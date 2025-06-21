@@ -69,8 +69,14 @@ app.use(express.static("public"));
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
+
+
 app.get("/", (req, res) => {
-  res.send("Welcome to Webory, Website!  ");
+  res.send({
+    activeStatus:true,
+    error: null,
+    message: "Server is running",
+  })
 });
 
 // Health check endpoint
