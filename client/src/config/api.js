@@ -119,8 +119,9 @@ export const handleApiError = (error) => {
 // Check server connection
 export const checkServerConnection = async () => {
   try {
-    console.log("Checking server connection to:", `${API_URL}/health`);
-    const response = await fetch(`${API_URL}/health`, {
+    const healthCheckUrl = `${API_URL}/api/health`;
+    console.log("Checking server connection to:", healthCheckUrl);
+    const response = await fetch(healthCheckUrl, {
       method: "GET",
       headers: {
         Accept: "application/json",
