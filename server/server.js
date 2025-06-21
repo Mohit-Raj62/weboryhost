@@ -67,7 +67,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.send("Welcome to Webory, Website!  ");
 });
 
 // Health check endpoint
