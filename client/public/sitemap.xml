@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>https://webory.netlify.app/</loc>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/about</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/services</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/contact</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/blog</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/login</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/register</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/get-started</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/web-development</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/app-development</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/web-design</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/seo</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/mlm</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/maintenance</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/support</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/consulting</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/careers</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/terms-of-service</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/privacy-policy</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://webory.netlify.app/cookie-policy</loc>
+  <priority>0.51</priority>
+</url>
+
+</urlset> 
