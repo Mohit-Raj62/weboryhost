@@ -7,6 +7,7 @@ const adminRoutes = require("./routes/admin");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const path = require("path");
 
 const app = express();
 
@@ -80,6 +81,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
+
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

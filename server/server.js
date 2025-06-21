@@ -46,6 +46,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve static files (including favicon.ico)
+app.use(express.static("public"));
+
 // Database connection
 /* mongoose
   .connect(process.env.MONGODB_URI, {
