@@ -134,7 +134,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5002;
 
-const startServer = async (port) => {
+/* const startServer = async (port) => {
   try {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
@@ -149,14 +149,14 @@ const startServer = async (port) => {
       process.exit(1);
     }
   }
-};
+}; */
 
 // Connect to MongoDB and start server
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-    startServer(PORT);
+    // startServer(PORT);
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
@@ -168,3 +168,5 @@ process.on("unhandledRejection", (err) => {
   console.error("Unhandled Promise Rejection:", err);
   process.exit(1);
 });
+
+module.exports = app;
