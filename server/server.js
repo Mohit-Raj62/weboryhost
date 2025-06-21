@@ -26,7 +26,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "https://webory.netlify.app",
-      "https://webory.netlify.app/",
+      /https:\/\/[a-z0-9-]+\.vercel\.app$/, // Allows all vercel app subdomains
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -69,14 +69,12 @@ app.use(express.static("public"));
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
-
-
 app.get("/", (req, res) => {
   res.send({
-    activeStatus:true,
+    activeStatus: true,
     error: null,
     message: "Server is running",
-  })
+  });
 });
 
 // Health check endpoint
