@@ -66,6 +66,10 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+})
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
