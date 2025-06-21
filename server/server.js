@@ -156,9 +156,7 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-    if (process.env.NODE_ENV !== "production") {
-      startServer(PORT);
-    }
+    startServer(PORT);
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
