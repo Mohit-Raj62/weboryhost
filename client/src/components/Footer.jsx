@@ -13,9 +13,10 @@ import {
   TextField,
   InputAdornment
 } from '@mui/material';
+import XIcon from '@mui/icons-material/X';
 import {
   Facebook as FacebookIcon,
-  Twitter as TwitterIcon,
+  // Twitter as TwitterIcon,
   Instagram as InstagramIcon,
   LinkedIn as LinkedInIcon,
   AdminPanelSettings as AdminIcon,
@@ -51,14 +52,14 @@ const Footer = () => {
         { name: 'Support', path: '/support' }
       ]
     },
-    {
-      title: 'Contact Info',
-      links: [
-        { name: 'contact@webory.com', icon: <EmailIcon /> },
-        { name: '+1 (555) 123-4567', icon: <PhoneIcon /> },
-        { name: '123 Business Ave, Suite 100', icon: <LocationIcon /> }
-      ]
-    },
+    // {
+    //   title: 'Contact Info',
+    //   links: [
+    //     { name: 'weboryinfo@gmail.com', icon: <EmailIcon /> },
+    //     { name: '+91 94704-89367', icon: <PhoneIcon /> },
+    //     { name: '123 Business Ave, Suite 100', icon: <LocationIcon /> }
+    //   ]
+    // },
     {
       title: 'Legal',
       links: [
@@ -75,7 +76,7 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: <FacebookIcon />, path: 'https://facebook.com' },
-    { icon: <TwitterIcon />, path: 'https://twitter.com' },
+    { icon: <XIcon />, path: 'https://twitter.com' },
     { icon: <InstagramIcon />, path: 'https://instagram.com' },
     { icon: <LinkedInIcon />, path: 'https://linkedin.com' }
   ];

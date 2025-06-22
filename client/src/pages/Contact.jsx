@@ -245,7 +245,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Email</h3>
-                        <p className="text-white/70">support@webory.com</p>
+                        <p className="text-white/70">weboryinfo@gamil.com</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">
@@ -254,7 +254,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Phone</h3>
-                        <p className="text-white/70">+1 (555) 123-4567</p>
+                        <p className="text-white/70">+91 94704-89367</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">
@@ -263,7 +263,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Address</h3>
-                        <p className="text-white/70">123 Webory Street<br />Tech City, TC 12345</p>
+                        <p className="text-white/70">Webory Street<br />Patna,Bihar City, 800020</p>
                       </div>
                     </div>
                   </div>

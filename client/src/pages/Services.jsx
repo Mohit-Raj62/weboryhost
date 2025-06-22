@@ -42,13 +42,14 @@ const Services = () => {
   ];
 
   return (
-    <div className="services-page ">
+    <div className="services-page  min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
       <style>{`
         .services-page {
           padding: 2rem;
-          max-width: 1200px;
+          max-width: 2200px;
           margin: 0 auto;
           color: white;
+        
         }
 
         .services-header {
