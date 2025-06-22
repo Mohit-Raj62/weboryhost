@@ -287,16 +287,20 @@ const Careers = () => {
 
         {showApplicationForm && (
           <div
-            className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${!isClosing ? 'opacity-100' : 'opacity-0'}`}
+            className={`fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-500 ${!isClosing ? 'opacity-100' : 'opacity-0'}`}
           >
             <div
               ref={formRef}
-              className={`bg-gray-600 rounded-2xl shadow-2xl w-full max-w-3xl max-h-full overflow-y-auto transform transition-all duration-300 ${!isClosing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+              className={`bg-gray-600 rounded-2xl shadow-2xl w-full max-w-3xl max-h-full overflow-y-auto transform transition-all duration-700
+                ${!isClosing ? 'scale-100 rotate-0 opacity-100' : 'scale-90 -rotate-12 opacity-0'}
+                sm:shadow-3xl sm:backdrop-blur-2xl
+              `}
+              style={{ willChange: 'transform, opacity' }}
             >
               {submissionStatus === 'success' ? (
                 <div className="p-8 md:p-12 text-center">
                   <h2 className="text-3xl font-bold text-green-600 mb-4">Application Sent!</h2>
-                  <p className="text-gray-600 mb-8">Thank you for applying for the {selectedJob.title} position. We've received your application and will get back to you soon.</p>
+                  <p className="text-green-600 mb-8">Thank you for applying for the {selectedJob.title} position. We've received your application and will get back to you soon.</p>
                   <button onClick={handleCloseModal} className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold">
                     Close
                   </button>
