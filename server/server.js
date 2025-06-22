@@ -25,7 +25,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://webory.netlify.app",
+      "https://weboy.netlify.app/",
       /https:\/\/[a-z0-9-]+\.vercel\.app$/, // Allows all vercel app subdomains
     ],
     credentials: true,
