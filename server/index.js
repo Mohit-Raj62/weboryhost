@@ -93,6 +93,14 @@ if (process.env.NODE_ENV === "production") {
 // Centralized error handler
 app.use(errorHandler);
 
+// 404 handler (should be last)
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Not Found",
+    details: `The requested endpoint ${req.method} ${req.originalUrl} does not exist`,
+  });
+});
+
 // Database connection
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
