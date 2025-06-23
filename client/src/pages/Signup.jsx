@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Auth.css';
 
-const API_URL = 'http://localhost:5001/api'||'https://weboy.netlify.app/';
+const API_URL = 'https://weboy.netlify.app/';
 
 const Signup = () => {
   const [formData, setFormData] = useState({

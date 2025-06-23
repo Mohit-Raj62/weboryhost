@@ -299,7 +299,7 @@ const Careers = () => {
             >
               {submissionStatus === 'success' ? (
                 <div className="p-8 md:p-12 text-center">
-                  <h2 className="text-3xl font-bold text-green-600 mb-4">Application Sent!</h2>
+                  <h2 className="text-3xl font-bold text-green-600 mb-4">🎊Application Sent!🎊</h2>
                   <p className="text-green-600 mb-8">Thank you for applying for the {selectedJob.title} position. We've received your application and will get back to you soon.</p>
                   <button onClick={handleCloseModal} className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold">
                     Close
