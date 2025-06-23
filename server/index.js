@@ -2,12 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/admin");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const path = require("path");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -17,13 +18,13 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://webory.netlify.app",
   "https://*.netlify.app",
+  // Add your production frontend URL here
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-
     if (
       allowedOrigins.indexOf(origin) !== -1 ||
       origin.endsWith(".netlify.app")
@@ -42,11 +43,10 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-// Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Add security headers
+// Security headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint
+// Health check endpoint (should be before static files)
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
@@ -75,49 +75,38 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Routes
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
 
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error("Server Error:", {
-    message: err.message,
-    stack: err.stack,
-    path: req.path,
-    method: req.method,
-    origin: req.headers.origin,
-    headers: req.headers,
+// Serve static files (only in production)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
   });
+}
 
-  // Handle CORS errors
-  if (err.message === "Not allowed by CORS") {
-    return res.status(403).json({
-      message: "CORS error: Origin not allowed",
-      origin: req.headers.origin,
-    });
-  }
+// Centralized error handler
+app.use(errorHandler);
 
-  res.status(500).json({
-    message: "Something went wrong!",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
-  });
-});
+// Database connection
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error("MONGODB_URI is not set in environment variables.");
+  process.exit(1);
+}
 
-// Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/webory", {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to MongoDB");
-
     // Start server
     const PORT = process.env.PORT || 5002;
     app.listen(PORT, () => {
@@ -130,3 +119,5 @@ mongoose
     console.error("MongoDB connection error:", error);
     process.exit(1);
   });
+
+// For deployment, set all secrets and config in environment variables (.env or platform dashboard)

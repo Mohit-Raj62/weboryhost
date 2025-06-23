@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const authController = require("../controllers/admin/authController");
+const dashboardController = require("../controllers/admin/dashboardController");
 const adminController = require("../controllers/adminController");
 const adminAuth = require("../middleware/adminAuth");
 
 // Public routes
-router.post("/signup", adminController.signup);
-router.post("/login", adminController.login);
+router.post("/signup", authController.signup);
+router.post("/login", authController.login);
 
 // Protected routes
-router.get("/stats", adminAuth, adminController.getDashboardStats);
-router.get("/activity", adminAuth, adminController.getRecentActivity);
+router.get("/stats", adminAuth, dashboardController.getDashboardStats);
+router.get("/activity", adminAuth, dashboardController.getRecentActivity);
 
 // Admin authentication routes
 router.get("/dashboard", adminAuth, adminController.getDashboard);

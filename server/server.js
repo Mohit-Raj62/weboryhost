@@ -50,8 +50,8 @@ app.use((req, res, next) => {
 app.use(express.static("public"));
 
 // Database connection
-/* mongoose
-  .connect(process.env.MONGODB_URI, {
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -63,7 +63,7 @@ app.use(express.static("public"));
   .catch((err) => {
     console.error("MongoDB connection error:", err);
     process.exit(1);
-  }); */
+  });
 
 // Routes
 app.use("/api/auth", authRoutes);
