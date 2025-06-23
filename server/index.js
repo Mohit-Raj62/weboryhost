@@ -129,3 +129,5 @@ mongoose
   });
 
 // For deployment, set all secrets and config in environment variables (.env or platform dashboard)
+
+const API_BASE_URL = "https://your-backend.onrender.com/api";
