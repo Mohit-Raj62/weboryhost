@@ -2,10 +2,25 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
+const { initializeChat } = require("./controllers/chatbotController");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://weboy.netlify.app/",
+      /https:\/\/[a-z0-9-]+\.vercel\.app$/,
+    ],
+    methods: ["GET", "POST"],
+  },
+});
 
 // Check for required environment variables
 const requiredEnvVars = ["JWT_SECRET", "MONGODB_URI"];
@@ -51,10 +66,14 @@ app.use(express.static("public"));
 
 // Database connection
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    process.env.MONGODB_URI ||
+      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Connected to MongoDB");
     console.log("Database:", mongoose.connection.name);
@@ -139,11 +158,14 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Initialize chat
+initializeChat(io);
+
 const PORT = process.env.PORT || 5002;
 
 const startServer = async (port) => {
   try {
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
     });

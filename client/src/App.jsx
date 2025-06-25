@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
+import LiveChat from './components/LiveChat';
 import Home from './pages/Home';
 import About from './pages/About';
 import Consulting from './pages/Consulting';
@@ -107,6 +108,7 @@ const App = () => {
         </Routes>
       </main>
       <Footer />
+      <LiveChat />
         </div>
       </BrowserRouter>
     </ThemeProvider>
