@@ -1,6 +1,8 @@
 const OpenAI = require("openai");
 const openai = new OpenAI.default({ apiKey: process.env.OPENAI_API_KEY });
 
+console.log('DEBUG OPENAI_API_KEY:', process.env.OPENAI_API_KEY);
+
 const getBotResponse = async (message) => {
   const userMessage = message.toLowerCase();
 
