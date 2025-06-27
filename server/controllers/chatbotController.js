@@ -1,7 +1,4 @@
-const OpenAI = require("openai");
-const openai = new OpenAI.default({ apiKey: process.env.OPENAI_API_KEY });
-
-console.log('DEBUG OPENAI_API_KEY:', process.env.OPENAI_API_KEY);
+// Removed OpenAI integration
 
 const getBotResponse = async (message) => {
   const userMessage = message.toLowerCase();
@@ -50,28 +47,6 @@ const getBotResponse = async (message) => {
     (userMessage.includes("app") && userMessage.includes("website"))
   ) {
     return "Yeh aapke business aur target audience par depend karta hai!\n\nAgar aapko wide reach aur easy access chahiye toh website best hai, kyunki koi bhi browser me open kar sakta hai. Lekin agar aapko personalized experience, notifications, ya offline features chahiye toh app banana better hai.\n\nAgar aap chahein toh hum aapke business ke liye best option suggest kar sakte hain!";
-  }
-
-  // AI fallback using OpenAI
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a helpful assistant for a business website. Answer user questions in a friendly and informative way.",
-          },
-          { role: "user", content: message },
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
-      });
-      return completion.choices[0].message.content.trim();
-    } catch (err) {
-      return "Sorry, AI service is temporarily unavailable. Please try again later.";
-    }
   }
 
   // Improved fallback: repeat user's question and offer help
