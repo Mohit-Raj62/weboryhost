@@ -9,7 +9,7 @@ const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const errorHandler = require("./middleware/errorHandler");
-
+require('dotenv').config();
 const app = express();
 
 // CORS configuration

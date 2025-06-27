@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,6 +9,7 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 const server = http.createServer(app);
+require("dotenv").config();
 const io = new Server(server, {
   cors: {
     origin: [
