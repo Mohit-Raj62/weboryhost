@@ -4,15 +4,21 @@ import axios from "axios";
 const getApiUrl = () => {
   // Check if we're in development
   if (import.meta.env.DEV) {
+    console.log("Development mode - using localhost");
     return "http://localhost:5002";
   }
 
   // Check for custom API URL from environment
   if (import.meta.env.VITE_API_URL) {
+    console.log(
+      "Using VITE_API_URL from environment:",
+      import.meta.env.VITE_API_URL
+    );
     return import.meta.env.VITE_API_URL;
   }
 
   // Default production API URL (Render backend)
+  console.log("Using default production URL");
   return "https://webory.onrender.com";
 };
 
@@ -35,10 +41,11 @@ export const API_ENDPOINTS = {
   HEALTH: `${API_BASE_URL}/api/health`,
 };
 
-console.log("API Configuration:", {
-  environment: import.meta.env.DEV ? "development" : "production",
-  apiUrl: API_BASE_URL,
-});
+console.log("=== API Configuration Debug ===");
+console.log("Environment:", import.meta.env.DEV ? "development" : "production");
+console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+console.log("Final API_BASE_URL:", API_BASE_URL);
+console.log("===============================");
 
 // Create axios instance with default config
 const axiosInstance = axios.create({

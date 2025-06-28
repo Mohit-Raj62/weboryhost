@@ -26,6 +26,7 @@ import Career from './pages/Careers';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import GetStarted from './pages/GetStarted';
+import TestPage from './pages/TestPage';
 
 // Admin Components
 import AdminLogin from './pages/admin/AdminLogin';
@@ -81,6 +82,7 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/get-started" element={<GetStarted />} />
+              <Route path="/test-page" element={<TestPage />} />
 
               {/* Admin Authentication Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
