@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance, { handleApiError } from '../../config/api';
 
 const AdminSignup = () => {
   const navigate = useNavigate();
@@ -27,6 +27,8 @@ const AdminSignup = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
@@ -51,29 +53,40 @@ const AdminSignup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5002/api/admin/signup', {
+      console.log('Attempting admin signup with:', {
+        url: '/api/admin/signup',
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        apiBaseUrl: import.meta.env.VITE_API_URL || 'https://webory.onrender.com'
+      });
+
+      const response = await axiosInstance.post('/api/admin/signup', {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         role: formData.role
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
       });
+
+      console.log('Admin signup response:', response.data);
 
       if (response.data.token) {
         localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('adminUser', JSON.stringify(response.data.admin));
         navigate('/admin/dashboard');
-      }
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message || 'Signup failed');
-      } else if (err.request) {
-        setError('No response from server. Please try again.');
       } else {
-        setError('Error setting up request. Please try again.');
+        throw new Error('Invalid response from server - no token received');
       }
+    } catch (error) {
+      console.error('Admin signup error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config
+      });
+      
+      const errorMessage = handleApiError(error);
+      setError(errorMessage || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }

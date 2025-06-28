@@ -13,7 +13,7 @@ const createTestAdmin = async () => {
       name: "Test Admin",
       email: "admin@webory.com",
       password: "admin123",
-      role: "super_admin",
+      role: "admin",
     };
 
     const existingAdmin = await Admin.findOne({ email: adminData.email });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance, { handleApiError } from '../../config/api';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +17,8 @@ const AdminLogin = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
@@ -27,31 +29,33 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5002/api/admin/login', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        timeout: 5000,
+      console.log('Attempting admin login with:', {
+        url: '/api/admin/login',
+        email: formData.email,
+        apiBaseUrl: import.meta.env.VITE_API_URL || 'https://webory.onrender.com'
       });
+
+      const response = await axiosInstance.post('/api/admin/login', formData);
+
+      console.log('Admin login response:', response.data);
 
       if (response.data.token) {
         localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('adminUser', JSON.stringify(response.data.admin));
         navigate('/admin/dashboard');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        setError(err.response.data.error || 'Login failed. Please check your credentials.');
-      } else if (err.request) {
-        // The request was made but no response was received
-        setError('No response from server. Please check your connection.');
       } else {
-        // Something happened in setting up the request that triggered an Error
-        setError('An error occurred. Please try again.');
+        throw new Error('Invalid response from server - no token received');
       }
+    } catch (error) {
+      console.error('Admin login error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config
+      });
+      
+      const errorMessage = handleApiError(error);
+      setError(errorMessage || 'Failed to log in. Please try again.');
     } finally {
       setLoading(false);
     }

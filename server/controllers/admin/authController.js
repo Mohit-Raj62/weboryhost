@@ -17,18 +17,26 @@ const generateToken = (admin) => {
 // Admin signup
 const signup = async (req, res, next) => {
   try {
+    console.log('Admin signup request:', {
+      name: req.body.name,
+      email: req.body.email,
+      role: req.body.role
+    });
+
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ email: req.body.email });
     if (existingAdmin) {
       return res
         .status(400)
-        .json({ message: "Admin with this email already exists" });
+        .json({ error: "Admin with this email already exists" });
     }
+
     // Validate role
     const validRoles = ["admin", "moderator", "editor"];
     if (!validRoles.includes(req.body.role)) {
-      return res.status(400).json({ message: "Invalid role specified" });
+      return res.status(400).json({ error: "Invalid role specified" });
     }
+
     // Create new admin
     const admin = new Admin({
       name: req.body.name,
@@ -37,8 +45,16 @@ const signup = async (req, res, next) => {
       role: req.body.role,
       isActive: true,
     });
+
     await admin.save();
     const token = generateToken(admin);
+
+    console.log('Admin created successfully:', {
+      id: admin._id,
+      email: admin.email,
+      role: admin.role
+    });
+
     res.status(201).json({
       message: "Admin account created successfully",
       token,
@@ -51,6 +67,7 @@ const signup = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error('Admin signup error:', error);
     next(error);
   }
 };
