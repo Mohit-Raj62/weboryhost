@@ -9,9 +9,11 @@ const adminAuth = require("../middleware/adminAuth");
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
-// Protected routes
+// Enhanced dashboard routes
 router.get("/stats", adminAuth, dashboardController.getDashboardStats);
 router.get("/activity", adminAuth, dashboardController.getRecentActivity);
+router.get("/analytics", adminAuth, dashboardController.getAnalytics);
+router.get("/health", adminAuth, dashboardController.getSystemHealth);
 
 // Admin authentication routes
 router.get("/dashboard", adminAuth, adminController.getDashboard);
