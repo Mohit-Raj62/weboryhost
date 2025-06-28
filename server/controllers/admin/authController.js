@@ -17,10 +17,10 @@ const generateToken = (admin) => {
 // Admin signup
 const signup = async (req, res, next) => {
   try {
-    console.log('Admin signup request:', {
+    console.log("Admin signup request:", {
       name: req.body.name,
       email: req.body.email,
-      role: req.body.role
+      role: req.body.role,
     });
 
     // Check if admin already exists
@@ -49,10 +49,10 @@ const signup = async (req, res, next) => {
     await admin.save();
     const token = generateToken(admin);
 
-    console.log('Admin created successfully:', {
+    console.log("Admin created successfully:", {
       id: admin._id,
       email: admin.email,
-      role: admin.role
+      role: admin.role,
     });
 
     res.status(201).json({
@@ -67,7 +67,7 @@ const signup = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.error('Admin signup error:', error);
+    console.error("Admin signup error:", error);
     next(error);
   }
 };
@@ -75,21 +75,50 @@ const signup = async (req, res, next) => {
 // Admin login
 const login = async (req, res, next) => {
   try {
+    console.log("Admin login request received:", {
+      email: req.body.email,
+      hasPassword: !!req.body.password,
+      body: req.body,
+    });
+
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      console.log("Missing email or password");
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
     const admin = await Admin.findOne({ email });
+    console.log("Admin found:", admin ? "Yes" : "No");
+
     if (!admin) {
+      console.log("Admin not found for email:", email);
       return res.status(401).json({ error: "Invalid login credentials" });
     }
+
     if (!admin.isActive) {
+      console.log("Admin account is deactivated");
       return res.status(401).json({ error: "Account is deactivated" });
     }
+
     const isMatch = await admin.comparePassword(password);
+    console.log("Password match:", isMatch);
+
     if (!isMatch) {
+      console.log("Password does not match");
       return res.status(401).json({ error: "Invalid login credentials" });
     }
+
     admin.lastLogin = new Date();
     await admin.save();
     const token = generateToken(admin);
+
+    console.log("Admin login successful:", {
+      id: admin._id,
+      email: admin.email,
+      role: admin.role,
+    });
+
     res.json({
       admin: {
         _id: admin._id,
@@ -100,6 +129,7 @@ const login = async (req, res, next) => {
       token,
     });
   } catch (error) {
+    console.error("Admin login error:", error);
     next(error);
   }
 };

@@ -88,6 +88,15 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
+// Test route for debugging
+app.get("/api/test", (req, res) => {
+  res.json({
+    message: "Test route working",
+    timestamp: new Date().toISOString(),
+    headers: req.headers,
+  });
+});
+
 // Root route - API information
 app.get("/", (req, res) => {
   res.json({
