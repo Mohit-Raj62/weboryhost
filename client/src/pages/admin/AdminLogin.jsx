@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance, { handleApiError } from '../../config/api';
+import axiosInstance from '../../config/api';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
