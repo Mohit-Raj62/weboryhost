@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 const AdminRoles = () => {
   const [roles, setRoles] = useState([]);
@@ -59,7 +60,7 @@ const AdminRoles = () => {
           throw new Error('No authentication token found');
         }
 
-        const response = await axios.get('http://localhost:5002/api/admin/roles', {
+        const response = await axios.get(`${API_BASE_URL}/api/admin/roles`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -106,7 +107,7 @@ const AdminRoles = () => {
       }
 
       await axios.put(
-        `http://localhost:5002/api/admin/roles/${selectedRole}`,
+        `${API_BASE_URL}/api/admin/roles/${selectedRole}`,
         { permissions: Object.entries(permissions).filter(([_, value]) => value).map(([key]) => key) },
         {
           headers: {
@@ -116,7 +117,7 @@ const AdminRoles = () => {
       );
 
       // Refresh roles after update
-      const response = await axios.get('http://localhost:5002/api/admin/roles', {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/roles`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -133,98 +134,89 @@ const AdminRoles = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold text-gray-900">Loading roles...</h2>
+      <div className="p-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <p className="mt-2 text-gray-600">Loading roles...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold text-red-600">{error}</h2>
+      <div className="p-4">
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <h3 className="text-sm font-medium text-red-800">Error</h3>
+          <p className="mt-1 text-sm text-red-700">{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">Role Management</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <h2 className="text-2xl font-bold mb-4">Role Management</h2>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Role List */}
-        <div className="lg:col-span-1">
-          <div className="bg-white shadow rounded-lg">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">Roles</h2>
-            </div>
-            <div className="p-6">
-              <ul className="space-y-4">
-                {Object.entries(validRoles).map(([key, role]) => (
-                  <li key={key}>
-                    <button
-                      onClick={() => handleRoleSelect(key)}
-                      className={`w-full text-left px-4 py-2 rounded-md ${
-                        selectedRole === key
-                          ? 'bg-indigo-50 text-indigo-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4">Available Roles</h3>
+          <div className="space-y-3">
+            {Object.entries(validRoles).map(([roleKey, roleData]) => (
+              <div
+                key={roleKey}
+                className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                  selectedRole === roleKey
+                    ? 'border-indigo-500 bg-indigo-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+                onClick={() => handleRoleSelect(roleKey)}
+              >
+                <h4 className="font-medium text-gray-900">{roleData.name}</h4>
+                <p className="text-sm text-gray-600 mt-1">{roleData.description}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {roleData.permissions.map((permission) => (
+                    <span
+                      key={permission}
+                      className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
                     >
-                      <div className="font-medium">{role.name}</div>
-                      <div className="text-sm text-gray-500">{role.description}</div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      {permission}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Permissions */}
-        <div className="lg:col-span-2">
-          {selectedRole ? (
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">
-                  {validRoles[selectedRole].name} Permissions
-                </h2>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  {validRoles[selectedRole].permissions.map((permission) => (
-                    <div key={permission} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id={permission}
-                        checked={permissions[permission] || false}
-                        onChange={() => handlePermissionChange(permission)}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                      />
-                      <label
-                        htmlFor={permission}
-                        className="ml-3 block text-sm font-medium text-gray-700"
-                      >
-                        {permission.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6">
-                  <button
-                    onClick={handleSaveRole}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
+        {/* Permission Editor */}
+        {selectedRole && (
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">
+              Edit Permissions: {validRoles[selectedRole].name}
+            </h3>
+            
+            <div className="space-y-3">
+              {validRoles[selectedRole].permissions.map((permission) => (
+                <label key={permission} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={permissions[permission] || false}
+                    onChange={() => handlePermissionChange(permission)}
+                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">{permission}</span>
+                </label>
+              ))}
             </div>
-          ) : (
-            <div className="bg-white shadow rounded-lg p-6 text-center text-gray-500">
-              Select a role to manage its permissions
-            </div>
-          )}
-        </div>
+
+            <button
+              onClick={handleSaveRole}
+              className="mt-6 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+            >
+              Save Changes
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

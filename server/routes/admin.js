@@ -37,4 +37,16 @@ router.put(
 );
 router.delete("/comments/:id", adminAuth, adminController.deleteComment);
 
+// Test admin authentication
+router.get("/test-auth", adminAuth, (req, res) => {
+  res.json({
+    message: "Admin authentication successful!",
+    admin: {
+      id: req.admin._id,
+      email: req.admin.email,
+      role: req.admin.role,
+    },
+  });
+});
+
 module.exports = router;

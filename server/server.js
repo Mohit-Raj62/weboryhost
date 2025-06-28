@@ -11,6 +11,13 @@ const path = require("path");
 const app = express();
 const server = http.createServer(app);
 require("dotenv").config();
+
+// Set default JWT_SECRET if not provided
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = "webory_admin_secret_key_2024_very_secure_and_long";
+  console.log("⚠️  Using default JWT_SECRET (not recommended for production)");
+}
+
 const io = new Server(server, {
   cors: {
     origin: true, // Allow all origins temporarily
@@ -19,7 +26,7 @@ const io = new Server(server, {
 });
 
 // Check for required environment variables
-const requiredEnvVars = ["JWT_SECRET", "MONGODB_URI"];
+const requiredEnvVars = ["MONGODB_URI"];
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {

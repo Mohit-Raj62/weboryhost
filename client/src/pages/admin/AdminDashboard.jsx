@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -36,18 +37,19 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [notifications, setNotifications] = useState([]);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5002';
-
   const fetchDashboardData = useCallback(async () => {
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
-        throw new Error('No authentication token found');
+        setError('No authentication token found. Please login again.');
+        setLoading(false);
+        return;
       }
 
-      const headers = { Authorization: `Bearer ${token}` };
-      
-      console.log('Fetching dashboard data from:', `${API_BASE_URL}/api/admin/stats`);
+      const headers = { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
       
       const [statsResponse, activityResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/admin/stats`, { headers }),
@@ -67,19 +69,8 @@ const AdminDashboard = () => {
 
       setError('');
     } catch (err) {
-      console.error('Dashboard data fetch error:', err);
-      console.error('Error details:', {
-        message: err.message,
-        status: err.response?.status,
-        statusText: err.response?.statusText,
-        data: err.response?.data,
-        config: err.config
-      });
-      
       if (err.response?.status === 401) {
-        setError('Please log in to access the dashboard');
-        localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
+        setError('Authentication failed. Please check your login credentials.');
       } else if (err.response?.status === 404) {
         setError('Dashboard endpoint not found. Please check server configuration.');
       } else if (err.code === 'ERR_NETWORK') {
@@ -169,12 +160,25 @@ const AdminDashboard = () => {
           </div>
           <h2 className="text-xl font-semibold text-red-600 mb-2">Dashboard Error</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={fetchDashboardData}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-          >
-            Retry
-          </button>
+          <div className="space-y-2">
+            <button
+              onClick={fetchDashboardData}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 mr-2"
+            >
+              Retry
+            </button>
+            <button
+              onClick={() => window.location.href = '/admin/login'}
+              className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+            >
+              Go to Login
+            </button>
+          </div>
+          <div className="mt-4 p-3 bg-gray-100 rounded text-sm">
+            <p className="font-semibold">Debug Info:</p>
+            <p>Token: {localStorage.getItem('adminToken') ? 'Present' : 'Missing'}</p>
+            <p>API URL: {API_BASE_URL}</p>
+          </div>
         </div>
       </div>
     );

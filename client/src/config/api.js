@@ -8,19 +8,19 @@ const getApiUrl = () => {
   console.log("import.meta.env.NODE_ENV:", import.meta.env.NODE_ENV);
   console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
 
-  // Check for custom API URL from environment first
+  // Force localhost for development
+  if (import.meta.env.MODE === "development" || import.meta.env.DEV === true) {
+    console.log("Development mode detected - using localhost:5002");
+    return "http://localhost:5002";
+  }
+
+  // Check for custom API URL from environment
   if (import.meta.env.VITE_API_URL) {
     console.log(
       "Using VITE_API_URL from environment:",
       import.meta.env.VITE_API_URL
     );
     return import.meta.env.VITE_API_URL;
-  }
-
-  // Check if we're in development (more reliable check)
-  if (import.meta.env.MODE === "development" || import.meta.env.DEV === true) {
-    console.log("Development mode detected - using localhost");
-    return "http://localhost:5002";
   }
 
   // Default production API URL (Render backend)

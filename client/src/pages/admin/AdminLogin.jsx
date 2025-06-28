@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../config/api';
+import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -29,31 +30,26 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      console.log('Attempting admin login with:', {
-        url: '/api/admin/login',
+      const response = await axios.post(`${API_BASE_URL}/api/admin/login`, {
         email: formData.email,
-        apiBaseUrl: import.meta.env.VITE_API_URL || 'http://localhost:5002',
-        fullUrl: `${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/admin/login`
+        password: formData.password
       });
 
-      const response = await axiosInstance.post('/api/admin/login', formData);
-
-      console.log('Admin login response:', response.data);
-
       if (response.data.token) {
+        // Store token and admin data
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminUser', JSON.stringify(response.data.admin));
-        console.log('Login successful, redirecting to dashboard...');
-        navigate('/admin/dashboard');
+        
+        // Redirect to admin dashboard
+        navigate('/admin/dashboard', { replace: true });
       } else {
         throw new Error('Invalid response from server - no token received');
       }
     } catch (error) {
-      console.error('Admin login error details:', {
+      console.error('❌ Admin login error:', {
         message: error.message,
-        response: error.response?.data,
         status: error.response?.status,
-        config: error.config,
+        data: error.response?.data,
         code: error.code
       });
       

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
+import { API_BASE_URL } from '../config/api';
 
 const LiveChat = () => {
     const location = useLocation();
@@ -17,10 +18,8 @@ const LiveChat = () => {
         }
         
         // Connect to the socket server
-        // Use the production URL when deployed
-        const SERVER_URL = import.meta.env.VITE_NODE_ENV === 'production' 
-            ? import.meta.env.VITE_API_URL || 'https://webory-backend.onrender.com' 
-            : 'http://localhost:5002';
+        // Use the API_BASE_URL from config
+        const SERVER_URL = API_BASE_URL;
             
         socket.current = io(SERVER_URL);
 

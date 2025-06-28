@@ -75,7 +75,7 @@ const signup = async (req, res, next) => {
 // Admin login
 const login = async (req, res, next) => {
   try {
-    console.log("Admin login request received:", {
+    console.log("🔐 Admin login request received:", {
       email: req.body.email,
       hasPassword: !!req.body.password,
       body: req.body,
@@ -84,36 +84,49 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      console.log("Missing email or password");
+      console.log("❌ Missing email or password");
       return res.status(400).json({ error: "Email and password are required" });
     }
 
+    console.log("🔍 Searching for admin with email:", email);
     const admin = await Admin.findOne({ email });
-    console.log("Admin found:", admin ? "Yes" : "No");
+    console.log("👤 Admin found:", admin ? "Yes" : "No");
 
     if (!admin) {
-      console.log("Admin not found for email:", email);
+      console.log("❌ Admin not found for email:", email);
       return res.status(401).json({ error: "Invalid login credentials" });
     }
 
+    console.log("📋 Admin details:", {
+      id: admin._id,
+      email: admin.email,
+      role: admin.role,
+      isActive: admin.isActive,
+      hasPassword: !!admin.password
+    });
+
     if (!admin.isActive) {
-      console.log("Admin account is deactivated");
+      console.log("❌ Admin account is deactivated");
       return res.status(401).json({ error: "Account is deactivated" });
     }
 
+    console.log("🔑 Comparing password...");
     const isMatch = await admin.comparePassword(password);
-    console.log("Password match:", isMatch);
+    console.log("✅ Password match:", isMatch);
 
     if (!isMatch) {
-      console.log("Password does not match");
+      console.log("❌ Password does not match");
       return res.status(401).json({ error: "Invalid login credentials" });
     }
 
     admin.lastLogin = new Date();
     await admin.save();
+    
+    console.log("🎫 Generating JWT token...");
     const token = generateToken(admin);
+    console.log("✅ Token generated successfully");
 
-    console.log("Admin login successful:", {
+    console.log("🎉 Admin login successful:", {
       id: admin._id,
       email: admin.email,
       role: admin.role,
@@ -129,7 +142,7 @@ const login = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.error("Admin login error:", error);
+    console.error("❌ Admin login error:", error);
     next(error);
   }
 };

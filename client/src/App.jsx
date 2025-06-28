@@ -27,7 +27,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import GetStarted from './pages/GetStarted';
 import TestPage from './pages/TestPage';
-import TestAdmin from './pages/admin/TestAdmin';
 
 // Admin Components
 import AdminLogin from './pages/admin/AdminLogin';
@@ -108,9 +107,6 @@ const App = () => {
 
               {/* Catch all route - redirect to home */}
               <Route path="*" element={<Navigate to="/" replace />} />
-
-              {/* New route for TestAdmin */}
-              <Route path="/admin/test" element={<TestAdmin />} />
         </Routes>
       </main>
       <Footer />
