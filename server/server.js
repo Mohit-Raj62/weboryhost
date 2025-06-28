@@ -199,9 +199,14 @@ const startServer = async (port) => {
 
 // Connect to MongoDB and start server
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(
+    process.env.MONGODB_URI ||
+      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory"
+  )
   .then(() => {
     console.log("Connected to MongoDB");
+    console.log("Database:", mongoose.connection.name);
+    console.log("Host:", mongoose.connection.host);
     startServer(PORT);
   })
   .catch((error) => {

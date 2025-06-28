@@ -32,7 +32,8 @@ const AdminLogin = () => {
       console.log('Attempting admin login with:', {
         url: '/api/admin/login',
         email: formData.email,
-        apiBaseUrl: import.meta.env.VITE_API_URL || 'https://webory.onrender.com'
+        apiBaseUrl: import.meta.env.VITE_API_URL || 'http://localhost:5002',
+        fullUrl: `${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/admin/login`
       });
 
       const response = await axiosInstance.post('/api/admin/login', formData);
@@ -42,6 +43,7 @@ const AdminLogin = () => {
       if (response.data.token) {
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminUser', JSON.stringify(response.data.admin));
+        console.log('Login successful, redirecting to dashboard...');
         navigate('/admin/dashboard');
       } else {
         throw new Error('Invalid response from server - no token received');
@@ -51,11 +53,23 @@ const AdminLogin = () => {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
-        config: error.config
+        config: error.config,
+        code: error.code
       });
       
-      const errorMessage = handleApiError(error);
-      setError(errorMessage || 'Failed to log in. Please try again.');
+      let errorMessage = 'Failed to log in. Please try again.';
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Unable to connect to server. Please check if the server is running on port 5002.';
+      } else if (error.response?.status === 404) {
+        errorMessage = 'Admin login endpoint not found. Please check server configuration.';
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid email or password. Please try again.';
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
