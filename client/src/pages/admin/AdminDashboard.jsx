@@ -47,6 +47,8 @@ const AdminDashboard = () => {
 
       const headers = { Authorization: `Bearer ${token}` };
       
+      console.log('Fetching dashboard data from:', `${API_BASE_URL}/api/admin/stats`);
+      
       const [statsResponse, activityResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/admin/stats`, { headers }),
         axios.get(`${API_BASE_URL}/api/admin/activity?limit=15`, { headers })
@@ -66,12 +68,24 @@ const AdminDashboard = () => {
       setError('');
     } catch (err) {
       console.error('Dashboard data fetch error:', err);
+      console.error('Error details:', {
+        message: err.message,
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        config: err.config
+      });
+      
       if (err.response?.status === 401) {
         setError('Please log in to access the dashboard');
         localStorage.removeItem('adminToken');
         window.location.href = '/admin/login';
+      } else if (err.response?.status === 404) {
+        setError('Dashboard endpoint not found. Please check server configuration.');
+      } else if (err.code === 'ERR_NETWORK') {
+        setError('Unable to connect to server. Please check if the server is running.');
       } else {
-        setError('Failed to fetch dashboard data. Please try again later.');
+        setError(`Failed to fetch dashboard data: ${err.message}`);
       }
     } finally {
       setLoading(false);

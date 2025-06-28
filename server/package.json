@@ -9,7 +9,8 @@
     "check-port": "node scripts/manageServer.js",
     "kill-port": "node scripts/manageServer.js --kill",
     "restart": "npm run kill-port && npm run dev",
-    "create-admin": "node config/createTestAdmin.js"
+    "create-admin": "node config/createTestAdmin.js",
+    "create-test-admin": "node scripts/createTestAdmin.js"
   },
   "keywords": [],
   "author": "",

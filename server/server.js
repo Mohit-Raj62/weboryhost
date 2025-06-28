@@ -50,7 +50,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`, {
+  req.startTime = Date.now();
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`, {
     body: req.body,
     query: req.query,
     headers: req.headers,
