@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const { initializeChat } = require("./controllers/chatbotController");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +18,8 @@ const io = new Server(server, {
       "http://localhost:3001",
       "https://weboy.netlify.app/",
       /https:\/\/[a-z0-9-]+\.vercel\.app$/,
+      /https:\/\/[a-z0-9-]+\.netlify\.app$/,
+      /https:\/\/[a-z0-9-]+\.netlify\.com$/,
     ],
     methods: ["GET", "POST"],
   },
@@ -42,6 +45,8 @@ app.use(
       "http://localhost:3001",
       "https://weboy.netlify.app/",
       /https:\/\/[a-z0-9-]+\.vercel\.app$/, // Allows all vercel app subdomains
+      /https:\/\/[a-z0-9-]+\.netlify\.app$/, // Allows all netlify app subdomains
+      /https:\/\/[a-z0-9-]+\.netlify\.com$/, // Allows all netlify.com subdomains
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -63,6 +68,9 @@ app.use((req, res, next) => {
 
 // Serve static files (including favicon.ico)
 app.use(express.static("public"));
+
+// Serve built frontend files (for production)
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Database connection
 mongoose
@@ -88,12 +96,15 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
-app.get("/", (req, res) => {
-  res.send({
-    activeStatus: true,
-    error: null,
-    message: "Server is running",
-  });
+// Serve React app for all non-API routes (for client-side routing)
+app.get("*", (req, res) => {
+  // Skip API routes
+  if (req.path.startsWith("/api/")) {
+    return next();
+  }
+
+  // Serve the React app
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 // Health check endpoint

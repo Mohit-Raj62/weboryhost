@@ -1,13 +1,18 @@
 [build]
-  command = "npm run build"
   publish = "dist"
+  command = "npm run build"
   functions = "netlify/functions"
-  environment = { NODE_VERSION = "18", VITE_API_URL = "https://webory-backend.onrender.com", VITE_NODE_ENV = "production" }
+
+[build.environment]
+  NODE_VERSION = "18"
+  VITE_API_URL = "https://webory.onrender.com"
+  VITE_NODE_ENV = "production"
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "https://webory.onrender.com/api/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"

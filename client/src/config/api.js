@@ -1,21 +1,48 @@
 import axios from "axios";
 
 // API Configuration
-const isDevelopment = import.meta.env.DEV;
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (isDevelopment
-    ? "http://localhost:5002"
-    : "https://webory-backend.onrender.com");
+const getApiUrl = () => {
+  // Check if we're in development
+  if (import.meta.env.DEV) {
+    return "http://localhost:5002";
+  }
+
+  // Check for custom API URL from environment
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  // Default production API URL (Render backend)
+  return "https://webory.onrender.com";
+};
+
+export const API_BASE_URL = getApiUrl();
+
+export const API_ENDPOINTS = {
+  // Auth endpoints
+  LOGIN: `${API_BASE_URL}/api/auth/login`,
+  REGISTER: `${API_BASE_URL}/api/auth/register`,
+  LOGOUT: `${API_BASE_URL}/api/auth/logout`,
+
+  // Admin endpoints
+  ADMIN_LOGIN: `${API_BASE_URL}/api/admin/login`,
+  ADMIN_DASHBOARD: `${API_BASE_URL}/api/admin/dashboard`,
+
+  // Contact endpoints
+  CONTACT: `${API_BASE_URL}/api/contact`,
+
+  // Health check
+  HEALTH: `${API_BASE_URL}/api/health`,
+};
 
 console.log("API Configuration:", {
-  environment: isDevelopment ? "development" : "production",
-  apiUrl: API_URL,
+  environment: import.meta.env.DEV ? "development" : "production",
+  apiUrl: API_BASE_URL,
 });
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -50,7 +77,7 @@ axiosInstance.interceptors.response.use(
 );
 
 export const apiConfig = {
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -119,7 +146,7 @@ export const handleApiError = (error) => {
 // Check server connection
 export const checkServerConnection = async () => {
   try {
-    const healthCheckUrl = `${API_URL}/api/health`;
+    const healthCheckUrl = `${API_BASE_URL}/api/health`;
     console.log("Checking server connection to:", healthCheckUrl);
     const response = await fetch(healthCheckUrl, {
       method: "GET",
