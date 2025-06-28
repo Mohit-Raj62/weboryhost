@@ -2,13 +2,13 @@ import axios from "axios";
 
 // API Configuration
 const getApiUrl = () => {
-  // Check if we're in development
-  if (import.meta.env.DEV) {
-    console.log("Development mode - using localhost");
-    return "http://localhost:5002";
-  }
+  console.log("=== Environment Debug ===");
+  console.log("import.meta.env.DEV:", import.meta.env.DEV);
+  console.log("import.meta.env.MODE:", import.meta.env.MODE);
+  console.log("import.meta.env.NODE_ENV:", import.meta.env.NODE_ENV);
+  console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
 
-  // Check for custom API URL from environment
+  // Check for custom API URL from environment first
   if (import.meta.env.VITE_API_URL) {
     console.log(
       "Using VITE_API_URL from environment:",
@@ -17,8 +17,14 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
 
+  // Check if we're in development (more reliable check)
+  if (import.meta.env.MODE === "development" || import.meta.env.DEV === true) {
+    console.log("Development mode detected - using localhost");
+    return "http://localhost:5002";
+  }
+
   // Default production API URL (Render backend)
-  console.log("Using default production URL");
+  console.log("Production mode detected - using Render URL");
   return "https://webory.onrender.com";
 };
 

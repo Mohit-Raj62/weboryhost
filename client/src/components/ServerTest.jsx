@@ -16,7 +16,11 @@ const ServerTest = () => {
     setResult(null);
 
     try {
-      console.log('Testing server connection...');
+      console.log('=== Server Test Debug ===');
+      console.log('API_BASE_URL:', API_BASE_URL);
+      console.log('import.meta.env.DEV:', import.meta.env.DEV);
+      console.log('import.meta.env.MODE:', import.meta.env.MODE);
+      console.log('import.meta.env.VITE_API_URL:', import.meta.env.VITE_API_URL);
       
       // Test 1: Direct fetch
       const healthUrl = `${API_BASE_URL}/api/health`;
