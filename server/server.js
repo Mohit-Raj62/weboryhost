@@ -43,14 +43,15 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://weboy.netlify.app/",
-      /https:\/\/[a-z0-9-]+\.vercel\.app$/, // Allows all vercel app subdomains
-      /https:\/\/[a-z0-9-]+\.netlify\.app$/, // Allows all netlify app subdomains
-      /https:\/\/[a-z0-9-]+\.netlify\.com$/, // Allows all netlify.com subdomains
+      "https://weboy.netlify.app",
+      "https://webory.netlify.app",
+      /https:\/\/[a-z0-9-]+\.vercel\.app$/,
+      /https:\/\/[a-z0-9-]+\.netlify\.app$/,
+      /https:\/\/[a-z0-9-]+\.netlify\.com$/,
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   })
 );
 app.use(express.json());
