@@ -48,7 +48,8 @@ const Login = () => {
 
       console.log('Attempting login with:', {
         url: '/api/auth/login',
-        email: formData.email
+        email: formData.email,
+        apiBaseUrl: import.meta.env.VITE_API_URL || 'https://webory.onrender.com'
       });
 
       const response = await axiosInstance.post('/api/auth/login', formData);
@@ -57,12 +58,19 @@ const Login = () => {
 
       if (response.data && response.data.token) {
         localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
         navigate('/admin/dashboard');
       } else {
-        throw new Error('Invalid response from server');
+        throw new Error('Invalid response from server - no token received');
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config
+      });
+      
       const errorMessage = handleApiError(error);
       setError(errorMessage || 'Failed to log in. Please try again.');
     } finally {

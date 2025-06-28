@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance, { handleApiError } from '../config/api';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,6 +18,8 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -39,24 +41,37 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5002/api/auth/register', {
+      console.log('Attempting registration with:', {
+        url: '/api/auth/register',
+        name: formData.name,
+        email: formData.email
+      });
+
+      const response = await axiosInstance.post('/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password
       });
 
+      console.log('Registration response:', response.data);
+
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        navigate('/');
-      }
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message || 'Registration failed');
-      } else if (err.request) {
-        setError('No response from server. Please try again.');
+        localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate('/admin/dashboard');
       } else {
-        setError('Error setting up request. Please try again.');
+        throw new Error('Invalid response from server - no token received');
       }
+    } catch (error) {
+      console.error('Registration error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config
+      });
+      
+      const errorMessage = handleApiError(error);
+      setError(errorMessage || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

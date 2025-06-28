@@ -47,13 +47,20 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  timeout: 15000, // 15 seconds
-  withCredentials: true,
+  timeout: 30000, // 30 seconds for production
+  withCredentials: false, // Changed to false for cross-origin requests
 });
 
 // Add request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    console.log("Making API request:", {
+      url: config.url,
+      method: config.method,
+      baseURL: config.baseURL,
+      fullURL: `${config.baseURL}${config.url}`,
+    });
+
     // Add auth token if available
     const token = localStorage.getItem("adminToken");
     if (token) {

@@ -9,7 +9,7 @@ const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const errorHandler = require("./middleware/errorHandler");
-require('dotenv').config();
+require("dotenv").config();
 const app = express();
 
 // CORS configuration
@@ -130,4 +130,9 @@ mongoose
 
 // For deployment, set all secrets and config in environment variables (.env or platform dashboard)
 
-const API_BASE_URL = "https://your-backend.onrender.com/api";
+const API_BASE_URL = "https://webory.onrender.com/api";
+
+// API connection test
+fetch("https://webory.onrender.com/api/health")
+  .then((res) => res.json())
+  .then((data) => console.log("Backend connected:", data));
