@@ -9,9 +9,7 @@
     "check-port": "node scripts/manageServer.js",
     "kill-port": "node scripts/manageServer.js --kill",
     "restart": "npm run kill-port && npm run dev",
-    "create-admin": "node config/createTestAdmin.js",
-    "build-frontend": "cd ../client && npm run build",
-    "serve-full": "npm run build-frontend && npm start"
+    "create-admin": "node config/createTestAdmin.js"
   },
   "keywords": [],
   "author": "",

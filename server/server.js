@@ -70,8 +70,8 @@ app.use((req, res, next) => {
 // Serve static files (including favicon.ico)
 app.use(express.static("public"));
 
-// Serve built frontend files (for production)
-app.use(express.static(path.join(__dirname, "../client/dist")));
+// Remove frontend serving since it's deployed separately on Netlify
+// app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Database connection
 mongoose
@@ -97,15 +97,19 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Serve React app for all non-API routes (for client-side routing)
-app.get("*", (req, res) => {
-  // Skip API routes
-  if (req.path.startsWith("/api/")) {
-    return next();
-  }
-
-  // Serve the React app
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+// Root route - API information
+app.get("/", (req, res) => {
+  res.json({
+    message: "Webory Backend API",
+    version: "1.0.0",
+    status: "running",
+    endpoints: {
+      auth: "/api/auth",
+      admin: "/api/admin",
+      health: "/api/health",
+    },
+    frontend: "Deployed separately on Netlify",
+  });
 });
 
 // Health check endpoint
