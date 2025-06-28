@@ -47,7 +47,7 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  timeout: 30000, // 30 seconds for production
+  timeout: 60000, // 60 seconds for production
   withCredentials: false, // Changed to false for cross-origin requests
 });
 
@@ -59,6 +59,7 @@ axiosInstance.interceptors.request.use(
       method: config.method,
       baseURL: config.baseURL,
       fullURL: `${config.baseURL}${config.url}`,
+      timeout: config.timeout,
     });
 
     // Add auth token if available
@@ -111,7 +112,7 @@ export const handleApiError = (error) => {
     config: {
       url: error.config?.url,
       method: error.config?.method,
-      headers: error.config?.headers,
+      baseURL: error.config?.baseURL,
       timeout: error.config?.timeout,
     },
   });
@@ -120,10 +121,17 @@ export const handleApiError = (error) => {
     return "Unable to connect to the server. Please check your internet connection and try again.";
   }
 
+  if (error.code === "ECONNABORTED") {
+    return "Request timed out. The server is taking too long to respond. Please try again.";
+  }
+
   if (error.response) {
     // Server responded with error
     const status = error.response.status;
-    const message = error.response.data?.message || "An error occurred";
+    const message =
+      error.response.data?.error ||
+      error.response.data?.message ||
+      "An error occurred";
 
     switch (status) {
       case 401:
@@ -140,13 +148,10 @@ export const handleApiError = (error) => {
     }
   } else if (error.request) {
     // Request made but no response
-    if (error.code === "ECONNABORTED") {
-      return "Request timed out. Please check your connection";
-    }
-    return "No response from server. Please check if the server is running";
+    return "No response from server. Please check if the server is running and try again.";
   } else {
     // Request setup error
-    return "Failed to make request. Please try again";
+    return "Failed to make request. Please check your connection and try again.";
   }
 };
 
@@ -155,18 +160,21 @@ export const checkServerConnection = async () => {
   try {
     const healthCheckUrl = `${API_BASE_URL}/api/health`;
     console.log("Checking server connection to:", healthCheckUrl);
+
     const response = await fetch(healthCheckUrl, {
       method: "GET",
       headers: {
         Accept: "application/json",
       },
       mode: "cors",
-      credentials: "include",
-      timeout: 5000,
+      credentials: "omit", // Changed to omit
+      timeout: 10000, // 10 seconds timeout
     });
 
     if (!response.ok) {
-      throw new Error(`Server health check failed: ${response.status}`);
+      throw new Error(
+        `Server health check failed: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();

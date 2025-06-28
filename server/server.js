@@ -13,14 +13,7 @@ const server = http.createServer(app);
 require("dotenv").config();
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://weboy.netlify.app/",
-      /https:\/\/[a-z0-9-]+\.vercel\.app$/,
-      /https:\/\/[a-z0-9-]+\.netlify\.app$/,
-      /https:\/\/[a-z0-9-]+\.netlify\.com$/,
-    ],
+    origin: true, // Allow all origins temporarily
     methods: ["GET", "POST"],
   },
 });
@@ -40,18 +33,16 @@ if (missingEnvVars.length > 0) {
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://weboy.netlify.app",
-      "https://webory.netlify.app",
-      /https:\/\/[a-z0-9-]+\.vercel\.app$/,
-      /https:\/\/[a-z0-9-]+\.netlify\.app$/,
-      /https:\/\/[a-z0-9-]+\.netlify\.com$/,
-    ],
-    credentials: true,
+    origin: true, // Allow all origins temporarily
+    credentials: false, // Changed to false for cross-origin requests
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "Origin",
+      "X-Requested-With",
+    ],
   })
 );
 app.use(express.json());
