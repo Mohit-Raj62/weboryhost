@@ -36,8 +36,6 @@ import axios from 'axios';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [page, setPage] = useState(0);
@@ -60,14 +58,10 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      setLoading(true);
       const response = await axios.get('/api/admin/products');
       setProducts(response.data.products);
     } catch (error) {
-      setError('Failed to fetch products');
       console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
     }
   };
 

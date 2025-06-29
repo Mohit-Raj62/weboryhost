@@ -81,7 +81,7 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_BASE_URL]);
+  }, []);
 
   useEffect(() => {
     fetchDashboardData();

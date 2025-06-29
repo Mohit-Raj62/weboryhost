@@ -33,7 +33,7 @@ const Settings = () => {
 
   useEffect(() => {
     fetchSettings();
-  }, []);
+  }, [fetchSettings]);
 
   const fetchSettings = async () => {
     try {

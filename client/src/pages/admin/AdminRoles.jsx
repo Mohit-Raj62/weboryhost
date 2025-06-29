@@ -3,7 +3,6 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../config/api';
 
 const AdminRoles = () => {
-  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedRole, setSelectedRole] = useState(null);
@@ -60,15 +59,11 @@ const AdminRoles = () => {
           throw new Error('No authentication token found');
         }
 
-        const response = await axios.get(`${API_BASE_URL}/api/admin/roles`, {
+        await axios.get(`${API_BASE_URL}/api/admin/roles`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-
-        if (response.data) {
-          setRoles(response.data);
-        }
       } catch (err) {
         console.error('Roles fetch error:', err);
         if (err.response?.status === 401) {
@@ -108,7 +103,7 @@ const AdminRoles = () => {
 
       await axios.put(
         `${API_BASE_URL}/api/admin/roles/${selectedRole}`,
-        { permissions: Object.entries(permissions).filter(([_, value]) => value).map(([key]) => key) },
+        { permissions: Object.entries(permissions).filter(([ , value]) => value).map(([key]) => key) },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -116,16 +111,11 @@ const AdminRoles = () => {
         }
       );
 
-      // Refresh roles after update
-      const response = await axios.get(`${API_BASE_URL}/api/admin/roles`, {
+      await axios.get(`${API_BASE_URL}/api/admin/roles`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-
-      if (response.data) {
-        setRoles(response.data);
-      }
     } catch (err) {
       console.error('Role update error:', err);
       setError('Failed to update role permissions. Please try again.');
