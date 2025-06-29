@@ -21,6 +21,12 @@ router.get("/users", adminAuth, adminController.getUsers);
 router.get("/posts", adminAuth, adminController.getPosts);
 router.get("/comments", adminAuth, adminController.getComments);
 
+// Role management routes
+router.get("/roles", adminAuth, adminController.getRoles);
+router.put("/roles/:role", adminAuth, adminController.updateRole);
+router.post("/roles", adminAuth, adminController.createRole);
+router.delete("/roles/:role", adminAuth, adminController.deleteRole);
+
 // User management
 router.put("/users/:id/status", adminAuth, adminController.updateUserStatus);
 router.delete("/users/:id", adminAuth, adminController.deleteUser);
