@@ -5,19 +5,19 @@ const mongoose = require("mongoose");
 const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/admin");
-const postRoutes = require("./routes/postRoutes");
-const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const errorHandler = require("./middleware/errorHandler");
 require("dotenv").config();
 const app = express();
 
-// CORS configuration
+// CORS configuration - More permissive for Render
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   "https://webory.netlify.app",
   "https://*.netlify.app",
+  "https://webory.onrender.com",
+  "https://*.onrender.com",
   // Add your production frontend URL here
 ];
 
@@ -27,7 +27,9 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     if (
       allowedOrigins.indexOf(origin) !== -1 ||
-      origin.endsWith(".netlify.app")
+      origin.endsWith(".netlify.app") ||
+      origin.endsWith(".onrender.com") ||
+      process.env.NODE_ENV === "development"
     ) {
       callback(null, true);
     } else {
@@ -70,7 +72,8 @@ app.get("/health", (req, res) => {
       origin: req.headers.origin,
       allowed:
         allowedOrigins.includes(req.headers.origin) ||
-        req.headers.origin?.endsWith(".netlify.app"),
+        req.headers.origin?.endsWith(".netlify.app") ||
+        req.headers.origin?.endsWith(".onrender.com"),
     },
   });
 });
@@ -78,8 +81,6 @@ app.get("/health", (req, res) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
 
 // Serve static files (only in production)
@@ -128,11 +129,8 @@ mongoose
     process.exit(1);
   });
 
-// For deployment, set all secrets and config in environment variables (.env or platform dashboard)
-
-const API_BASE_URL = "https://webory.onrender.com/api";
-
-// API connection test
-fetch("https://webory.onrender.com/api/health")
-  .then((res) => res.json())
-  .then((data) => console.log("Backend connected:", data));
+// Remove the problematic fetch call that was causing issues
+// const API_BASE_URL = "https://webory.onrender.com/api";
+// fetch("https://webory.onrender.com/api/health")
+//   .then((res) => res.json())
+//   .then((data) => console.log("Backend connected:", data));
