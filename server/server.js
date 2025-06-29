@@ -72,26 +72,6 @@ app.use(express.static("public"));
 // Remove frontend serving since it's deployed separately on Netlify
 // app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// Database connection
-mongoose
-  .connect(
-    process.env.MONGODB_URI ||
-      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-    console.log("Database:", mongoose.connection.name);
-    console.log("Host:", mongoose.connection.host);
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    process.exit(1);
-  });
-
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
@@ -187,34 +167,27 @@ initializeChat(io);
 
 const PORT = process.env.PORT || 5002;
 
-const startServer = async (port) => {
-  try {
-    server.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-    });
-  } catch (error) {
-    if (error.code === "EADDRINUSE") {
-      console.log(`Port ${port} is busy, trying ${port + 1}`);
-      startServer(port + 1);
-    } else {
-      console.error("Error starting server:", error);
-      process.exit(1);
-    }
-  }
-};
-
-// Connect to MongoDB and start server
+// Database connection and server start
 mongoose
   .connect(
     process.env.MONGODB_URI ||
-      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory"
+      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
   )
   .then(() => {
     console.log("Connected to MongoDB");
     console.log("Database:", mongoose.connection.name);
     console.log("Host:", mongoose.connection.host);
-    startServer(PORT);
+
+    // Start server after MongoDB connection
+    server.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`Health check: http://localhost:${PORT}/api/health`);
+    });
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
