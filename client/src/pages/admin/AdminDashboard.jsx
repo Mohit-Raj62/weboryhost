@@ -38,7 +38,12 @@ const AdminDashboard = () => {
   const [notifications, setNotifications] = useState([]);
 
   // New state for enhanced functionality
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin', status: 'active', joined: '2024-01-15' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'moderator', status: 'active', joined: '2024-01-20' },
+    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'editor', status: 'active', joined: '2024-02-01' },
+    { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', role: 'user', status: 'inactive', joined: '2024-02-15' }
+  ]);
   const [systemSettings, setSystemSettings] = useState({
     siteName: 'Webory',
     siteDescription: 'Professional Web Services',
@@ -61,6 +66,19 @@ const AdminDashboard = () => {
     userEngagement: {},
     contentPerformance: []
   });
+
+  // User management functions
+  const [userSearch, setUserSearch] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState('');
+  const [userStatusFilter, setUserStatusFilter] = useState('');
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [newUser, setNewUser] = useState({ name: '', email: '', role: 'user', password: '' });
+
+  // System settings functions
+  const [settingsSaved, setSettingsSaved] = useState(false);
+
+  // Analytics functions
+  const [analyticsPeriod, setAnalyticsPeriod] = useState('30d');
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -159,6 +177,170 @@ const AdminDashboard = () => {
       case 'warning': return 'text-yellow-600 bg-yellow-100';
       case 'degraded': return 'text-orange-600 bg-orange-100';
       default: return 'text-red-600 bg-red-100';
+    }
+  };
+
+  // User Management Functions
+  const handleAddUser = () => {
+    if (newUser.name && newUser.email && newUser.password) {
+      const user = {
+        id: users.length + 1,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        status: 'active',
+        joined: new Date().toISOString().split('T')[0]
+      };
+      setUsers([...users, user]);
+      setNewUser({ name: '', email: '', role: 'user', password: '' });
+      setShowAddUserModal(false);
+      addNotification('User added successfully!', 'success');
+    } else {
+      addNotification('Please fill all required fields', 'error');
+    }
+  };
+
+  const handleEditUser = (userId) => {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      addNotification(`Editing user: ${user.name}`, 'info');
+      // Here you would typically open an edit modal
+    }
+  };
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      setUsers(users.filter(u => u.id !== userId));
+      addNotification('User deleted successfully!', 'success');
+    }
+  };
+
+  const handleSuspendUser = (userId) => {
+    setUsers(users.map(u => 
+      u.id === userId 
+        ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' }
+        : u
+    ));
+    const user = users.find(u => u.id === userId);
+    addNotification(`User ${user.name} ${user.status === 'active' ? 'suspended' : 'activated'}`, 'warning');
+  };
+
+  const handleRoleChange = (userId, newRole) => {
+    setUsers(users.map(u => 
+      u.id === userId ? { ...u, role: newRole } : u
+    ));
+    const user = users.find(u => u.id === userId);
+    addNotification(`Role changed for ${user.name} to ${newRole}`, 'success');
+  };
+
+  // Filter users based on search and filters
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+                         user.email.toLowerCase().includes(userSearch.toLowerCase());
+    const matchesRole = !userRoleFilter || user.role === userRoleFilter;
+    const matchesStatus = !userStatusFilter || user.status === userStatusFilter;
+    return matchesSearch && matchesRole && matchesStatus;
+  });
+
+  // System Settings Functions
+  const handleSaveSettings = () => {
+    // Here you would typically save to backend
+    setSettingsSaved(true);
+    addNotification('Settings saved successfully!', 'success');
+    setTimeout(() => setSettingsSaved(false), 3000);
+  };
+
+  const handleMaintenanceMode = () => {
+    setSystemSettings({...systemSettings, maintenanceMode: !systemSettings.maintenanceMode});
+    addNotification(`Maintenance mode ${!systemSettings.maintenanceMode ? 'enabled' : 'disabled'}`, 'warning');
+  };
+
+  const handleUserRegistration = () => {
+    setSystemSettings({...systemSettings, userRegistration: !systemSettings.userRegistration});
+    addNotification(`User registration ${!systemSettings.userRegistration ? 'enabled' : 'disabled'}`, 'info');
+  };
+
+  const handleEmailNotifications = () => {
+    setSystemSettings({...systemSettings, emailNotifications: !systemSettings.emailNotifications});
+    addNotification(`Email notifications ${!systemSettings.emailNotifications ? 'enabled' : 'disabled'}`, 'info');
+  };
+
+  const handleIntegrationToggle = (integration) => {
+    setSystemSettings({
+      ...systemSettings, 
+      integrations: {
+        ...systemSettings.integrations,
+        [integration]: !systemSettings.integrations[integration]
+      }
+    });
+    addNotification(`${integration} integration ${!systemSettings.integrations[integration] ? 'enabled' : 'disabled'}`, 'info');
+  };
+
+  // Analytics Functions
+  const handleExportData = () => {
+    const data = {
+      analytics: analytics,
+      stats: stats,
+      users: users,
+      settings: systemSettings
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `admin-dashboard-export-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    addNotification('Data exported successfully!', 'success');
+  };
+
+  const handleGenerateReport = () => {
+    addNotification('Generating comprehensive report...', 'info');
+    // Here you would typically generate a detailed report
+    setTimeout(() => {
+      addNotification('Report generated successfully!', 'success');
+    }, 2000);
+  };
+
+  const handleAnalyticsPeriodChange = (period) => {
+    setAnalyticsPeriod(period);
+    addNotification(`Analytics period changed to ${period}`, 'info');
+  };
+
+  // Notification Functions
+  const addNotification = (message, type = 'info') => {
+    const notification = {
+      id: Date.now(),
+      message,
+      type,
+      timestamp: new Date()
+    };
+    setNotifications(prev => [notification, ...prev.slice(0, 4)]);
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  // Quick Actions Functions
+  const handleQuickAction = (action) => {
+    switch (action) {
+      case 'addUser':
+        setShowAddUserModal(true);
+        break;
+      case 'createPost':
+        addNotification('Redirecting to post creation...', 'info');
+        break;
+      case 'manageRoles':
+        setActiveTab('users');
+        addNotification('Switched to user management', 'info');
+        break;
+      case 'settings':
+        setActiveTab('settings');
+        addNotification('Switched to system settings', 'info');
+        break;
+      default:
+        addNotification(`Action ${action} triggered`, 'info');
     }
   };
 
@@ -940,16 +1122,26 @@ const AdminDashboard = () => {
                 <input
                   type="text"
                   placeholder="Search users..."
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
                   className="border border-gray-300 rounded-md px-3 py-2 flex-1"
                 />
-                <select className="border border-gray-300 rounded-md px-3 py-2">
+                <select 
+                  value={userRoleFilter}
+                  onChange={(e) => setUserRoleFilter(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2"
+                >
                   <option value="">All Roles</option>
                   <option value="admin">Administrator</option>
                   <option value="moderator">Moderator</option>
                   <option value="editor">Editor</option>
                   <option value="user">User</option>
                 </select>
-                <select className="border border-gray-300 rounded-md px-3 py-2">
+                <select 
+                  value={userStatusFilter}
+                  onChange={(e) => setUserStatusFilter(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2"
+                >
                   <option value="">All Status</option>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
@@ -970,12 +1162,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {[
-                      { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin', status: 'active', joined: '2024-01-15' },
-                      { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'moderator', status: 'active', joined: '2024-01-20' },
-                      { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'editor', status: 'active', joined: '2024-02-01' },
-                      { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', role: 'user', status: 'inactive', joined: '2024-02-15' }
-                    ].map((user) => (
+                    {filteredUsers.map((user) => (
                       <tr key={user.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -992,6 +1179,8 @@ const AdminDashboard = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <select 
+                            value={user.role}
+                            onChange={(e) => handleRoleChange(user.id, e.target.value)}
                             className={`text-sm px-2 py-1 rounded-full ${
                               user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
                               user.role === 'moderator' ? 'bg-blue-100 text-blue-800' :
@@ -1019,9 +1208,24 @@ const AdminDashboard = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
-                            <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
-                            <button className="text-red-600 hover:text-red-900">Delete</button>
-                            <button className="text-yellow-600 hover:text-yellow-900">Suspend</button>
+                            <button 
+                              onClick={() => handleEditUser(user.id)}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Edit
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteUser(user.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              Delete
+                            </button>
+                            <button 
+                              onClick={() => handleSuspendUser(user.id)}
+                              className="text-yellow-600 hover:text-yellow-900"
+                            >
+                              {user.status === 'active' ? 'Suspend' : 'Activate'}
+                            </button>
                           </div>
                         </td>
                       </tr>
