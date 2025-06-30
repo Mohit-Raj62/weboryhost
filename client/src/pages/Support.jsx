@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ContactForm from '../components/ContactForm';
 import SupportTicketForm from '../components/SupportTicketForm';
+import LiveChat from '../components/LiveChat';
 
 const Support = () => {
+  const [showLiveChat, setShowLiveChat] = useState(false);
+
+  const handleLiveChatClick = () => setShowLiveChat(true);
+  const handleCloseLiveChat = () => setShowLiveChat(false);
+
+  const handleEmailClick = () => {
+    window.location.href = 'mailto:weboryinfo@gmail.com'; // Replace with your support email
+  };
+
+  const handlePhoneClick = () => {
+    window.location.href = 'tel:+91 94704-89367'; // Replace with your support phone number
+  };
+
   return (
     <div className="support-page min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden">
       <style>{`
@@ -373,19 +387,19 @@ const Support = () => {
         <div className="support-card">
           <h3>Live Chat Support</h3>
           <p>Connect with our support team instantly through our live chat system. Available 24/7 for immediate assistance.</p>
-          <button className="submit-button">Start Chat</button>
+          <button className="submit-button" onClick={handleLiveChatClick}>Start Chat</button>
         </div>
 
         <div className="support-card">
           <h3>Email Support</h3>
           <p>Send us an email and our team will respond within 24 hours with detailed solutions to your queries.</p>
-          <button className="submit-button">Send Email</button>
+          <button className="submit-button" onClick={handleEmailClick}>Send Email</button>
         </div>
 
         <div className="support-card">
           <h3>Phone Support</h3>
           <p>Speak directly with our technical experts. Available during business hours for personalized assistance.</p>
-          <button className="submit-button">Call Now</button>
+          <button className="submit-button" onClick={handlePhoneClick}>Call Now</button>
         </div>
       </div>
 
@@ -400,6 +414,43 @@ const Support = () => {
         <p>Email Support: 24/7 (Response within 24 hours)</p>
         <p>Phone Support: Monday - Friday, 9:00 AM - 6:00 PM EST</p>
       </div>
+
+      {/* Live Chat Modal */}
+      {showLiveChat && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.5)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={handleCloseLiveChat}
+              style={{
+                position: 'absolute',
+                top: -40,
+                right: 0,
+                background: 'transparent',
+                color: 'white',
+                fontSize: 32,
+                border: 'none',
+                cursor: 'pointer',
+                zIndex: 1001,
+              }}
+              aria-label="Close Live Chat"
+            >
+              &times;
+            </button>
+            <LiveChat />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

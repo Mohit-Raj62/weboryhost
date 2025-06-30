@@ -33,7 +33,7 @@ const About = () => {
       name: "Mohit Sinha",
       role: "CEO, Founder & CTO",
       image: "👨‍💼",
-      bio: "Visionary leader driving innovation, strategy, and scalable tech solutions with 8+ years of experience in software architecture.",
+      bio: "Visionary leader, founder, and CTO driving innovation, strategy, and scalable tech solutions—melding forward-thinking vision with hands-on technical depth to steer transformative roadmaps and high-performing teams.",
       skills: ["Leadership", "Strategy", "Tech Architecture"],
       social: { email: "singm2698@gmail.com", phone: "+91-62059 47359" }
     },
@@ -42,7 +42,7 @@ const About = () => {
       role: "Co-Founder, CMO & COO",
       image: "👨‍💻",
       bio: "Co-Founder driving brand growth, marketing strategy, and operational excellence with proven track record in scaling businesses.",
-      skills: ["Marketing", "Operations", "Business Development"],
+      skills: ["Marketing", "Operations", "Business Development" , "Social Media", "Leadership"],
       social: { email: "utkarshvats3434@gmail.com", phone: "+91-94316 15128" , Instagram: "https://www.instagram.com/utkarshvats_/"}
     },
     {
@@ -57,8 +57,8 @@ const About = () => {
       name: "Piyush Aryan",
       role: "Lead Developer, Marketing Head, Content Writer",
       image: "👨‍💻",
-      bio: "Full-stack developer, strategic marketing head, and creative content writer driving technical innovation and brand visibility.",
-      skills: ["Full-Stack Development", "Content Strategy", "Digital Marketing"],
+      bio: "strategic marketing head, and creative content writer driving technical innovation and brand visibility.",
+      skills: [ "Content Strategy", "Digital Marketing", "Social Media", "Content Writing" ],
       social: { email: "thepiyusharyan@gmail.com", phone: "+91-7992421732" }
     },
     {
