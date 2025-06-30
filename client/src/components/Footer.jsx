@@ -24,8 +24,10 @@ import {
   Email as EmailIcon,
   Send as SendIcon,
   Phone as PhoneIcon,
-  LocationOn as LocationIcon
+  LocationOn as LocationIcon,
+  WhatsApp,
 } from '@mui/icons-material';
+import ThreadsIcon from '@mui/icons-material/Gesture';
 
 const Footer = () => {
   // const theme = useTheme();
@@ -76,9 +78,12 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: <FacebookIcon />, path: 'https://facebook.com' },
-    { icon: <XIcon />, path: 'https://twitter.com' },
-    { icon: <InstagramIcon />, path: 'https://instagram.com' },
-    { icon: <LinkedInIcon />, path: 'https://linkedin.com' }
+    { icon: <XIcon />, path: 'https://x.com/Weboryinfo?t=-00bwPiELtq_XS_WvZZl2w&s=08' },
+    { icon: <InstagramIcon />, path: 'https://www.instagram.com/weboryinfo?igsh=YjZmbjRwdHhmNHU2' },
+    { icon: <ThreadsIcon />, path: 'https://www.threads.net/@weboryinfo' },
+    { icon: <LinkedInIcon />, path: 'https://www.linkedin.com/in/webory-info-35a257372?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
+    { icon: <WhatsApp/>, path: 'https://whatsapp.com/channel/0029Vb3Cd5JFnSzHB0i0on04' }
+    
   ];
 
   const handleSubscribe = (e) => {

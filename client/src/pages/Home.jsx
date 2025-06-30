@@ -129,34 +129,34 @@ const Home = () => {
   const testimonials = [
     {
       id: 1,
-      name: 'Sarah Johnson',
+      name: 'Ayaan Singh',
       company: 'TechStart Inc.',
       text: 'Webory transformed our vision into a stunning website that exceeded all expectations. Their attention to detail is remarkable.',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b601?w=100&h=100&fit=crop&crop=face',
+      // image: 'https://images.unsplash.com/photo-1494790108755-2616b612b601?w=100&h=100&fit=crop&crop=face',
       rating: 5
     },
     {
       id: 2,
-      name: 'Michael Chen',
+      name: 'Rajesh Kumar',
       company: 'Design Studio',
       text: 'Professional, creative, and delivered on time. The team at Webory is simply outstanding at what they do.',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
+      // image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
       rating: 5
     },
     {
       id: 3,
-      name: 'Emily Rodriguez',
+      name: 'Ekansh Singh',
       company: 'E-Commerce Pro',
       text: 'Our online sales increased by 300% after Webory redesigned our website. Incredible results and fantastic team!',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
+      // image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
       rating: 5
     }
   ];
 
   const stats = [
-    { number: '200+', label: 'Projects Completed', icon: '✨' },
-    { number: '150+', label: 'Happy Clients', icon: '😊' },
-    { number: '5+', label: 'Years Experience', icon: '🏆' },
+    { number: '100+', label: 'Projects Completed', icon: '✨' },
+    { number: '50+', label: 'Happy Clients', icon: '😊' },
+    { number: '2+', label: 'Years Experience', icon: '🏆' },
     { number: '24/7', label: 'Support Available', icon: '🔧' }
   ];
 
