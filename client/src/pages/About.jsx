@@ -1,644 +1,430 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, Mail, Phone, MapPin, Users, Target, Award, Zap, Contact } from 'lucide-react';
 
 const About = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(prev => ({
+            ...prev,
+            [entry.target.id]: entry.isIntersecting
+          }));
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[id]').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   const team = [
     {
-      name: "John Smith",
-      role: "CEO & Founder",
+      name: "Mohit Sinha",
+      role: "CEO, Founder & CTO",
       image: "👨‍💼",
-      bio: "Visionary leader with 15+ years of experience in technology and business development."
+      bio: "Visionary leader driving innovation, strategy, and scalable tech solutions with 8+ years of experience in software architecture.",
+      skills: ["Leadership", "Strategy", "Tech Architecture"],
+      social: { email: "singm2698@gmail.com", phone: "+91-62059 47359" }
     },
     {
-      name: "Sarah Johnson",
-      role: "CTO",
-      image: "👩‍💻",
-      bio: "Tech innovator specializing in scalable architecture and emerging technologies."
-    },
-    {
-      name: "Michael Chen",
-      role: "Lead Developer",
+      name: "Utkarsh Vats",
+      role: "Co-Founder, CMO & COO",
       image: "👨‍💻",
-      bio: "Full-stack expert passionate about creating efficient and elegant solutions."
+      bio: "Co-Founder driving brand growth, marketing strategy, and operational excellence with proven track record in scaling businesses.",
+      skills: ["Marketing", "Operations", "Business Development"],
+      social: { email: "utkarshvats3434@gmail.com", phone: "+91-94316 15128" , Instagram: "https://www.instagram.com/utkarshvats_/"}
     },
     {
-      name: "Emily Davis",
-      role: "Creative Director",
+      name: "Saloni Singh",
+      role: "HR, SMM & Creative Director",
       image: "👩‍🎨",
-      bio: "Award-winning designer focused on creating exceptional user experiences."
-    },{
-      name: "Emily Davis",
-      role: "Creative Director",
-      image: "👩‍🎨",
-      bio: "Award-winning designer focused on creating exceptional user experiences."
-    },{
-      name: "Emily Davis",
-      role: "Creative Director",
-      image: "👩‍🎨",
-      bio: "Award-winning designer focused on creating exceptional user experiences."
+      bio: "People-focused HR expert, growth-driven social media strategist, and visionary creative lead crafting impactful brand experiences.",
+      skills: ["Creative Design", "HR Management", "Social Media"],
+      social: { email: "salonisingh17781@gmail.com", phone: "+91-9142812872" }
+    },
+    {
+      name: "Piyush Aryan",
+      role: "Lead Developer, Marketing Head, Content Writer",
+      image: "👨‍💻",
+      bio: "Full-stack developer, strategic marketing head, and creative content writer driving technical innovation and brand visibility.",
+      skills: ["Full-Stack Development", "Content Strategy", "Digital Marketing"],
+      social: { email: "thepiyusharyan@gmail.com", phone: "+91-7992421732" }
+    },
+    {
+      name: "Rupesh Singh",
+      role: "SMM Head, PR Head & Product Manager",
+      image: "👨‍💻",
+      bio: "Digital-first social media expert, reputation-focused PR lead, and product manager turning innovative ideas into user-centric solutions.",
+      skills: ["Product Management", "Public Relations", "Social Media Strategy"],
+      social: { email: "rupesh.jbit@gmail.com", phone: "+91-7667959622" }
     }
   ];
 
+  const stats = [
+    { icon: <Users className="w-8 h-8" />, number: "50+", label: "Happy Clients" },
+    { icon: <Target className="w-8 h-8" />, number: "100+", label: "Projects Completed" },
+    { icon: <Award className="w-8 h-8" />, number: "2+", label: "Years Experience" },
+    { icon: <Zap className="w-8 h-8" />, number: "24/7", label: "Support Available" }
+  ];
+
+  const values = [
+    {
+      title: "Innovation",
+      description: "Constantly pushing boundaries to deliver cutting-edge solutions that drive growth and success.",
+      icon: "🚀"
+    },
+    {
+      title: "Excellence",
+      description: "Committed to delivering the highest quality in every project, no matter the size or scope.",
+      icon: "⭐"
+    },
+    {
+      title: "Integrity",
+      description: "Building trust through transparent communication and honest business practices.",
+      icon: "🤝"
+    },
+    {
+      title: "Collaboration",
+      description: "Working together with clients and team members to achieve exceptional results.",
+      icon: "👥"
+    }
+  ];
+
+  // const handleContactUs = () => {
+  //   window.location.href = 'mailto:contact@webory.com?subject=Project Inquiry&body=Hi there! I would like to discuss a project with you.';
+  // };
+
+  const handleScheduleCall = () => {
+    // You can replace this with your preferred scheduling service (Calendly, Acuity, etc.)
+    window.open('https://calendly.com/weboryinfo', '_blank');
+  };
+
   return (
-    <div className="about-page min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden text-white">
       <style>{`
         @keyframes float {
-          0% { transform: translateY(0px); }
+          0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
-          100% { transform: translateY(0px); }
         }
 
-        // @keyframes pulse {
-        //   0% { transform: scale(1); }
-        //   50% { transform: scale(1.05); }
-        //   100% { transform: scale(1); }
-        // }
-
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 2; transform: translateY(0); }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.05); opacity: 0.8; }
         }
 
-        @keyframes shine {
-          from { background-position: 200% center; }
-          to { background-position: -200% center; }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
         }
 
         @keyframes glow {
-          0% { box-shadow: 0 0 5px rgba(255,255,255,0.1); }
-          50% { box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-          100% { box-shadow: 0 0 5px rgba(255,255,255,0.1); }
+          0%, 100% { box-shadow: 0 0 5px rgba(255,255,255,0.1); }
+          50% { box-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 30px rgba(168,85,247,0.2); }
         }
 
-        .about-page {
-          padding: 4rem 2rem;
-          max-width: 2200px;
-          margin: 0 auto;
-          color: white;
-          position: relative;
+        @keyframes backgroundShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
         }
 
-        .about-page::before {
-          content: '';
-          position: absolute;
+        .animate-fadeInUp { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-slideInLeft { animation: slideInLeft 0.8s ease-out forwards; }
+        .animate-slideInRight { animation: slideInRight 0.8s ease-out forwards; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse 4s ease-in-out infinite; }
+        .animate-glow { animation: glow 3s ease-in-out infinite; }
+        .animate-shimmer { 
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+          background-size: 200% 100%;
+          animation: shimmer 2s infinite;
+        }
+
+        .parallax-bg {
+          background: linear-gradient(135deg, #1e1b4b, #581c87, #be185d);
+          background-size: 400% 400%;
+          animation: backgroundShift 10s ease infinite;
+        }
+
+        .glass-effect {
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-effect:hover {
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .text-gradient {
+          background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #c084fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .hover-lift {
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .scroll-indicator {
+          position: fixed;
           top: 0;
           left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
-          pointer-events: none;
-          animation: pulse 8s ease-in-out infinite;
+          height: 3px;
+          background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+          z-index: 50;
+          transition: width 0.1s ease;
         }
 
-        .hero-section {
-          text-align: center;
-          padding: 8rem 0;
-          position: relative;
-          animation: fadeIn 1s ease-out;
-        }
-
-        .hero-section::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 150%;
-          height: 150%;
-          background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-          pointer-events: none;
-          animation: pulse 4s ease-in-out infinite;
-        }
-
-        .hero-section h1 {
-          font-size: 4.5rem;
-          font-weight: 800;
-          margin-bottom: 1.5rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          letter-spacing: -0.02em;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .hero-section p {
-          font-size: 1.5rem;
-          color: rgba(255, 255, 255, 0.95);
-          max-width: 700px;
-          margin: 0 auto;
-          line-height: 1.6;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .mission-section {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          border-radius: 30px;
-          padding: 5rem;
-          margin: 6rem auto;
-          text-align: center;
-          max-width: 1000px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          transform: translateY(0);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          animation: fadeIn 1s ease-out 0.2s both;
-        }
-
-        .mission-section:hover {
-          transform: translateY(-5px);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .mission-section h2 {
-          font-size: 3rem;
-          margin-bottom: 2rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .mission-section p {
-          color: rgba(255, 255, 255, 0.95);
-          line-height: 1.8;
-          max-width: 800px;
-          margin: 0 auto;
-          font-size: 1.3rem;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .values-section {
-          margin: 8rem 0;
-          padding: 0 1rem;
-          animation: fadeIn 1s ease-out 0.4s both;
-        }
-
-        .values-section h2 {
-          text-align: center;
-          font-size: 3rem;
-          margin-bottom: 4rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .values-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 3rem;
-          margin-top: 2rem;
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-
-        .value-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          border-radius: 24px;
-          padding: 3rem;
-          text-align: center;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          animation: fadeIn 1s ease-out 0.6s both;
-        }
-
-        .value-card:hover {
-          transform: translateY(-10px) scale(1.02);
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .value-card h3 {
-          font-size: 2rem;
-          margin: 1.5rem 0;
-          color: #fff;
-          font-weight: 700;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .value-card p {
-          color: rgba(255, 255, 255, 0.9);
-          line-height: 1.7;
-          font-size: 1.2rem;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .team-section {
-          margin: 8rem 0;
-          padding: 0 1rem;
-          animation: fadeIn 1s ease-out 0.8s both;
-        }
-
-        .team-section h2 {
-          text-align: center;
-          font-size: 3rem;
-          margin-bottom: 4rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .team-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 3rem;
-          margin-top: 2rem;
-          max-width: 1600px;
-          margin: 0 auto;
-        }
-
-        .team-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          border-radius: 24px;
-          padding: 3rem;
-          text-align: center;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          animation: fadeIn 1s ease-out 1s both;
-        }
-
-        .team-card:hover {
-          transform: translateY(-10px) scale(1.02);
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .team-image {
-          font-size: 5rem;
-          margin-bottom: 2rem;
-          background: rgba(255, 255, 255, 0.1);
-          padding: 2rem;
-          border-radius: 20px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .team-card h3 {
-          font-size: 2rem;
-          margin: 0.5rem 0;
-          color: #fff;
-          font-weight: 700;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .team-card h4 {
-          font-size: 1.3rem;
-          margin: 0.5rem 0;
-          color: rgba(255, 255, 255, 0.8);
-          font-weight: 500;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .team-card p {
-          color: rgba(255, 255, 255, 0.9);
-          line-height: 1.7;
-          margin-top: 1.5rem;
-          font-size: 1.2rem;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .cta-section {
-          text-align: center;
-          margin: 8rem auto;
-          padding: 5rem;
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: 30px;
-          max-width: 1000px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(12px);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          animation: fadeIn 1s ease-out 1.2s both;
-        }
-
-        .cta-section:hover {
-          transform: translateY(-5px);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .cta-section h2 {
-          font-size: 3.2rem;
-          margin-bottom: 2rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .cta-section p {
-          font-size: 1.4rem;
-          color: rgba(255, 255, 255, 0.95);
-          max-width: 600px;
-          margin: 0 auto 3rem;
-          line-height: 1.7;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .cta-button {
-          display: inline-block;
-          padding: 1.4rem 3.5rem;
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          color: white;
-          text-decoration: none;
-          border-radius: 16px;
-          font-weight: 600;
-          font-size: 1.3rem;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .cta-button:hover {
-          transform: translateY(-5px) scale(1.02);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        .team-card-expanded {
+          transform: scale(1.05);
+          z-index: 10;
         }
 
         @media (max-width: 768px) {
-          .about-page {
-            padding: 2rem 1rem;
-          }
-          
-          .hero-section {
-            padding: 4rem 0;
-          }
-          
-          .hero-section h1 {
-            font-size: 2.8rem;
-          }
-          
-          .hero-section p {
-            font-size: 1.2rem;
-          }
-          
-          .mission-section,
-          .cta-section {
-            padding: 3rem 2rem;
-            margin: 4rem auto;
-          }
-          
-          .values-grid,
-          .team-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-          
-          .team-card,
-          .value-card {
-            padding: 2.5rem;
-          }
-
-          .team-image {
-            font-size: 4rem;
-            padding: 1.5rem;
-          }
-        }
-
-        .value-card, .team-card, .mission-section, .cta-section {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
-
-        .value-card::before, .team-card::before, .mission-section::before, .cta-section::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent
-          );
-          transition: 0.5s;
-        }
-
-        .value-card:hover::before, .team-card:hover::before, 
-        .mission-section:hover::before, .cta-section:hover::before {
-          left: 100%;
-        }
-
-        .value-card, .team-card {
-          transform-style: preserve-3d;
-          perspective: 1000px;
-        }
-
-        .value-card:hover, .team-card:hover {
-          transform: translateY(-10px) scale(1.02) rotateX(2deg) rotateY(2deg);
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            0 0 20px rgba(255, 255, 255, 0.1);
-          animation: glow 2s infinite;
-        }
-
-        .value-card:active, .team-card:active {
-          transform: translateY(-5px) scale(0.98);
-          transition: all 0.1s ease;
-        }
-
-        .team-image {
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          transform-style: preserve-3d;
-        }
-
-        .team-card:hover .team-image {
-          transform: scale(1.1) translateZ(20px);
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .team-card:hover h3 {
-          transform: translateZ(30px);
-          text-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .team-card:hover h4 {
-          transform: translateZ(20px);
-        }
-
-        .team-card:hover p {
-          transform: translateZ(10px);
-        }
-
-        .value-card:hover h3 {
-          transform: translateZ(30px);
-          text-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .value-card:hover p {
-          transform: translateZ(20px);
-        }
-
-        .cta-button {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cta-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-          );
-          transition: 0.5s;
-        }
-
-        .cta-button:hover::before {
-          left: 100%;
-        }
-
-        .cta-button:hover {
-          transform: translateY(-5px) scale(1.02);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            0 0 20px rgba(255, 255, 255, 0.1);
-          animation: glow 2s infinite;
-        }
-
-        .cta-button:active {
-          transform: translateY(-2px) scale(0.98);
-          transition: all 0.1s ease;
-        }
-
-        .mission-section:hover {
-          transform: translateY(-5px);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            0 0 20px rgba(255, 255, 255, 0.1);
-          animation: glow 2s infinite;
-        }
-
-        .mission-section:active {
-          transform: translateY(-2px);
-          transition: all 0.1s ease;
-        }
-
-        @media (hover: none) {
-          .value-card:hover, .team-card:hover, 
-          .mission-section:hover, .cta-section:hover {
+          .hover-lift:hover {
             transform: none;
-            animation: none;
-          }
-
-          .value-card:active, .team-card:active {
-            transform: scale(0.98);
-            transition: all 0.1s ease;
-          }
-
-          .cta-button:active {
-            transform: scale(0.98);
-            transition: all 0.1s ease;
           }
         }
       `}</style>
 
-      <div className="hero-section">
-        <h1>About Webory</h1>
-        <p>Transforming ideas into digital excellence since 2008</p>
+      {/* Scroll Progress Indicator */}
+      <div 
+        className="scroll-indicator"
+        style={{ width: `${(scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100}%` }}
+      />
+
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '4s' }} />
       </div>
 
-      <div className="mission-section">
-        <h2>Our Mission</h2>
-        <p>
-          At Webory, we're dedicated to empowering businesses through innovative technology solutions. 
-          We believe in creating digital experiences that not only meet but exceed expectations, 
-          helping our clients achieve their goals in the digital landscape.
-        </p>
-      </div>
-
-      <div className="values-section">
-        <h2>Our Values</h2>
-        <div className="values-grid">
-          <div className="value-card">
-            <h3>Innovation</h3>
-            <p>Constantly pushing boundaries to deliver cutting-edge solutions that drive growth and success.</p>
-          </div>
-          <div className="value-card">
-            <h3>Excellence</h3>
-            <p>Committed to delivering the highest quality in every project, no matter the size or scope.</p>
-          </div>
-          <div className="value-card">
-            <h3>Integrity</h3>
-            <p>Building trust through transparent communication and honest business practices.</p>
-          </div>
-          <div className="value-card">
-            <h3>Collaboration</h3>
-            <p>Working together with clients and team members to achieve exceptional results.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="team-section">
-        <h2>Our Team</h2>
-        <div className="team-grid">
-          {team.map((member, index) => (
-            <div key={index} className="team-card">
-              <div className="team-image">{member.image}</div>
-              <h3>{member.name}</h3>
-              <h4>{member.role}</h4>
-              <p>{member.bio}</p>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center py-20">
+          <div className={`space-y-8 ${isVisible.hero ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6">
+              About Webory
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+              Transforming ideas into digital excellence since 2024 🚀
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+          
+          <ChevronDown className="w-8 h-8 mt-12 animate-bounce text-gray-400" />
+        </section>
 
-      <div className="cta-section">
-        <h2>Join Us on Our Journey</h2>
-        <p>Let's create something amazing together. Get in touch to discuss your next project.</p>
-        <a href="/contact" className="cta-button">Contact Us</a>
+      
+        {/* Stats Section */}
+        <section id="stats" className="py-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+              <div 
+                key={index}
+                className={`glass-effect rounded-2xl p-6 text-center hover-lift ${
+                  isVisible.stats ? 'animate-fadeInUp' : 'opacity-0'
+                }`}
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="text-indigo-400 mb-4 flex justify-center">{stat.icon}</div>
+                <div className="text-3xl font-bold text-gradient mb-2">{stat.number}</div>
+                <div className="text-gray-300 text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+        {/* Mission Section */}
+        <section id="mission" className="py-20">
+          <div className={`glass-effect rounded-3xl p-8 md:p-12 text-center hover-lift ${
+            isVisible.mission ? 'animate-fadeInUp' : 'opacity-0'
+          }`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-8">Our Mission</h2>
+            <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-4xl mx-auto">
+              At Webory, we're dedicated to empowering businesses through innovative technology solutions. 
+              We believe in creating digital experiences that not only meet but exceed expectations, 
+              helping our clients achieve their goals in the digital landscape. 🚀
+            </p>
+          </div>
+        </section>
+{/* Our Story */}
+        <section id="mission" className="py-20">
+          <div className={`glass-effect rounded-3xl p-8 md:p-12 text-center hover-lift ${
+            isVisible.mission ? 'animate-fadeInUp' : 'opacity-0'
+          }`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-8">Our Story</h2>
+            <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-4xl mx-auto">
+            "At Webory, we blend design, storytelling, and technology to build digital experiences that connect, convert, and inspire."
+             <br />
+            Webory began with a shared frustration—beautiful websites that lacked soul. Co-founders Ayaan and Meher, along with operations lead Zara, set out to build digital experiences that told stories, not just showed products. From humble beginnings to helping brands grow through thoughtful design and tech, Webory became a creative agency where every pixel has purpose.
+            </p>
+          </div>
+        </section>
+
+        {/* Values Section */}
+        <section id="values" className="py-20">
+          <h2 className={`text-4xl md:text-5xl font-bold text-gradient text-center mb-16 ${
+            isVisible.values ? 'animate-fadeInUp' : 'opacity-0'
+          }`}>
+            Our Values
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => (
+              <div 
+                key={index}
+                className={`glass-effect rounded-2xl p-8 text-center hover-lift animate-glow ${
+                  isVisible.values ? 'animate-fadeInUp' : 'opacity-0'
+                }`}
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="text-4xl mb-4 animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
+                  {value.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">{value.title}</h3>
+                <p className="text-gray-300 leading-relaxed">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section id="team" className="py-20">
+          <h2 className={`text-4xl md:text-5xl font-bold text-gradient text-center mb-16 ${
+            isVisible.team ? 'animate-fadeInUp' : 'opacity-0'
+          }`}>
+            Meet Our Team
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {team.map((member, index) => (
+              <div 
+                key={index}
+                className={`glass-effect rounded-2xl p-8 hover-lift animate-glow ${
+                  isVisible.team ? 'animate-fadeInUp' : 'opacity-0'
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="text-center">
+                  <div className="text-6xl mb-6 animate-float" style={{ animationDelay: `${index * 0.3}s` }}>
+                    {member.image}
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">{member.name}</h3>
+                  <h4 className="text-lg text-indigo-300 mb-4 font-medium">{member.role}</h4>
+                  <p className="text-gray-300 leading-relaxed mb-6">{member.bio}</p>
+                  
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-2 justify-center mb-6">
+                    {member.skills.map((skill, skillIndex) => (
+                      <span 
+                        key={skillIndex}
+                        className="px-3 py-1 bg-indigo-600/30 text-indigo-200 rounded-full text-sm"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  {/* Contact */}
+                  <div className="flex justify-center gap-4">
+                    <a 
+                      href={`mailto:${member.social.email}`}
+                      className="p-2 glass-effect rounded-lg hover:bg-indigo-600/20 transition-colors"
+                    >
+                      <Mail className="w-5 h-5" />
+                    </a>
+                    <a 
+                      href={`tel:${member.social.phone}`}
+                      className="p-2 glass-effect rounded-lg hover:bg-green-600/20 transition-colors"
+                    >
+                      <Phone className="w-5 h-5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section id="cta" className="py-20">
+          <div className={`glass-effect rounded-3xl p-8 md:p-12 text-center hover-lift ${
+            isVisible.cta ? 'animate-fadeInUp' : 'opacity-0'
+          }`}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-8">
+              Join Us on Our Journey
+            </h2>
+            <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto mb-10">
+              Let's create something amazing together. Get in touch to discuss your next project and see how we can help bring your vision to life.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button
+                className="px-8 py-4 bg-gradient-to-r to-purple-600 rounded-xl font-semibold hover-lift animate-glow"
+                // onClick={handleContactUs}
+              >
+                <Contact className="w-5 h-5 inline mr-2" />
+                <a href="/contact"> Contact Us</a>
+              </button>
+              <button
+                className="px-8 py-4 glass-effect rounded-xl font-semibold hover-lift"
+                onClick={handleScheduleCall}
+              >
+                <Phone className="w-5 h-5 inline mr-2" />
+                Schedule a Call
+              </button>
+            </div>
+            
+            <div className="mt-8 flex justify-center items-center gap-6 text-gray-400">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm">Patna, Bihar, 20 India</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4" />
+                <span className="text-sm">Available 24/7</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
 };
 
-export default About; 
+export default About;
