@@ -228,7 +228,7 @@ const Navigation = () => {
         
         .nav-link {
           color: #1a202c; 
-          font-size: 18px;
+          font-size: 21px;
           font-weight: 600;
           text-decoration: none;
           padding: 10px 16px;
@@ -734,7 +734,9 @@ const Navigation = () => {
 
       <nav className="navbar" ref={navRef}>
         <div className="nav-brand">
-          <a href="/">Webory</a>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', height: '48px' }}>
+            <img src="/exwayer.regular.webp" alt="Webory Logo" style={{ height: '30px', width: 'auto', display: 'block' }} />
+          </a>
         </div>
 
         <button 
