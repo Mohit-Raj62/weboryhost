@@ -343,7 +343,7 @@ const Home = () => {
                           View Pricing Plans
                         </button>
                         <Link 
-                          to={`/services/${service.id}`}
+                          to={`/services`}
                           className="flex-1 border-2 border-cyan-400/50 hover:border-cyan-400 hover:bg-cyan-400/10 text-cyan-400 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 hover:scale-105 text-center no-underline"
                         >
                           Learn More
@@ -367,7 +367,7 @@ const Home = () => {
                         onClick={() => setSelectedService(null)}
                         className="text-white/70 hover:text-white text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
                       >
-                        ×
+                        ❌
                       </button>
                     </div>
                     

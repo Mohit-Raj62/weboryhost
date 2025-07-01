@@ -33,6 +33,7 @@ const Footer = () => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [email, setEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState({ type: '', message: '' });
 
   const sections = [
     {
@@ -86,11 +87,39 @@ const Footer = () => {
     
   ];
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    // Handle newsletter subscription
-    console.log('Subscribing email:', email);
-    setEmail('');
+    setNewsletterStatus({ type: '', message: '' });
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setNewsletterStatus({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+    const web3FormsData = {
+      access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
+      from_name: "Webory Newsletter",
+      subject: `New Newsletter Subscription: ${email}`,
+      email,
+      form_type: 'Newsletter Subscription',
+    };
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(web3FormsData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setNewsletterStatus({ type: 'success', message: 'Thank you for subscribing!' });
+        setEmail('');
+      } else {
+        setNewsletterStatus({ type: 'error', message: data.message || 'Subscription failed. Please try again.' });
+      }
+    } catch (error) {
+      setNewsletterStatus({ type: 'error', message: 'Subscription failed. Please try again.' });
+    }
   };
 
   return (
@@ -309,6 +338,11 @@ const Footer = () => {
                   )
                 }}
               />
+              {newsletterStatus.message && (
+                <Box sx={{ mb: 1, color: newsletterStatus.type === 'success' ? '#4caf50' : '#f44336', fontWeight: 500 }}>
+                  {newsletterStatus.message}
+                </Box>
+              )}
             </Box>
 
             {/* Social Media Icons */}

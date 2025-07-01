@@ -29,6 +29,13 @@ const Client = () => {
       industry: "Healthcare",
       testimonial: "Webory's healthcare management system has revolutionized how we handle patient data and appointments.",
       project: "Healthcare Management System"
+    },
+    {
+      name: "Mohit Sinha's Portfolio",
+      logo: "👤",
+      industry: "Portfolio",
+      testimonial: "Mohit Sinha's portfolio has helped us showcase our work and attract new clients.",
+      project: "Portfolio Website"
     }
   ];
 
@@ -329,11 +336,11 @@ const Client = () => {
         <h2>Our Impact</h2>
         <div className="stats-grid">
           <div className="stat-card">
-            <h3>500+</h3>
+            <h3>50+</h3>
             <p>Happy Clients</p>
           </div>
           <div className="stat-card">
-            <h3>1000+</h3>
+            <h3>100+</h3>
             <p>Projects Completed</p>
           </div>
           <div className="stat-card">
@@ -341,7 +348,7 @@ const Client = () => {
             <p>Client Satisfaction</p>
           </div>
           <div className="stat-card">
-            <h3>15+</h3>
+            <h3>1.5+</h3>
             <p>Years Experience</p>
           </div>
         </div>

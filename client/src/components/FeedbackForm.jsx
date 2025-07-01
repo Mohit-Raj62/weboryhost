@@ -28,24 +28,45 @@ const FeedbackForm = () => {
     if (!validateForm()) return;
 
     setLoading(true);
+    setErrors({});
+    setSuccess(false);
+
+    // Prepare data for Web3Forms
+    const web3FormsData = {
+      ...formData,
+      access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc", // Same as Contact form
+      from_name: "Webory Feedback Form",
+      subject: `New Feedback from ${formData.name}`,
+      form_type: 'Feedback',
+    };
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Store the submitted feedback
-      setSubmittedFeedback({
-        ...formData,
-        id: Date.now(),
-        date: new Date().toLocaleDateString()
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(web3FormsData)
       });
-      
-      setSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        rating: 5,
-        feedback: ''
-      });
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmittedFeedback({
+          ...formData,
+          id: Date.now(),
+          date: new Date().toLocaleDateString()
+        });
+        setSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          rating: 5,
+          feedback: ''
+        });
+      } else {
+        setErrors({ submit: data.message || 'Failed to submit feedback. Please try again.' });
+      }
     } catch (error) {
       setErrors({ submit: 'Failed to submit feedback. Please try again.' });
     } finally {

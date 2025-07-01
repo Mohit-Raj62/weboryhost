@@ -203,6 +203,9 @@ As blockchain technology matures, we're seeing more web applications integrating
     image: null
   });
 
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState({ type: '', message: '' });
+
   // Load saved blog posts from localStorage on component mount
   useEffect(() => {
     const savedPosts = localStorage.getItem('blogPosts');
@@ -317,6 +320,42 @@ As blockchain technology matures, we're seeing more web applications integrating
         ...prev,
         image: file
       }));
+    }
+  };
+
+  // Newsletter submit handler
+  const handleNewsletterSubscribe = async (e) => {
+    e.preventDefault();
+    setNewsletterStatus({ type: '', message: '' });
+    if (!newsletterEmail || !/\S+@\S+\.\S+/.test(newsletterEmail)) {
+      setNewsletterStatus({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+    const web3FormsData = {
+      access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
+      from_name: "Webory Blog Newsletter",
+      subject: `New Blog Newsletter Subscription: ${newsletterEmail}`,
+      email: newsletterEmail,
+      form_type: 'Blog Newsletter Subscription',
+    };
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(web3FormsData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setNewsletterStatus({ type: 'success', message: 'Thank you for subscribing!' });
+        setNewsletterEmail("");
+      } else {
+        setNewsletterStatus({ type: 'error', message: data.message || 'Subscription failed. Please try again.' });
+      }
+    } catch (error) {
+      setNewsletterStatus({ type: 'error', message: 'Subscription failed. Please try again.' });
     }
   };
 
@@ -467,16 +506,23 @@ As blockchain technology matures, we're seeing more web applications integrating
             <p className="text-white/80 mb-8">
               Get the latest articles and insights delivered straight to your inbox.
             </p>
-            <div className="flex gap-4">
+            <form className="flex gap-4" onSubmit={handleNewsletterSubscribe}>
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500"
+                value={newsletterEmail}
+                onChange={e => setNewsletterEmail(e.target.value)}
               />
-              <button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105">
+              <button type="submit" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105">
                 Subscribe
               </button>
-            </div>
+            </form>
+            {newsletterStatus.message && (
+              <div className={`mt-4 font-semibold ${newsletterStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                {newsletterStatus.message}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -82,7 +82,7 @@ const PrivacyPolicy = () => {
             <h2 className="text-3xl font-bold text-white mb-6">6. Contact Us</h2>
             <div className="space-y-4 text-white/80">
               <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-              <p className="text-cyan-400">privacy@webory.com</p>
+              <p className="text-cyan-400">weboryinfo@gmail.com</p>
             </div>
           </section>
         </div>

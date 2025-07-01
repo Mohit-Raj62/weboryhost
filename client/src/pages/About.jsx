@@ -113,6 +113,9 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden text-white">
       <style>{`
+        .min-h-screen {
+          min-height: 50vh !important;
+        }
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
@@ -233,15 +236,16 @@ const About = () => {
         <div className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '4s' }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center py-20">
           <div className={`space-y-8 ${isVisible.hero ? 'animate-fadeInUp' : 'opacity-0'}`}>
             <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6">
-              About Webory
+              About Webory <br />
+              
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Transforming ideas into digital excellence since 2024 🚀
+               Transforming ideas into digital excellence since 2024 🚀
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
             </div>

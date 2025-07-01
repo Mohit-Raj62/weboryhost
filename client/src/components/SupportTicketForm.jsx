@@ -16,25 +16,47 @@ const SupportTicketForm = () => {
     event.preventDefault();
     setResult("Sending....");
     setLoading(true);
-    const formData = new FormData(event.target);
+
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const issueType = form.issueType.value;
+    const description = form.description.value;
     const ticketNum = generateTicketNumber();
-    formData.append("ticketNumber", ticketNum);
-    formData.append("access_key", "7203cedb-c88e-49fd-9559-c83b4426bfcc");
 
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData
-    });
+    // Build web3FormsData
+    const web3FormsData = {
+      access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
+      from_name: "Webory Support Ticket",
+      subject: `New Support Ticket #${ticketNum} from ${name}`,
+      form_type: 'Support Ticket',
+      ticketNumber: ticketNum,
+      name,
+      email,
+      issueType,
+      description
+    };
 
-    const data = await response.json();
-
-    if (data.success) {
-      setResult("Support Ticket Submitted Successfully!");
-      setTicketNumber(ticketNum);
-      event.target.reset();
-    } else {
-      console.log("Error", data);
-      setResult(data.message);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(web3FormsData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setResult("Support Ticket Submitted Successfully!");
+        setTicketNumber(ticketNum);
+        form.reset();
+      } else {
+        setResult(data.message);
+        setTicketNumber("");
+      }
+    } catch (error) {
+      setResult("Submission failed. Please try again.");
       setTicketNumber("");
     }
     setLoading(false);

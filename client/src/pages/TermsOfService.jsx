@@ -83,7 +83,7 @@ const TermsOfService = () => {
             <h2 className="text-3xl font-bold text-white mb-6">7. Contact Information</h2>
             <div className="space-y-4 text-white/80">
               <p>If you have any questions about these Terms of Service, please contact us at:</p>
-              <p className="text-cyan-400">legal@webory.com</p>
+              <p className="text-cyan-400">weboryinfo@gmail.com</p>
             </div>
           </section>
         </div>
