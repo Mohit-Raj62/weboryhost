@@ -9,6 +9,9 @@ const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const errorHandler = require("./middleware/errorHandler");
+const projectRoutes = require("./routes/projectRoutes");
+const invoiceRoutes = require("./routes/invoiceRoutes");
+const fs = require("fs");
 require("dotenv").config();
 const app = express();
 
@@ -81,6 +84,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/invoices", invoiceRoutes);
 
 // Serve static files (only in production)
 if (process.env.NODE_ENV === "production") {
@@ -136,3 +141,17 @@ const API_BASE_URL = "https://webory.onrender.com/api";
 fetch("https://webory.onrender.com/api/health")
   .then((res) => res.json())
   .then((data) => console.log("Backend connected:", data));
+
+// Plugin loader
+const pluginsDir = path.join(__dirname, "plugins");
+if (fs.existsSync(pluginsDir)) {
+  fs.readdirSync(pluginsDir).forEach((file) => {
+    if (file.endsWith(".js")) {
+      const plugin = require(path.join(pluginsDir, file));
+      if (typeof plugin === "function") {
+        plugin(app);
+        console.log(`Loaded plugin: ${file}`);
+      }
+    }
+  });
+}

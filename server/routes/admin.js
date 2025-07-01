@@ -30,6 +30,9 @@ router.delete("/roles/:role", adminAuth, adminController.deleteRole);
 // User management
 router.put("/users/:id/status", adminAuth, adminController.updateUserStatus);
 router.delete("/users/:id", adminAuth, adminController.deleteUser);
+router.post("/users", adminAuth, adminController.createUser);
+router.get("/users/:id", adminAuth, adminController.getUserById);
+router.put("/users/:id", adminAuth, adminController.updateUser);
 
 // Post management
 router.put("/posts/:id/status", adminAuth, adminController.updatePostStatus);

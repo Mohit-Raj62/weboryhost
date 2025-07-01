@@ -165,6 +165,57 @@ app.use((err, req, res, next) => {
 // Initialize chat
 initializeChat(io);
 
+// --- Socket.IO Real-Time Project Management Events ---
+io.on("connection", (socket) => {
+  console.log("🟢 New client connected:", socket.id);
+
+  // Join project room
+  socket.on("joinProject", (projectId) => {
+    socket.join(projectId);
+    console.log(`Socket ${socket.id} joined project ${projectId}`);
+  });
+
+  // Leave project room
+  socket.on("leaveProject", (projectId) => {
+    socket.leave(projectId);
+    console.log(`Socket ${socket.id} left project ${projectId}`);
+  });
+
+  // Project updated
+  socket.on("projectUpdated", (project) => {
+    io.to(project._id).emit("projectUpdated", project);
+  });
+
+  // Task updated
+  socket.on("taskUpdated", ({ projectId, task }) => {
+    io.to(projectId).emit("taskUpdated", task);
+  });
+
+  // New comment
+  socket.on("commentAdded", ({ projectId, comment }) => {
+    io.to(projectId).emit("commentAdded", comment);
+  });
+
+  // New file
+  socket.on("fileAdded", ({ projectId, file }) => {
+    io.to(projectId).emit("fileAdded", file);
+  });
+
+  // Activity log
+  socket.on("activityLogged", ({ projectId, log }) => {
+    io.to(projectId).emit("activityLogged", log);
+  });
+
+  // Notifications (task assignment, deadline, etc.)
+  socket.on("notify", ({ projectId, notification }) => {
+    io.to(projectId).emit("notification", notification);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Client disconnected:", socket.id);
+  });
+});
+
 const PORT = process.env.PORT || 5002;
 
 // Database connection and server start

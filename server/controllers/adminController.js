@@ -256,6 +256,87 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+};
+
+const createUser = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      password,
+      role,
+      avatar,
+      phone,
+      bio,
+      skills,
+      responsibilities,
+      permissions,
+    } = req.body;
+    if (!name || !email || !password || !role) {
+      return res
+        .status(400)
+        .json({ error: "Name, email, password, and role are required" });
+    }
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+    user = new User({
+      name,
+      email,
+      password,
+      role,
+      avatar,
+      phone,
+      bio,
+      skills,
+      responsibilities,
+      permissions,
+    });
+    await user.save();
+    res
+      .status(201)
+      .json({ message: "User created successfully", user: user.toJSON() });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateFields = { ...req.body };
+    if (updateFields.password) {
+      // Hash new password
+      const bcrypt = require("bcryptjs");
+      updateFields.password = await bcrypt.hash(updateFields.password, 10);
+    }
+    const user = await User.findByIdAndUpdate(id, updateFields, {
+      new: true,
+    }).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "User updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Failed to update user" });
+  }
+};
+
 module.exports = {
   getDashboard,
   getUsers,
@@ -271,4 +352,7 @@ module.exports = {
   deletePost,
   updateCommentStatus,
   deleteComment,
+  getUserById,
+  createUser,
+  updateUser,
 };
