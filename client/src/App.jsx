@@ -38,6 +38,10 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminPosts from './pages/admin/AdminPosts';
 import AdminComments from './pages/admin/AdminComments';
 import AdminRoles from './pages/admin/AdminRoles';
+import Products from './pages/admin/Products';
+import Careers from './pages/admin/Careers';
+import Settings from './pages/admin/Settings';
+import Profile from './pages/admin/Profile';
 
 const App = () => {
   const theme = createTheme({
@@ -103,6 +107,10 @@ const App = () => {
                 <Route path="roles" element={<AdminRoles />} />
                 <Route path="posts" element={<AdminPosts />} />
                 <Route path="comments" element={<AdminComments />} />
+                <Route path="products" element={<Products />} />
+                <Route path="careers" element={<Careers />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="profile" element={<Profile />} />
               </Route>
 
               {/* Catch all route - redirect to home */}

@@ -14,7 +14,7 @@ const settingsSchema = new mongoose.Schema(
     },
     contactEmail: {
       type: String,
-      required: true,
+      required: false,
       default: "contact@webory.com",
     },
     socialLinks: {
@@ -46,6 +46,26 @@ const settingsSchema = new mongoose.Schema(
         type: Boolean,
         default: true,
       },
+    },
+    maintenanceMode: {
+      type: Boolean,
+      default: false,
+    },
+    allowRegistration: {
+      type: Boolean,
+      default: true,
+    },
+    maxLoginAttempts: {
+      type: Number,
+      default: 5,
+    },
+    sessionTimeout: {
+      type: Number,
+      default: 30,
+    },
+    emailNotifications: {
+      type: Boolean,
+      default: true,
     },
   },
   {

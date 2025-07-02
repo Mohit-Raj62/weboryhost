@@ -4,6 +4,9 @@ const authController = require("../controllers/admin/authController");
 const dashboardController = require("../controllers/admin/dashboardController");
 const adminController = require("../controllers/adminController");
 const adminAuth = require("../middleware/adminAuth");
+const productController = require("../controllers/productController");
+const careerController = require("../controllers/careerController");
+const settingsController = require("../controllers/settingsController");
 
 // Public routes
 router.post("/signup", authController.signup);
@@ -45,6 +48,24 @@ router.put(
   adminController.updateCommentStatus
 );
 router.delete("/comments/:id", adminAuth, adminController.deleteComment);
+
+// Product management
+router.get("/products", adminAuth, productController.getProducts);
+router.post("/products", adminAuth, productController.createProduct);
+router.get("/products/:id", adminAuth, productController.getProductById);
+router.put("/products/:id", adminAuth, productController.updateProduct);
+router.delete("/products/:id", adminAuth, productController.deleteProduct);
+
+// Career management
+router.get("/careers", adminAuth, careerController.getCareers);
+router.post("/careers", adminAuth, careerController.createCareer);
+router.get("/careers/:id", adminAuth, careerController.getCareerById);
+router.put("/careers/:id", adminAuth, careerController.updateCareer);
+router.delete("/careers/:id", adminAuth, careerController.deleteCareer);
+
+// Settings management
+router.get("/settings", adminAuth, settingsController.getSettings);
+router.put("/settings", adminAuth, settingsController.updateSettings);
 
 // Test admin authentication
 router.get("/test-auth", adminAuth, (req, res) => {
