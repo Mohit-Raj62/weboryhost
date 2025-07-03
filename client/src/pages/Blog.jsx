@@ -363,64 +363,66 @@ As blockchain technology matures, we're seeing more web applications integrating
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <Navigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl lg:text-7xl font-black text-white mb-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-10 sm:py-16 md:py-20">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black text-white mb-4 sm:mb-8">
             Our Blog
           </h1>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
             Insights, trends, and best practices in web development, design, and digital marketing.
           </p>
           <button
             onClick={() => setShowWritePost(true)}
-            className="mt-8 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+            className="mt-6 sm:mt-8 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 w-full sm:w-auto"
           >
             Write a Blog Post
           </button>
         </div>
 
         {/* Featured Posts */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Featured Posts</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+        <div className="mb-12 md:mb-20">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Featured Posts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {featuredPosts.map(post => (
               <div
                 key={post.id}
-                className="bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-500"
+                className="bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-500 flex flex-col"
               >
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-40 sm:h-64 object-cover"
                 />
-                <div className="p-8">
-                  <div className="flex items-center gap-4 text-sm text-white/60 mb-4">
-                    <span>{post.category}</span>
-                    <span>•</span>
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
+                <div className="p-4 sm:p-8 flex flex-col flex-1 justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/60 mb-2 sm:mb-4">
+                      <span>{post.category}</span>
+                      <span>•</span>
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                    <h3 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4">{post.title}</h3>
+                    <p className="text-white/80 mb-4 sm:mb-6">{post.excerpt}</p>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{post.title}</h3>
-                  <p className="text-white/80 mb-6">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/60">By {post.author}</span>
-                    <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                    <span className="text-white/60 text-xs sm:text-base">By {post.author}</span>
+                    <div className="flex gap-2 mt-2 sm:mt-0">
                       <button
                         onClick={() => handleEditPost(post)}
-                        className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                        className="text-cyan-400 hover:text-cyan-300 font-semibold text-xs sm:text-base"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeletePost(post.id)}
-                        className="text-red-400 hover:text-red-300 font-semibold"
+                        className="text-red-400 hover:text-red-300 font-semibold text-xs sm:text-base"
                       >
                         Delete
                       </button>
                       <button 
                         onClick={() => handleReadMore(post)}
-                        className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                        className="text-cyan-400 hover:text-cyan-300 font-semibold text-xs sm:text-base"
                       >
                         Read More →
                       </button>
@@ -433,13 +435,13 @@ As blockchain technology matures, we're seeing more web applications integrating
         </div>
 
         {/* Category Filter */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white/5 backdrop-blur-xl rounded-full p-2 border border-white/10">
+        <div className="flex justify-center mb-8 sm:mb-12">
+          <div className="bg-white/5 backdrop-blur-xl rounded-full p-1 sm:p-2 border border-white/10 flex flex-wrap gap-2 sm:gap-0">
             {categories.map(category => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-6 py-2 rounded-full transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-1 sm:py-2 rounded-full transition-all duration-300 text-xs sm:text-base ${
                   selectedCategory === category.id
                     ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -452,43 +454,45 @@ As blockchain technology matures, we're seeing more web applications integrating
         </div>
 
         {/* All Posts */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {filteredPosts.map(post => (
             <div
               key={post.id}
-              className="bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-500"
+              className="bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-500 flex flex-col"
             >
               <img
                 src={post.image}
                 alt={post.title}
-                className="w-full h-48 object-cover"
+                className="w-full h-32 sm:h-48 object-cover"
               />
-              <div className="p-6">
-                <div className="flex items-center gap-4 text-sm text-white/60 mb-4">
-                  <span>{post.category}</span>
-                  <span>•</span>
-                  <span>{post.date}</span>
+              <div className="p-4 sm:p-6 flex flex-col flex-1 justify-between">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/60 mb-2 sm:mb-4">
+                    <span>{post.category}</span>
+                    <span>•</span>
+                    <span>{post.date}</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-4">{post.title}</h3>
+                  <p className="text-white/80 mb-4 sm:mb-6">{post.excerpt}</p>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-4">{post.title}</h3>
-                <p className="text-white/80 mb-6">{post.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-white/60">{post.readTime}</span>
-                  <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                  <span className="text-white/60 text-xs sm:text-base">{post.readTime}</span>
+                  <div className="flex gap-2 mt-2 sm:mt-0">
                     <button
                       onClick={() => handleEditPost(post)}
-                      className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                      className="text-cyan-400 hover:text-cyan-300 font-semibold text-xs sm:text-base"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDeletePost(post.id)}
-                      className="text-red-400 hover:text-red-300 font-semibold"
+                      className="text-red-400 hover:text-red-300 font-semibold text-xs sm:text-base"
                     >
                       Delete
                     </button>
                     <button 
                       onClick={() => handleReadMore(post)}
-                      className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                      className="text-cyan-400 hover:text-cyan-300 font-semibold text-xs sm:text-base"
                     >
                       Read More →
                     </button>
@@ -500,26 +504,26 @@ As blockchain technology matures, we're seeing more web applications integrating
         </div>
 
         {/* Newsletter Section */}
-        <div className="mt-20 bg-white/5 backdrop-blur-xl rounded-3xl p-12 border border-white/10">
+        <div className="mt-12 md:mt-20 bg-white/5 backdrop-blur-xl rounded-3xl p-6 sm:p-12 border border-white/10">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
-            <p className="text-white/80 mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">Subscribe to Our Newsletter</h2>
+            <p className="text-white/80 mb-4 sm:mb-8 text-sm sm:text-base">
               Get the latest articles and insights delivered straight to your inbox.
             </p>
-            <form className="flex gap-4" onSubmit={handleNewsletterSubscribe}>
+            <form className="flex flex-col sm:flex-row gap-2 sm:gap-4" onSubmit={handleNewsletterSubscribe}>
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500"
+                className="flex-1 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
                 value={newsletterEmail}
                 onChange={e => setNewsletterEmail(e.target.value)}
               />
-              <button type="submit" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105">
+              <button type="submit" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 w-full sm:w-auto text-sm sm:text-base">
                 Subscribe
               </button>
             </form>
             {newsletterStatus.message && (
-              <div className={`mt-4 font-semibold ${newsletterStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+              <div className={`mt-2 sm:mt-4 font-semibold ${newsletterStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
                 {newsletterStatus.message}
               </div>
             )}
@@ -529,13 +533,13 @@ As blockchain technology matures, we're seeing more web applications integrating
 
       {/* Read More Modal */}
       {selectedPost && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-3xl p-8 max-w-4xl w-full border border-white/10 max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold text-white">{selectedPost.title}</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
+          <div className="bg-gray-900 rounded-3xl p-4 sm:p-8 max-w-full sm:max-w-4xl w-full border border-white/10 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-3xl font-bold text-white">{selectedPost.title}</h2>
               <button
                 onClick={() => setSelectedPost(null)}
-                className="text-white/60 hover:text-white"
+                className="text-white/60 hover:text-white text-lg sm:text-2xl"
               >
                 ✕
               </button>
@@ -543,9 +547,9 @@ As blockchain technology matures, we're seeing more web applications integrating
             <img
               src={selectedPost.image}
               alt={selectedPost.title}
-              className="w-full h-64 object-cover rounded-xl mb-6"
+              className="w-full h-40 sm:h-64 object-cover rounded-xl mb-4 sm:mb-6"
             />
-            <div className="flex items-center gap-4 text-sm text-white/60 mb-6">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/60 mb-4 sm:mb-6">
               <span>{selectedPost.category}</span>
               <span>•</span>
               <span>{selectedPost.date}</span>
@@ -556,7 +560,7 @@ As blockchain technology matures, we're seeing more web applications integrating
             </div>
             <div className="prose prose-invert max-w-none">
               {selectedPost.content.split('\n\n').map((paragraph, index) => (
-                <p key={index} className="text-white/80 mb-4">{paragraph}</p>
+                <p key={index} className="text-white/80 mb-2 sm:mb-4 text-sm sm:text-base">{paragraph}</p>
               ))}
             </div>
           </div>
@@ -565,10 +569,10 @@ As blockchain technology matures, we're seeing more web applications integrating
 
       {/* Write Post Modal */}
       {showWritePost && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-3xl p-8 max-w-4xl w-full border border-white/10">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
+          <div className="bg-gray-900 rounded-3xl p-4 sm:p-8 max-w-full sm:max-w-4xl w-full border border-white/10">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 {isEditing ? 'Edit Blog Post' : 'Write a New Blog Post'}
               </h2>
               <button
@@ -583,30 +587,30 @@ As blockchain technology matures, we're seeing more web applications integrating
                     image: null
                   });
                 }}
-                className="text-white/60 hover:text-white"
+                className="text-white/60 hover:text-white text-lg sm:text-2xl"
               >
                 ✕
               </button>
             </div>
-            <form onSubmit={handleWritePost} className="space-y-6">
+            <form onSubmit={handleWritePost} className="space-y-4 sm:space-y-6">
               <div>
-                <label className="block text-white mb-2">Title</label>
+                <label className="block text-white mb-1 sm:mb-2 text-sm sm:text-base">Title</label>
                 <input
                   type="text"
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
                   placeholder="Enter post title"
                 />
               </div>
               <div>
-                <label className="block text-white mb-2">Category</label>
+                <label className="block text-white mb-1 sm:mb-2 text-sm sm:text-base">Category</label>
                 <select
                   required
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
                 >
                   <option value="">Select a category</option>
                   {categories.filter(cat => cat.id !== 'all').map(category => (
@@ -617,27 +621,27 @@ As blockchain technology matures, we're seeing more web applications integrating
                 </select>
               </div>
               <div>
-                <label className="block text-white mb-2">Featured Image</label>
+                <label className="block text-white mb-1 sm:mb-2 text-sm sm:text-base">Featured Image</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
                 />
               </div>
               <div>
-                <label className="block text-white mb-2">Content</label>
+                <label className="block text-white mb-1 sm:mb-2 text-sm sm:text-base">Content</label>
                 <textarea
                   required
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 h-64"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 h-40 sm:h-64 text-sm sm:text-base"
                   placeholder="Write your blog post content here..."
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 text-sm sm:text-base"
               >
                 {isEditing ? 'Update Post' : 'Publish Post'}
               </button>

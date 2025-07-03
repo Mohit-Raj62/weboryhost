@@ -9,6 +9,7 @@ import AnalyticsDashboard from '../../components/analytics/AnalyticsDashboard';
 import ContentManager from '../../components/content/ContentManager';
 import SettingsDashboard from '../../components/settings/SettingsDashboard';
 import UserList from '../../components/admin/UserList';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -43,6 +44,9 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const [notifications, setNotifications] = useState([]);
+  const [visitorCount, setVisitorCount] = useState(null);
+  const [visitStats, setVisitStats] = useState({ daily: null, monthly: null });
+  const [dailyChartData, setDailyChartData] = useState([]);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -128,6 +132,76 @@ const AdminDashboard = () => {
 
     setNotifications(newNotifications);
   }, [stats]);
+
+  // Fetch visitor count for admin
+  useEffect(() => {
+    const fetchVisitorCount = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/visitor-count`);
+        if (res.data && res.data.success) {
+          setVisitorCount(res.data.count);
+        }
+      } catch (err) {
+        setVisitorCount('N/A');
+      }
+    };
+    fetchVisitorCount();
+  }, []);
+
+  // Fetch daily and monthly visit stats
+  useEffect(() => {
+    const fetchVisitStats = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/visit-stats`);
+        if (res.data && res.data.success) {
+          setVisitStats({ daily: res.data.daily, monthly: res.data.monthly });
+        }
+      } catch (err) {
+        setVisitStats({ daily: 'N/A', monthly: 'N/A' });
+      }
+    };
+    fetchVisitStats();
+    const interval = setInterval(fetchVisitStats, 20000); // 20 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch daily visit data for the current month (for chart)
+  useEffect(() => {
+    const fetchDailyChartData = async () => {
+      try {
+        // Get the first day of the month
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        // Prepare an array for all days in the month
+        const daysArray = Array.from({ length: daysInMonth }, (_, i) => {
+          const day = i + 1;
+          return {
+            date: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+            day: day,
+            count: 0
+          };
+        });
+        // Fetch all visits for this month
+        const res = await axios.get(`${API_BASE_URL}/api/visit-stats-daily`);
+        if (res.data && res.data.success && Array.isArray(res.data.dailyCounts)) {
+          // Merge API data into daysArray
+          res.data.dailyCounts.forEach(({ date, count }) => {
+            const d = new Date(date);
+            const day = d.getDate();
+            if (daysArray[day - 1]) daysArray[day - 1].count = count;
+          });
+        }
+        setDailyChartData(daysArray);
+      } catch (err) {
+        setDailyChartData([]);
+      }
+    };
+    fetchDailyChartData();
+    const interval = setInterval(fetchDailyChartData, 20000); // 20 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const formatNumber = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
@@ -243,6 +317,33 @@ const AdminDashboard = () => {
         {activeTab === 'overview' && (
           <div>
             <h2 className="text-xl font-bold mb-4">Welcome to the Admin Dashboard</h2>
+            <div className="mb-6 flex flex-wrap gap-4">
+              <div className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-2xl px-6 py-4 shadow-lg flex flex-col items-center min-w-[160px]">
+                <span className="text-3xl font-black">{visitorCount !== null ? visitorCount : '...'}</span>
+                <span className="text-base font-semibold mt-1">Total Website Visitors</span>
+              </div>
+              <div className="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-2xl px-6 py-4 shadow-lg flex flex-col items-center min-w-[160px]">
+                <span className="text-3xl font-black">{visitStats.daily !== null ? visitStats.daily : '...'}</span>
+                <span className="text-base font-semibold mt-1">Today's Visits</span>
+              </div>
+              <div className="bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-2xl px-6 py-4 shadow-lg flex flex-col items-center min-w-[160px]">
+                <span className="text-3xl font-black">{visitStats.monthly !== null ? visitStats.monthly : '...'}</span>
+                <span className="text-base font-semibold mt-1">This Month's Visits</span>
+              </div>
+            </div>
+            {/* Chart for daily visits this month */}
+            <div className="bg-white rounded-2xl shadow p-4 mb-8 max-w-3xl">
+              <h3 className="text-lg font-bold mb-2 text-gray-800">Daily Visits (This Month)</h3>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={dailyChartData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" tick={{ fontSize: 12 }} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#06b6d4" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
             <p>Select a tab above to manage projects, tasks, invoices, analytics, content, users, or settings.</p>
           </div>
         )}

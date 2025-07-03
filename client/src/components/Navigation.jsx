@@ -734,8 +734,19 @@ const Navigation = () => {
 
       <nav className="navbar" ref={navRef}>
         <div className="nav-brand">
-          <a href="/" style={{ display: 'flex', alignItems: 'center', height: '48px' }}>
-            <img src="/exwayer.regular.webp" alt="Webory Logo" style={{ height: '30px', width: 'auto', display: 'block' }} />
+          <a href="/" className="flex items-center h-8 sm:h-10 md:h-12 lg:h-12">
+            {/* Mobile logo */}
+            <img
+              src="/web.png"
+              alt="Webory Mobile Logo"
+              className="block sm:hidden h-50  w-auto max-w-[71px]"
+            />
+            {/* Desktop/Tablet logo */}
+            <img
+              src="/exwayer.regular.webp"
+              alt="Webory Logo"
+              className="hidden sm:block h-8 md:h-12 lg:h-10 w-auto max-w-[160px] sm:max-w-[180px]"
+            />
           </a>
         </div>
 

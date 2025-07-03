@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AdsPopup from '../components/AdsPopup';
 
 // Mock Link component - replace with actual react-router-dom Link
 const Link = ({ to, children, className, ...props }) => (
@@ -186,6 +187,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
+      <AdsPopup />
       {/* Fixed Background with proper z-index */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"></div>
@@ -356,32 +358,33 @@ const Home = () => {
 
               {/* Service Detail Modal */}
               {selectedService && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                  <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-                    <div className="sticky top-0 bg-white/5 backdrop-blur-xl border-b border-white/20 p-6 flex justify-between items-center">
-                      <div className="flex items-center gap-4">
-                        <div className="text-3xl">{selectedService.icon}</div>
-                        <h3 className="text-2xl font-bold text-white">{selectedService.name}</h3>
-                      </div>
-                      <button
-                        onClick={() => setSelectedService(null)}
-                        className="text-white/70 hover:text-white text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
-                      >
-                        ❌
-                      </button>
+                <div className="fixed top-0 left-0 w-full h-full z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4">
+                  <div className="w-full sm:w-auto bg-white/10 backdrop-blur-xl rounded-t-2xl sm:rounded-3xl border border-white/20 max-h-[90vh] overflow-y-auto shadow-2xl relative"
+                    style={{maxWidth: '100%', minHeight: '40vh'}}>
+                    {/* Fixed close button */}
+                    <button
+                      onClick={() => setSelectedService(null)}
+                      className="fixed top-2 right-2 sm:top-6 sm:right-6 text-white/70 hover:text-white text-3xl font-bold w-12 h-12 sm:w-10 sm:h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors focus:outline-none z-50"
+                      aria-label="Close"
+                    >
+                      ❌
+                    </button>
+                    <div className="bg-white/5 backdrop-blur-xl border-b border-white/20 p-3 sm:p-6 flex items-center gap-4">
+                      <div className="text-3xl">{selectedService.icon}</div>
+                      <h3 className="text-2xl font-bold text-white">{selectedService.name}</h3>
                     </div>
                     
-                    <div className="p-6">
+                    <div className="p-3 sm:p-6">
                       <div className="mb-8">
-                        <p className="text-white/80 text-lg leading-relaxed mb-6">
+                        <p className="text-white/80 text-sm sm:text-lg leading-relaxed mb-4 sm:mb-6">
                           {selectedService.detailedDescription}
                         </p>
                         
                         <div className="mb-6">
-                          <h4 className="text-cyan-400 font-semibold text-lg mb-4">Complete Feature List:</h4>
-                          <div className="grid md:grid-cols-2 gap-3">
+                          <h4 className="text-cyan-400 font-semibold text-sm sm:text-lg mb-2 sm:mb-4">Complete Feature List:</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                             {selectedService.features.map((feature, idx) => (
-                              <div key={idx} className="flex items-center gap-3 text-white/80">
+                              <div key={idx} className="flex items-center gap-2 sm:gap-3 text-white/80 text-xs sm:text-base">
                                 <div className="w-2 h-2 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full"></div>
                                 {feature}
                               </div>
@@ -390,33 +393,33 @@ const Home = () => {
                         </div>
                       </div>
 
-                      <div className="grid md:grid-cols-3 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
                         {Object.entries(selectedService.pricing).map(([planKey, plan]) => (
-                          <div key={planKey} className={`relative bg-white/5 backdrop-blur-xl rounded-2xl p-6 border transition-all duration-300 ${
+                          <div key={planKey} className={`relative bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-6 border transition-all duration-300 ${
                             planKey === 'standard' 
                               ? 'border-cyan-400/50 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 scale-105' 
                               : 'border-white/20 hover:border-white/40'
                           }`}>
                             {planKey === 'standard' && (
-                              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+                              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold">
                                 Most Popular
                               </div>
                             )}
                             
-                            <div className="text-center mb-6">
-                              <h4 className="text-xl font-bold text-white mb-2">{plan.plan}</h4>
-                              <div className="text-3xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">
+                            <div className="text-center mb-4 sm:mb-6">
+                              <h4 className="text-base sm:text-xl font-bold text-white mb-1 sm:mb-2">{plan.plan}</h4>
+                              <div className="text-xl sm:text-3xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">
                                 {plan.price}
                               </div>
                               {plan.price.includes('/mo') && (
-                                <p className="text-white/60 text-sm mt-1">per month</p>
+                                <p className="text-white/60 text-xs sm:text-sm mt-1">per month</p>
                               )}
                             </div>
                             
-                            <ul className="space-y-3 mb-6">
+                            <ul className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                               {plan.features.map((feature, idx) => (
-                                <li key={idx} className="flex items-center gap-3 text-white/80">
-                                  <svg className="w-5 h-5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <li key={idx} className="flex items-center gap-2 sm:gap-3 text-white/80 text-xs sm:text-base">
+                                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                   </svg>
                                   {feature}
@@ -426,7 +429,7 @@ const Home = () => {
                             
                             <Link
                               to="/contact"
-                              className={`block text-center px-6 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 no-underline ${
+                              className={`block text-center px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 no-underline ${
                                 planKey === 'standard'
                                   ? 'bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white shadow-lg'
                                   : 'border-2 border-cyan-400/50 hover:border-cyan-400 hover:bg-cyan-400/10 text-cyan-400'
@@ -438,11 +441,11 @@ const Home = () => {
                         ))}
                       </div>
                       
-                      <div className="mt-8 text-center">
-                        <p className="text-white/60 mb-4">Need a custom solution? We'd love to discuss your specific requirements.</p>
+                      <div className="mt-4 sm:mt-8 text-center">
+                        <p className="text-white/60 mb-2 sm:mb-4 text-xs sm:text-base">Need a custom solution? We'd love to discuss your specific requirements.</p>
                         <Link
                           to="/contact"
-                          className="inline-block bg-white/10 backdrop-blur-md hover:bg-white/20 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 border border-white/20 no-underline"
+                          className="inline-block bg-white/10 backdrop-blur-md hover:bg-white/20 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 border border-white/20 no-underline text-xs sm:text-base"
                         >
                           Request Custom Quote
                         </Link>

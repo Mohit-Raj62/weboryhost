@@ -12,6 +12,7 @@ const errorHandler = require("./middleware/errorHandler");
 const projectRoutes = require("./routes/projectRoutes");
 const invoiceRoutes = require("./routes/invoiceRoutes");
 const fs = require("fs");
+const visitorRoutes = require("./routes/visitorRoutes");
 require("dotenv").config();
 const app = express();
 
@@ -86,6 +87,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api", visitorRoutes);
 
 // Serve static files (only in production)
 if (process.env.NODE_ENV === "production") {
