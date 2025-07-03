@@ -14,12 +14,13 @@ export default defineConfig({
     ),
   },
   build: {
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          mui: ["@mui/material", "@mui/icons-material"],
+          "react-vendors": ["react", "react-dom"],
+          "mui-vendors": ["@mui/material", "@mui/icons-material"],
+          "recharts-vendors": ["recharts"],
         },
       },
     },
