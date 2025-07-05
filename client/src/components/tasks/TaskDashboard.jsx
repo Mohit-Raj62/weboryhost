@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import TaskForm from "./TaskForm";
 
 const mockTasks = [
@@ -10,12 +10,23 @@ const mockTasks = [
 const statuses = ["All", "To Do", "In Progress", "Blocked", "Done"];
 
 export default function TaskDashboard() {
-  const [tasks, setTasks] = useState(mockTasks);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [view, setView] = useState('list'); // list, kanban
   const [statusFilter, setStatusFilter] = useState("All");
   const [assigneeFilter, setAssigneeFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [viewTask, setViewTask] = useState(null);
+
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      setTasks(mockTasks);
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   const filteredTasks = tasks.filter(
     (t) =>

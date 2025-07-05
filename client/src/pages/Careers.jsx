@@ -154,7 +154,7 @@ const Careers = () => {
     setIsClosing(false);
     setSubmissionStatus(null);
     setFormData({
-      name: '', email: '', phone: '', resume: '', coverLetter: '', portfolio: ''
+      name: '', email: '', phone: '', resume: '', coverLetter: '', portfolio: '', experience: '', skills: ''
     });
   };
 
@@ -180,39 +180,73 @@ const Careers = () => {
     setIsSubmitting(true);
     setSubmissionStatus(null);
 
-    const api_data = new FormData();
-    api_data.append("access_key", "7203cedb-c88e-49fd-9559-c83b4426bfcc");
-    api_data.append("subject", `New Job Application: ${selectedJob.title}`);
-    api_data.append("from_name", "Webory Careers");
-    api_data.append("job_title", selectedJob.title);
-
-    Object.entries(formData).forEach(([key, value]) => {
-      api_data.append(key, value);
-    });
-
-    console.log("Submitting the following data to Web3Forms:");
-    for (let [key, value] of api_data.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // Prepare data for database
+    const applicationData = {
+      jobId: selectedJob.id,
+      jobTitle: selectedJob.title,
+      department: selectedJob.department,
+      candidateName: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      resume: formData.resume,
+      coverLetter: formData.coverLetter,
+      portfolio: formData.portfolio || "",
+      experience: formData.experience || "Not specified",
+      skills: formData.skills ? formData.skills.split(',').map(skill => skill.trim()).filter(skill => skill) : [],
+    };
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // First, save to database
+      console.log("Saving to database:", applicationData);
+      const dbResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://webory.onrender.com'}/api/applications`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(applicationData),
+      });
+
+      const dbResult = await dbResponse.json();
+      console.log("Database response:", dbResult);
+
+      if (!dbResult.success) {
+        throw new Error(dbResult.message || "Failed to save to database");
+      }
+
+      // Then send email via Web3Forms
+      const api_data = new FormData();
+      api_data.append("access_key", "7203cedb-c88e-49fd-9559-c83b4426bfcc");
+      api_data.append("subject", `New Job Application: ${selectedJob.title}`);
+      api_data.append("from_name", "Webory Careers");
+      api_data.append("job_title", selectedJob.title);
+
+      Object.entries(formData).forEach(([key, value]) => {
+        api_data.append(key, value);
+      });
+
+      console.log("Submitting the following data to Web3Forms:");
+      for (let [key, value] of api_data.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      const emailResponse = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: api_data,
       });
 
-      const result = await response.json();
-      console.log("Web3Forms API Response:", result);
+      const emailResult = await emailResponse.json();
+      console.log("Web3Forms API Response:", emailResult);
 
-      if (result.success) {
-        console.log("Submission successful!");
-        setSubmissionStatus('success');
+      if (emailResult.success) {
+        console.log("Email sent successfully!");
       } else {
-        console.error("Web3Forms reported an error:", result);
-        setSubmissionStatus('error');
+        console.warn("Email sending failed, but application was saved to database");
       }
+
+      console.log("Submission successful!");
+      setSubmissionStatus('success');
     } catch (error) {
-      console.error("Caught an error during fetch:", error);
+      console.error("Caught an error during submission:", error);
       setSubmissionStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -346,6 +380,21 @@ const Careers = () => {
                     <div>
                       <label htmlFor="resume" className="block text-sm font-medium text-green-500 mb-1">Link to Resume/CV</label>
                       <input type="url" name="resume" id="resume" required placeholder="e.g., LinkedIn profile or Google Drive link" onChange={handleFormChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"/>
+                    </div>
+                    <div>
+                      <label htmlFor="experience" className="block text-sm font-medium text-gray-100 mb-1">Years of Experience</label>
+                      <select name="experience" id="experience" required onChange={handleFormChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select experience</option>
+                        <option value="0-1 years">0-1 years</option>
+                        <option value="1-2 years">1-2 years</option>
+                        <option value="2-3 years">2-3 years</option>
+                        <option value="3-5 years">3-5 years</option>
+                        <option value="5+ years">5+ years</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="skills" className="block text-sm font-medium text-gray-100 mb-1">Skills (comma separated)</label>
+                      <input type="text" name="skills" id="skills" placeholder="e.g., React, JavaScript, Node.js" onChange={handleFormChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"/>
                     </div>
                     <div>
                       <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-100 mb-1">Cover Letter <span className="text-green-500">(Optional)</span></label>
