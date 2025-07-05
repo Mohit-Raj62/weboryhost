@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     }
   });
   
-  const [recentActivity, setRecentActivity] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
@@ -62,10 +62,7 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
       
-      const [statsResponse, activityResponse] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/admin/stats`, { headers }),
-        axios.get(`${API_BASE_URL}/api/admin/activity?limit=15`, { headers })
-      ]);
+      const statsResponse = await axios.get(`${API_BASE_URL}/api/admin/stats`, { headers });
 
       if (statsResponse.data) {
         setStats(prevStats => ({
@@ -74,9 +71,7 @@ const AdminDashboard = () => {
         }));
       }
 
-      if (activityResponse.data) {
-        setRecentActivity(activityResponse.data.activities || []);
-      }
+
 
       setError('');
     } catch (err) {
