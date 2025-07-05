@@ -7,6 +7,7 @@ const { initializeChat } = require("./controllers/chatbotController");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
+const clientRoutes = require("./routes/clientRoutes");
 const path = require("path");
 
 const app = express();
@@ -77,6 +78,7 @@ app.use(express.static("public"));
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/applications", jobApplicationRoutes);
+app.use("/api/clients", clientRoutes);
 
 // Test route for debugging
 app.get("/api/test", (req, res) => {
