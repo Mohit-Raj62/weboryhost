@@ -104,17 +104,8 @@ app.get("/api/test", (req, res) => {
 });
 
 // Simple visitor routes directly in main file
-app.get("/api/visitor/visitor-count", async (req, res) => {
-  try {
-    const Visitor = require("./models/Visitor");
-    let visitor = await Visitor.findOne();
-    const count = visitor ? visitor.count : 0;
-    res.json({ success: true, count });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error fetching visitor count" });
-  }
+app.get("/api/visitor/visitor-count", (req, res) => {
+  res.json({ success: true, count: 0, message: "Test route working" });
 });
 
 app.get("/api/visitor/visit-stats", async (req, res) => {
