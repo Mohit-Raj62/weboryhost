@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import jobListings from '../data/jobListings';
 
 const Careers = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('all');
@@ -29,120 +30,7 @@ const Careers = () => {
     { id: 'data', name: 'Data Science' }
   ];
 
-  const jobListings = [
-    {
-      id: 1,
-      title: 'Senior Frontend Developer',
-      department: 'engineering',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'We are looking for an experienced Frontend Developer to join our team and help build amazing web applications.',
-      requirements: [
-        '5+ years of experience with React',
-        'Strong knowledge of JavaScript/TypeScript',
-        'Experience with modern frontend tools and frameworks',
-        'Excellent problem-solving skills'
-      ]
-    },
-    {
-      id: 2,
-      title: 'UI/UX Designer',
-      department: 'design',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Join our design team to create beautiful and intuitive user interfaces for our products.',
-      requirements: [
-        '3+ years of UI/UX design experience',
-        'Proficiency in Figma and Adobe Creative Suite',
-        'Strong portfolio showcasing web and mobile designs',
-        'Experience with user research and testing'
-      ]
-    },
-    {
-      id: 3,
-      title: 'Digital Marketing Specialist',
-      department: 'marketing',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Help us grow our digital presence and reach new customers through innovative marketing strategies.',
-      requirements: [
-        '3+ years of digital marketing experience',
-        'Experience with SEO and SEM',
-        'Strong analytical skills',
-        'Knowledge of marketing automation tools'
-      ]
-    },
-    {
-      id: 4,
-      title: 'Sales Representative',
-      department: 'sales',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Join our sales team to help businesses transform their digital presence with our solutions.',
-      requirements: [
-        '2+ years of B2B sales experience',
-        'Strong communication and negotiation skills',
-        'Experience with CRM tools',
-        'Understanding of web development and digital services'
-      ]
-    },
-    {
-      id: 5,
-      title: 'Backend Developer',
-      department: 'engineering',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Looking for a Backend Developer to build scalable and secure server-side applications.',
-      requirements: [
-        '4+ years of backend development experience',
-        'Strong knowledge of Node.js/Python/Java',
-        'Experience with databases and APIs',
-        'Understanding of cloud services'
-      ]
-    },
-    {
-      id: 6,
-      title: 'Product Manager',
-      department: 'product',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Lead product development and strategy for our digital solutions.',
-      requirements: [
-        '3+ years of product management experience',
-        'Strong analytical and strategic thinking',
-        'Experience with agile methodologies',
-        'Excellent communication skills'
-      ]
-    },
-    {
-      id: 7,
-      title: 'Data Scientist',
-      department: 'data',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Join our data team to analyze and derive insights from complex datasets.',
-      requirements: [
-        '3+ years of data science experience',
-        'Strong knowledge of Python/R',
-        'Experience with machine learning',
-        'Excellent statistical analysis skills'
-      ]
-    },
-    {
-      id: 8,
-      title: 'DevOps Engineer',
-      department: 'engineering',
-      location: 'Remote',
-      type: 'Full-time',
-      description: 'Help us build and maintain our cloud infrastructure and CI/CD pipelines.',
-      requirements: [
-        '3+ years of DevOps experience',
-        'Experience with AWS/Azure/GCP',
-        'Knowledge of containerization and orchestration',
-        'Strong scripting skills'
-      ]
-    }
-  ];
+
 
   const filteredJobs = selectedDepartment === 'all'
     ? jobListings
@@ -194,6 +82,10 @@ const Careers = () => {
       experience: formData.experience || "Not specified",
       skills: formData.skills ? formData.skills.split(',').map(skill => skill.trim()).filter(skill => skill) : [],
     };
+
+    console.log("Selected Job:", selectedJob);
+    console.log("Job ID being sent:", selectedJob.id);
+    console.log("Job ID type:", typeof selectedJob.id);
 
     try {
       // First, save to database
