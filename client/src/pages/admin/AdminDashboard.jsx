@@ -137,7 +137,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchVisitorCount = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/visitor-count`);
+        const res = await axios.get(`${API_BASE_URL}/api/visitor/visitor-count`);
         if (res.data && res.data.success) {
           setVisitorCount(res.data.count);
         }
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchVisitStats = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/visit-stats`);
+        const res = await axios.get(`${API_BASE_URL}/api/visitor/visit-stats`);
         if (res.data && res.data.success) {
           setVisitStats({ daily: res.data.daily, monthly: res.data.monthly });
         }
@@ -184,7 +184,7 @@ const AdminDashboard = () => {
           };
         });
         // Fetch all visits for this month
-        const res = await axios.get(`${API_BASE_URL}/api/visit-stats-daily`);
+        const res = await axios.get(`${API_BASE_URL}/api/visitor/visit-stats-daily`);
         if (res.data && res.data.success && Array.isArray(res.data.dailyCounts)) {
           // Merge API data into daysArray
           res.data.dailyCounts.forEach(({ date, count }) => {

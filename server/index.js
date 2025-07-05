@@ -103,7 +103,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
-app.use("/api", visitorRoutes);
+app.use("/api/visitor", visitorRoutes);
 
 // Serve static files (only in production)
 if (process.env.NODE_ENV === "production") {
