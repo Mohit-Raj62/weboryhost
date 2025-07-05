@@ -105,6 +105,14 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/visitor", visitorRoutes);
 
+// Debug: Add a test route to verify routing is working
+app.get("/api/test", (req, res) => {
+  res.json({
+    message: "Test route working",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -116,6 +124,23 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
   });
 }
+
+// Debug: Log all registered routes
+app._router.stack.forEach((middleware) => {
+  if (middleware.route) {
+    console.log(
+      `${Object.keys(middleware.route.methods)} ${middleware.route.path}`
+    );
+  } else if (middleware.name === "router") {
+    middleware.handle.stack.forEach((handler) => {
+      if (handler.route) {
+        console.log(
+          `${Object.keys(handler.route.methods)} ${handler.route.path}`
+        );
+      }
+    });
+  }
+});
 
 // Centralized error handler
 app.use(errorHandler);
