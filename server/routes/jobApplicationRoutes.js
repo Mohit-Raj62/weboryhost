@@ -10,7 +10,7 @@ const {
   deleteApplication,
   getRecentApplications,
 } = require("../controllers/jobApplicationController");
-const { adminAuth } = require("../middleware/adminAuth");
+const adminAuth = require("../middleware/adminAuth");
 
 // Public routes (for job applications)
 router.post("/", createApplication);
