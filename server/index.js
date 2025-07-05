@@ -3,17 +3,33 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
-const authRoutes = require("./routes/authRoutes");
-const adminRoutes = require("./routes/admin");
-const postRoutes = require("./routes/postRoutes");
-const commentRoutes = require("./routes/commentRoutes");
-const contactRoutes = require("./routes/contactRoutes");
-const errorHandler = require("./middleware/errorHandler");
-const projectRoutes = require("./routes/projectRoutes");
-const invoiceRoutes = require("./routes/invoiceRoutes");
 const fs = require("fs");
-const visitorRoutes = require("./routes/visitorRoutes");
-require("dotenv").config();
+
+// Import routes with error handling
+let authRoutes,
+  adminRoutes,
+  postRoutes,
+  commentRoutes,
+  contactRoutes,
+  errorHandler,
+  projectRoutes,
+  invoiceRoutes,
+  visitorRoutes;
+
+try {
+  authRoutes = require("./routes/authRoutes");
+  adminRoutes = require("./routes/admin");
+  postRoutes = require("./routes/postRoutes");
+  commentRoutes = require("./routes/commentRoutes");
+  contactRoutes = require("./routes/contactRoutes");
+  errorHandler = require("./middleware/errorHandler");
+  projectRoutes = require("./routes/projectRoutes");
+  invoiceRoutes = require("./routes/invoiceRoutes");
+  visitorRoutes = require("./routes/visitorRoutes");
+} catch (error) {
+  console.error("Error loading routes:", error.message);
+  process.exit(1);
+}
 const app = express();
 
 // CORS configuration
@@ -136,13 +152,6 @@ mongoose
   });
 
 // For deployment, set all secrets and config in environment variables (.env or platform dashboard)
-
-const API_BASE_URL = "https://webory.onrender.com/api";
-
-// API connection test
-fetch("https://webory.onrender.com/api/health")
-  .then((res) => res.json())
-  .then((data) => console.log("Backend connected:", data));
 
 // Plugin loader
 const pluginsDir = path.join(__dirname, "plugins");
