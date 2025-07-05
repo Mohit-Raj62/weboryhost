@@ -95,25 +95,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-// API Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/api/contact", contactRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/invoices", invoiceRoutes);
-app.use("/api/visitor", visitorRoutes);
-
-// Debug: Add a test route to verify routing is working
-app.get("/api/test", (req, res) => {
-  res.json({
-    message: "Test route working",
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// Direct visitor routes for testing
+// Direct visitor routes (define these first to avoid conflicts)
 app.get("/api/visitor/visitor-count", async (req, res) => {
   try {
     const Visitor = require("./models/Visitor");
@@ -204,6 +186,24 @@ app.get("/api/visitor/visit-stats-daily", async (req, res) => {
       .json({ success: false, message: "Error fetching daily visit stats" });
   }
 });
+
+// Debug: Add a test route to verify routing is working
+app.get("/api/test", (req, res) => {
+  res.json({
+    message: "Test route working",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// API Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/invoices", invoiceRoutes);
+// Removed visitorRoutes to avoid conflicts with direct routes
 
 // Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {

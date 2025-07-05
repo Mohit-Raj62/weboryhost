@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
-  const [notifications, setNotifications] = useState([]);
+  const [, setNotifications] = useState([]);
   const [visitorCount, setVisitorCount] = useState(null);
   const [visitStats, setVisitStats] = useState({ daily: null, monthly: null });
   const [dailyChartData, setDailyChartData] = useState([]);
@@ -198,11 +198,6 @@ const AdminDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const formatNumber = (num) => {
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    return num.toString();
-  };
 
   const getStatusColor = (status) => {
     switch (status) {
