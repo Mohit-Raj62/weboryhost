@@ -105,10 +105,14 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/visitor", visitorRoutes);
 
-// Serve static files (only in production)
+// Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
-  app.get("*", (req, res) => {
+  app.get("*", (req, res, next) => {
+    // Skip API routes for static file serving
+    if (req.path.startsWith("/api/")) {
+      return next();
+    }
     res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
   });
 }
