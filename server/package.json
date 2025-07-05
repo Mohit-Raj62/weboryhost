@@ -12,6 +12,7 @@
     "create-admin": "node config/createTestAdmin.js",
     "create-test-admin": "node scripts/createTestAdmin.js",
     "test-server": "node test-server.js",
+    "simple": "node simple-server.js",
     "diagnose": "node diagnose.js"
   },
   "keywords": [],
