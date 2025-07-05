@@ -194,17 +194,17 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
 // Removed visitorRoutes to use direct routes instead
 
-// Temporarily disable static file serving to debug API routes
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "../client/dist")));
-//   app.get("*", (req, res, next) => {
-//     // Skip API routes for static file serving
-//     if (req.path.startsWith("/api/")) {
-//       return next();
-//     }
-//     res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-//   });
-// }
+// Serve static files (only in production) - but only for non-API routes
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.get("*", (req, res, next) => {
+    // Skip API routes for static file serving
+    if (req.path.startsWith("/api/")) {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+  });
+}
 
 // Debug: Log all registered routes
 app._router.stack.forEach((middleware) => {
