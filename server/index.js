@@ -13,7 +13,8 @@ let authRoutes,
   contactRoutes,
   errorHandler,
   projectRoutes,
-  invoiceRoutes;
+  invoiceRoutes,
+  supportTicketRoutes;
 
 try {
   authRoutes = require("./routes/authRoutes");
@@ -24,6 +25,7 @@ try {
   errorHandler = require("./middleware/errorHandler");
   projectRoutes = require("./routes/projectRoutes");
   invoiceRoutes = require("./routes/invoiceRoutes");
+  supportTicketRoutes = require("./routes/supportTicketRoutes");
 } catch (error) {
   console.error("Error loading routes:", error.message);
   process.exit(1);
@@ -109,6 +111,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api/support-tickets", supportTicketRoutes);
 
 // Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {

@@ -39,6 +39,8 @@ router.post("/submit", async (req, res) => {
   }
 });
 
+const SupportTicket = require("../models/SupportTicket");
+
 // Submit support ticket
 router.post("/support", async (req, res) => {
   try {
@@ -56,17 +58,17 @@ router.post("/support", async (req, res) => {
       Math.random() * 1000
     )}`;
 
-    // Here you would typically save to a SupportTicket model
-    // For now, we'll log it and send an email
-    console.log("New Support Ticket:", {
-      ticketNumber,
-      name,
-      email,
+    // Save to SupportTicket model
+    const supportTicket = new SupportTicket({
+      user: null, // Will be null for non-authenticated users
       subject,
-      message,
+      email,
+      message: `${message}\n\nCategory: ${category}\nTicket Number: ${ticketNumber}`,
       priority,
-      category,
+      status: "open",
     });
+
+    await supportTicket.save();
 
     // Send notification email
     await emailService.sendEmail({

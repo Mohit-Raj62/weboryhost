@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 const clientRoutes = require("./routes/clientRoutes");
+const supportTicketRoutes = require("./routes/supportTicketRoutes");
 const path = require("path");
 
 const app = express();
@@ -79,6 +80,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/applications", jobApplicationRoutes);
 app.use("/api/clients", clientRoutes);
+app.use("/api/support-tickets", supportTicketRoutes);
 
 // Test route for debugging
 app.get("/api/test", (req, res) => {

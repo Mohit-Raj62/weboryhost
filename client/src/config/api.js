@@ -8,6 +8,10 @@ const getApiUrl = () => {
   console.log("import.meta.env.NODE_ENV:", import.meta.env.NODE_ENV);
   console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
 
+  // FORCE LOCAL SERVER FOR DEVELOPMENT
+  console.log("🔧 FORCING LOCAL SERVER FOR DEVELOPMENT");
+  return "http://localhost:5002";
+
   // Check for custom API URL from environment first
   if (import.meta.env.VITE_API_URL) {
     console.log(
@@ -17,9 +21,14 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
 
-  // Force Render backend for all environments
-  console.log("Using Render backend URL");
-  return "https://webory.onrender.com";
+  // Use local server in development, Render in production
+  if (import.meta.env.DEV) {
+    console.log("Using local development server");
+    return "http://localhost:5002";
+  } else {
+    console.log("Using Render backend URL");
+    return "https://webory.onrender.com";
+  }
 };
 
 export const API_BASE_URL = getApiUrl();

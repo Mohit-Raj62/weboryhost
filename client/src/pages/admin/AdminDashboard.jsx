@@ -9,11 +9,12 @@ import AnalyticsDashboard from '../../components/analytics/AnalyticsDashboard';
 import ContentManager from '../../components/content/ContentManager';
 import SettingsDashboard from '../../components/settings/SettingsDashboard';
 import UserList from '../../components/admin/UserList';
+import SupportTicketDashboard from '../../components/admin/SupportTicketDashboard';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   LineChart, Line, PieChart, Pie, Cell, AreaChart, Area
 } from 'recharts';
-import jobListings from '../../data/jobListings';
+
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -41,7 +42,6 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const [teamData, setTeamData] = useState([]);
-  const [careers, setCareers] = useState([]);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -57,9 +57,8 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
       
-      const [statsResponse, activityResponse] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/admin/stats`, { headers }),
-        axios.get(`${API_BASE_URL}/api/admin/activity?limit=10`, { headers })
+      const [statsResponse] = await Promise.all([
+        axios.get(`${API_BASE_URL}/api/admin/stats`, { headers })
       ]);
 
       if (statsResponse.data) {
@@ -161,7 +160,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
     fetchTeamData();
-    setCareers(jobListings);
     const interval = setInterval(fetchDashboardData, 30000);
     return () => clearInterval(interval);
   }, [fetchDashboardData, fetchTeamData]);
@@ -198,6 +196,7 @@ const AdminDashboard = () => {
     { key: 'clients', label: 'Clients', icon: '👥' },
     { key: 'tasks', label: 'Tasks', icon: '✅' },
     { key: 'invoices', label: 'Invoices', icon: '💰' },
+    { key: 'support-tickets', label: 'Support Tickets', icon: '🎫' },
     { key: 'team', label: 'Team', icon: '👨‍💼' },
     { key: 'analytics', label: 'Analytics', icon: '📈' },
     { key: 'content', label: 'Content', icon: '📝' },
@@ -370,16 +369,16 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                 <div className="flex items-center justify-between">
-          <div>
-                    <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
-                    <p className="text-sm text-green-600">+23% from last month</p>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Support Tickets</p>
+                    <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalTickets || 0)}</p>
+                    <p className="text-sm text-red-600">{stats.openTickets || 0} open</p>
                   </div>
-                  <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  <div className="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
+                    <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
                 </div>
@@ -481,6 +480,7 @@ const AdminDashboard = () => {
                   { type: 'project', action: 'Project "E-commerce Website" updated', time: '2 hours ago', user: 'John Doe' },
                   { type: 'task', action: 'Task "Payment Integration" completed', time: '4 hours ago', user: 'Mike Johnson' },
                   { type: 'invoice', action: 'Invoice #INV-2024-002 sent', time: '6 hours ago', user: 'Jane Smith' },
+                  { type: 'support_ticket', action: 'New support ticket: "Login Issue"', time: '1 hour ago', user: 'Support Team' },
                   { type: 'client', action: 'New client "TechCorp Inc." added', time: '1 day ago', user: 'Sarah Wilson' },
                   { type: 'task', action: 'Task "Mobile Testing" assigned', time: '1 day ago', user: 'Alex Brown' }
                 ].map((activity, index) => (
@@ -488,12 +488,14 @@ const AdminDashboard = () => {
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
                       activity.type === 'project' ? 'bg-blue-100' :
                       activity.type === 'task' ? 'bg-green-100' :
-                      activity.type === 'invoice' ? 'bg-yellow-100' : 'bg-purple-100'
+                      activity.type === 'invoice' ? 'bg-yellow-100' :
+                      activity.type === 'support_ticket' ? 'bg-red-100' : 'bg-purple-100'
                     }`}>
                       <svg className={`h-4 w-4 ${
                         activity.type === 'project' ? 'text-blue-600' :
                         activity.type === 'task' ? 'text-green-600' :
-                        activity.type === 'invoice' ? 'text-yellow-600' : 'text-purple-600'
+                        activity.type === 'invoice' ? 'text-yellow-600' :
+                        activity.type === 'support_ticket' ? 'text-red-600' : 'text-purple-600'
                       }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -512,6 +514,7 @@ const AdminDashboard = () => {
         {activeTab === 'projects' && <ProjectDashboard />}
         {activeTab === 'tasks' && <TaskDashboard />}
         {activeTab === 'invoices' && <InvoiceDashboard />}
+        {activeTab === 'support-tickets' && <SupportTicketDashboard />}
         {activeTab === 'analytics' && <AnalyticsDashboard />}
         {activeTab === 'content' && <ContentManager />}
         {activeTab === 'team' && (
