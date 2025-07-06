@@ -20,14 +20,30 @@ const SupportTicketDashboard = () => {
     hasPrev: false
   });
   const [responseMessage, setResponseMessage] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshMessage, setRefreshMessage] = useState('');
 
   useEffect(() => {
     fetchTickets();
     fetchStats();
   }, [filters, pagination.page]);
 
+  // Add keyboard shortcut for refresh (Ctrl+R)
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+        event.preventDefault();
+        handleRefresh();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
   const fetchTickets = async () => {
     try {
+      setError(''); // Clear any previous errors
       const token = localStorage.getItem('adminToken');
       console.log('Fetching tickets with token:', token ? 'Token exists' : 'No token');
       
@@ -45,12 +61,12 @@ const SupportTicketDashboard = () => {
       });
 
       console.log('Tickets response:', response.data);
-      setTickets(response.data.tickets);
+      setTickets(response.data.tickets || []);
       setPagination({
-        page: response.data.page,
-        totalPages: response.data.totalPages,
-        hasNext: response.data.hasNext,
-        hasPrev: response.data.hasPrev
+        page: response.data.page || 1,
+        totalPages: response.data.totalPages || 1,
+        hasNext: response.data.hasNext || false,
+        hasPrev: response.data.hasPrev || false
       });
     } catch (err) {
       console.error('Error fetching tickets:', err);
@@ -167,6 +183,20 @@ const SupportTicketDashboard = () => {
     });
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setLoading(true);
+    setError('');
+    setRefreshMessage('');
+    
+    Promise.all([fetchTickets(), fetchStats()]).then(() => {
+      setRefreshMessage('Data refreshed successfully!');
+      setTimeout(() => setRefreshMessage(''), 3000);
+    }).finally(() => {
+      setRefreshing(false);
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -203,6 +233,18 @@ const SupportTicketDashboard = () => {
 
   return (
     <div className="space-y-6">
+      {/* Success Message */}
+      {refreshMessage && (
+        <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-4">
+          <div className="flex items-center">
+            <svg className="w-5 h-5 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-green-800">{refreshMessage}</span>
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
@@ -262,8 +304,28 @@ const SupportTicketDashboard = () => {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filters and Refresh */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Filters & Actions</h3>
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {refreshing ? (
+              <svg className="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            )}
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
@@ -318,8 +380,24 @@ const SupportTicketDashboard = () => {
 
               {/* Tickets List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-900">Support Tickets</h3>
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {refreshing ? (
+                <svg className="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              )}
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
           </div>
 
           {tickets.length === 0 ? (
@@ -354,6 +432,7 @@ const SupportTicketDashboard = () => {
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Type</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
@@ -367,11 +446,17 @@ const SupportTicketDashboard = () => {
                           <div>
                             <div className="text-sm font-medium text-gray-900">{ticket.subject}</div>
                             <div className="text-sm text-gray-500 truncate max-w-xs">{ticket.message}</div>
+                            {ticket.ticketNumber && (
+                              <div className="text-xs text-gray-400">#{ticket.ticketNumber}</div>
+                            )}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{ticket.user?.name || 'Unknown'}</div>
+                          <div className="text-sm text-gray-900">{ticket.userName || ticket.user?.name || 'Unknown'}</div>
                           <div className="text-sm text-gray-500">{ticket.email}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{ticket.issueType || 'N/A'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
@@ -469,10 +554,16 @@ const SupportTicketDashboard = () => {
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium">User:</span> {selectedTicket.user?.name || 'Unknown'}
+                  <span className="font-medium">User:</span> {selectedTicket.userName || selectedTicket.user?.name || 'Unknown'}
                 </div>
                 <div>
                   <span className="font-medium">Email:</span> {selectedTicket.email}
+                </div>
+                <div>
+                  <span className="font-medium">Ticket Number:</span> {selectedTicket.ticketNumber || 'N/A'}
+                </div>
+                <div>
+                  <span className="font-medium">Issue Type:</span> {selectedTicket.issueType || 'N/A'}
                 </div>
                 <div>
                   <span className="font-medium">Status:</span>

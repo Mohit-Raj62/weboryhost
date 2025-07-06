@@ -21,7 +21,7 @@ const Contact = () => {
     subject: '',
     message: '',
     priority: 'medium',
-    category: 'general'
+    category: 'Technical Issue'
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -80,81 +80,157 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     let newTicketNumber = '';
-    const web3FormsData = {
-      ...formData,
-      access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc", // IMPORTANT: Replace with your actual Web3Forms access key
-      from_name: "Webory Contact Form",
-    };
 
-    if (activeTab === 'support') {
-      newTicketNumber = Math.floor(100000 + Math.random() * 900000).toString();
-      web3FormsData.ticket_number = newTicketNumber;
-      setTicketNumber(newTicketNumber);
-    }
-    
-    web3FormsData.subject = activeTab === 'contact' 
-      ? `New Contact from ${formData.name}` 
-      : `New Support Ticket #${newTicketNumber} from ${formData.name}`;
-    
-    // Add tab-specific data
     if (activeTab === 'contact') {
-      web3FormsData.form_type = 'Contact Us';
-    } else {
-      web3FormsData.form_type = 'Support Ticket';
-    }
+      // Handle contact form submission (Web3Forms)
+      const web3FormsData = {
+        ...formData,
+        access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
+        from_name: "Webory Contact Form",
+        subject: `New Contact from ${formData.name}`,
+        form_type: 'Contact Us'
+      };
 
-    try {
-      const response = await axios.post(
-        "https://api.web3forms.com/submit",
-        web3FormsData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+      try {
+        const response = await axios.post(
+          "https://api.web3forms.com/submit",
+          web3FormsData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
           }
-        }
-      );
-      const data = response.data;
+        );
+        const data = response.data;
 
-      if (data.success) {
-        let successMessage = data.message || 'Message sent successfully!';
-        if (activeTab === 'support') {
-          successMessage = `Support ticket created successfully! Your ticket number is ${newTicketNumber}.`;
+        if (data.success) {
+          setStatus({
+            type: 'success',
+            message: data.message || 'Message sent successfully!'
+          });
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: '',
+            priority: 'medium',
+            category: 'Technical Issue'
+          });
+        } else {
+          setStatus({
+            type: 'error',
+            message: data.message || 'An unknown error occurred.'
+          });
         }
-        setStatus({
-          type: 'success',
-          message: successMessage
-        });
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
-          priority: 'medium',
-          category: 'general'
-        });
-      } else {
+      } catch (error) {
+        const errorMessage = handleApiError(error);
         setStatus({
           type: 'error',
-          message: data.message || 'An unknown error occurred.'
+          message: errorMessage
         });
-        if (activeTab === 'support') {
-            setTicketNumber('');
-        }
       }
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      setStatus({
-        type: 'error',
-        message: errorMessage
-      });
-       if (activeTab === 'support') {
+    } else {
+      // Handle support ticket submission (Web3Forms + Database)
+      newTicketNumber = generateTicketNumber();
+      setTicketNumber(newTicketNumber);
+
+      // Prepare data for both Web3Forms and Database
+      const web3FormsData = {
+        ...formData,
+        access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
+        from_name: "Webory Support Ticket",
+        subject: `New Support Ticket #${newTicketNumber} from ${formData.name}`,
+        form_type: 'Support Ticket',
+        ticket_number: newTicketNumber,
+        issue_type: formData.category,
+        priority: formData.priority
+      };
+
+      const ticketData = {
+        subject: `${formData.category} - ${formData.subject}`,
+        email: formData.email,
+        message: formData.message,
+        priority: formData.priority,
+        ticketNumber: newTicketNumber,
+        userName: formData.name,
+        issueType: formData.category
+      };
+
+      try {
+        // Send to Web3Forms
+        const web3Response = await axios.post(
+          "https://api.web3forms.com/submit",
+          web3FormsData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        );
+
+        // Send to Database (optional - won't break if it fails)
+        let dbSuccess = false;
+        try {
+          console.log('Sending ticket data to database:', ticketData);
+          const dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
+          if (dbResponse.data) {
+            dbSuccess = true;
+            console.log('Ticket saved to database:', dbResponse.data);
+          }
+        } catch (dbError) {
+          console.error('Database save failed (but Web3Forms worked):', dbError.message);
+          console.error('Error details:', dbError.response?.data);
+        }
+
+        if (web3Response.data.success) {
+          let successMessage = `Support ticket created successfully! Your ticket number is ${newTicketNumber}.`;
+          if (dbSuccess) {
+            successMessage += ' Ticket also saved to our system.';
+          } else {
+            successMessage;
+          }
+          
+          setStatus({
+            type: 'success',
+            message: successMessage
+          });
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: '',
+            priority: 'medium',
+            category: 'Technical Issue'
+          });
+        } else {
+          setStatus({
+            type: 'error',
+            message: web3Response.data.message || 'Failed to create support ticket. Please try again.'
+          });
+          setTicketNumber('');
+        }
+      } catch (error) {
+        console.error('Error creating support ticket:', error);
+        setStatus({
+          type: 'error',
+          message: 'Failed to create support ticket. Please try again.'
+        });
         setTicketNumber('');
       }
-    } finally {
-      setLoading(false);
     }
+    
+    setLoading(false);
+  };
+
+  const generateTicketNumber = () => {
+    const date = new Date();
+    const ymd = date.getFullYear().toString() + (date.getMonth()+1).toString().padStart(2, '0') + date.getDate().toString().padStart(2, '0');
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `SUP-${ymd}-${rand}`;
   };
 
   const handleChange = (e) => {
@@ -386,10 +462,10 @@ const Contact = () => {
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
                         >
-                          <option value="general">General</option>
-                          <option value="technical">Technical</option>
-                          <option value="billing">Billing</option>
-                          <option value="feature">Feature Request</option>
+                          <option value="Technical Issue">Technical Issue</option>
+                          <option value="Billing Question">Billing Question</option>
+                          <option value="General Inquiry">General Inquiry</option>
+                          <option value="Feature Request">Feature Request</option>
                         </select>
                       </div>
                     </div>

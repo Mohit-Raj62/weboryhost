@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const SupportTicketForm = () => {
   const [result, setResult] = useState("");
@@ -24,7 +25,7 @@ const SupportTicketForm = () => {
     const description = form.description.value;
     const ticketNum = generateTicketNumber();
 
-    // Build web3FormsData
+    // Prepare data for both Web3Forms and Database
     const web3FormsData = {
       access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
       from_name: "Webory Support Ticket",
@@ -37,25 +38,51 @@ const SupportTicketForm = () => {
       description
     };
 
+    const ticketData = {
+      subject: `${issueType} - ${name}`,
+      email: email,
+      message: description,
+      priority: 'medium', // Default priority
+      ticketNumber: ticketNum,
+      userName: name,
+      issueType: issueType
+    };
+
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(web3FormsData)
-      });
-      const data = await response.json();
-      if (data.success) {
-        setResult("Support Ticket Submitted Successfully!");
+      // Send to Web3Forms
+      const web3Response = await axios.post("https://api.web3forms.com/submit", web3FormsData);
+      
+      // Send to Database (optional - won't break if it fails)
+      let dbSuccess = false;
+      try {
+        console.log('Sending ticket data to database:', ticketData);
+        const dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
+        if (dbResponse.data) {
+          dbSuccess = true;
+          console.log('Ticket saved to database:', dbResponse.data);
+        }
+      } catch (dbError) {
+        console.error('Database save failed (but Web3Forms worked):', dbError.message);
+        console.error('Error details:', dbError.response?.data);
+      }
+
+      if (web3Response.data.success) {
+        let successMessage = "Support Ticket Submitted Successfully!";
+        if (dbSuccess) {
+          successMessage += " Ticket also saved to our system.";
+        } else {
+          successMessage += " (Email notification sent)";
+        }
+        
+        setResult(successMessage);
         setTicketNumber(ticketNum);
         form.reset();
       } else {
-        setResult(data.message);
+        setResult(web3Response.data.message || "Failed to submit ticket. Please try again.");
         setTicketNumber("");
       }
     } catch (error) {
+      console.error('Error submitting ticket:', error);
       setResult("Submission failed. Please try again.");
       setTicketNumber("");
     }

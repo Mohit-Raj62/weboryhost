@@ -42,13 +42,21 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const [teamData, setTeamData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshMessage, setRefreshMessage] = useState('');
 
-  const fetchDashboardData = useCallback(async () => {
+  const fetchDashboardData = useCallback(async (isRefresh = false) => {
     try {
+      if (isRefresh) {
+        setRefreshing(true);
+      }
+      
+      console.log('🔄 Fetching dashboard data...');
       const token = localStorage.getItem('adminToken');
       if (!token) {
         setError('No authentication token found. Please login again.');
         setLoading(false);
+        setRefreshing(false);
         return;
       }
 
@@ -57,9 +65,13 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
       
+      console.log('📡 Making API request to:', `${API_BASE_URL}/api/admin/stats`);
+      
       const [statsResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/admin/stats`, { headers })
       ]);
+
+      console.log('✅ Dashboard data received:', statsResponse.data);
 
       if (statsResponse.data) {
         setStats(prevStats => ({
@@ -69,7 +81,21 @@ const AdminDashboard = () => {
       }
 
       setError('');
+      console.log('✅ Dashboard data updated successfully');
+      
+      if (isRefresh) {
+        setRefreshMessage('Dashboard refreshed successfully!');
+        setTimeout(() => setRefreshMessage(''), 3000);
+      }
     } catch (err) {
+      console.error('❌ Error fetching dashboard data:', err);
+      console.error('Error details:', {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        url: err.config?.url
+      });
+      
       if (err.response?.status === 401) {
         setError('Authentication failed. Please check your login credentials.');
       } else if (err.response?.status === 404) {
@@ -81,6 +107,7 @@ const AdminDashboard = () => {
       }
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
@@ -163,6 +190,19 @@ const AdminDashboard = () => {
     const interval = setInterval(fetchDashboardData, 30000);
     return () => clearInterval(interval);
   }, [fetchDashboardData, fetchTeamData]);
+
+  // Add keyboard shortcut for refresh (Ctrl+R)
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+        event.preventDefault();
+        fetchDashboardData(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [fetchDashboardData]);
 
   // Removed notifications logic since notifications state was removed
 
@@ -287,13 +327,20 @@ const AdminDashboard = () => {
                 {stats.systemHealth.status}
               </div>
               <button
-                onClick={fetchDashboardData}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center space-x-2"
+                onClick={() => fetchDashboardData(true)}
+                disabled={refreshing}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                <span>Refresh</span>
+                {refreshing ? (
+                  <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                ) : (
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                )}
+                <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
               </button>
             </div>
           </div>
@@ -320,6 +367,17 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Success Message */}
+        {refreshMessage && (
+          <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-green-800">{refreshMessage}</span>
+            </div>
+          </div>
+        )}
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Summary Cards */}
@@ -369,9 +427,9 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-                            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                 <div className="flex items-center justify-between">
-                  <div>
+          <div>
                     <p className="text-sm font-medium text-gray-600">Support Tickets</p>
                     <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalTickets || 0)}</p>
                     <p className="text-sm text-red-600">{stats.openTickets || 0} open</p>

@@ -73,7 +73,30 @@ const getTicketById = async (req, res) => {
 // Create new support ticket
 const createTicket = async (req, res) => {
   try {
-    const { subject, email, message, priority = "medium", userId } = req.body;
+    console.log("=== SUPPORT TICKET CREATION ===");
+    console.log("Request body:", req.body);
+
+    const {
+      subject,
+      email,
+      message,
+      priority = "medium",
+      userId,
+      ticketNumber,
+      userName,
+      issueType,
+    } = req.body;
+
+    console.log("Extracted fields:", {
+      subject,
+      email,
+      message,
+      priority,
+      userId,
+      ticketNumber,
+      userName,
+      issueType,
+    });
 
     // Validate required fields
     if (!subject || !email || !message) {
@@ -90,9 +113,16 @@ const createTicket = async (req, res) => {
       message,
       priority,
       status: "open",
+      ticketNumber,
+      userName,
+      issueType,
     });
 
+    console.log("Ticket object before save:", ticket);
+
     await ticket.save();
+
+    console.log("Ticket saved successfully:", ticket._id);
 
     // Populate user info
     await ticket.populate("user", "name email");

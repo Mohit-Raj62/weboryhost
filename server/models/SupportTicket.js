@@ -35,6 +35,18 @@ const supportTicketSchema = new mongoose.Schema(
       enum: ["low", "medium", "high"],
       default: "medium",
     },
+    ticketNumber: {
+      type: String,
+      required: false,
+    },
+    userName: {
+      type: String,
+      required: false,
+    },
+    issueType: {
+      type: String,
+      required: false,
+    },
     responses: [
       {
         responder: {
