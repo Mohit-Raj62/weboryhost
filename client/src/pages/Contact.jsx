@@ -159,63 +159,44 @@ const Contact = () => {
       };
 
       try {
-        // Send to Database FIRST (primary storage)
+        // Send to Web3Forms
+        const web3Response = await axios.post(
+          "https://api.web3forms.com/submit",
+          web3FormsData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        );
+
+        // Send to Database (optional - won't break if it fails)
         let dbSuccess = false;
-        let dbResponse = null;
-        
         try {
-          console.log('🔄 Sending ticket data to database:', ticketData);
-          dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
+          console.log('Sending ticket data to database:', ticketData);
+          const dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
           if (dbResponse.data) {
             dbSuccess = true;
-            console.log('✅ Ticket saved to database:', dbResponse.data);
+            console.log('Ticket saved to database:', dbResponse.data);
           }
         } catch (dbError) {
-          console.error('❌ Database save failed:', dbError.message);
+          console.error('Database save failed (but Web3Forms worked):', dbError.message);
           console.error('Error details:', dbError.response?.data);
-          
-          // If database fails, still try Web3Forms as backup
-          console.log('🔄 Trying Web3Forms as backup...');
         }
 
-        // Send to Web3Forms (backup/notification)
-        let web3Success = false;
-        try {
-          const web3Response = await axios.post(
-            "https://api.web3forms.com/submit",
-            web3FormsData,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              }
-            }
-          );
-          
-          if (web3Response.data.success) {
-            web3Success = true;
-            console.log('✅ Web3Forms notification sent');
-          }
-        } catch (web3Error) {
-          console.error('❌ Web3Forms failed:', web3Error.message);
-        }
-
-        // Determine success message based on what worked
-        if (dbSuccess) {
+        if (web3Response.data.success) {
           let successMessage = `Support ticket created successfully! Your ticket number is ${newTicketNumber}.`;
-          
-          if (web3Success) {
-            successMessage += ' Email notification also sent.';
+          if (dbSuccess) {
+            successMessage += ' Ticket also saved to our system.';
           } else {
-            successMessage += ' (Email notification failed, but ticket is saved)';
+            successMessage;
           }
           
           setStatus({
             type: 'success',
             message: successMessage
           });
-          
-          // Reset form only if database save was successful
           setFormData({
             name: '',
             email: '',
@@ -225,22 +206,15 @@ const Contact = () => {
             priority: 'medium',
             category: 'Technical Issue'
           });
-        } else if (web3Success) {
-          // Only Web3Forms worked, database failed
-          setStatus({
-            type: 'warning',
-            message: `Support ticket submitted via email. Ticket number: ${newTicketNumber}. (Database storage failed - please contact support)`
-          });
         } else {
-          // Both failed
           setStatus({
             type: 'error',
-            message: 'Failed to create support ticket. Please try again or contact us directly.'
+            message: web3Response.data.message || 'Failed to create support ticket. Please try again.'
           });
           setTicketNumber('');
         }
       } catch (error) {
-        console.error('❌ Error creating support ticket:', error);
+        console.error('Error creating support ticket:', error);
         setStatus({
           type: 'error',
           message: 'Failed to create support ticket. Please try again.'

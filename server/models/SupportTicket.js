@@ -10,7 +10,6 @@ const supportTicketSchema = new mongoose.Schema(
     subject: {
       type: String,
       required: true,
-      trim: true,
     },
     email: {
       type: String,
@@ -25,7 +24,6 @@ const supportTicketSchema = new mongoose.Schema(
     message: {
       type: String,
       required: true,
-      trim: true,
     },
     status: {
       type: String,
@@ -40,18 +38,14 @@ const supportTicketSchema = new mongoose.Schema(
     ticketNumber: {
       type: String,
       required: false,
-      unique: true,
-      sparse: true,
     },
     userName: {
       type: String,
       required: false,
-      trim: true,
     },
     issueType: {
       type: String,
       required: false,
-      trim: true,
     },
     responses: [
       {
@@ -71,20 +65,6 @@ const supportTicketSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Add compound index to prevent duplicate tickets (email + subject + recent time)
-supportTicketSchema.index(
-  { email: 1, subject: 1, createdAt: 1 },
-  {
-    unique: false,
-    expireAfterSeconds: 300, // 5 minutes
-  }
-);
-
-// Add index for faster queries
-supportTicketSchema.index({ status: 1, createdAt: -1 });
-supportTicketSchema.index({ email: 1 });
-supportTicketSchema.index({ ticketNumber: 1 });
 
 const SupportTicket = mongoose.model("SupportTicket", supportTicketSchema);
 

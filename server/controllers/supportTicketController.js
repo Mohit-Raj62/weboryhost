@@ -100,33 +100,16 @@ const createTicket = async (req, res) => {
 
     // Validate required fields
     if (!subject || !email || !message) {
-      console.log("❌ Missing required fields");
       return res
         .status(400)
         .json({ message: "Subject, email, and message are required" });
-    }
-
-    // Check for duplicate ticket (same email + subject within last 5 minutes)
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-    const existingTicket = await SupportTicket.findOne({
-      email: email.toLowerCase(),
-      subject: subject,
-      createdAt: { $gte: fiveMinutesAgo },
-    });
-
-    if (existingTicket) {
-      console.log("❌ Duplicate ticket detected");
-      return res.status(409).json({
-        message:
-          "A similar ticket was recently submitted. Please wait before submitting another.",
-      });
     }
 
     // Create ticket
     const ticket = new SupportTicket({
       user: userId,
       subject,
-      email: email.toLowerCase(),
+      email,
       message,
       priority,
       status: "open",
@@ -137,35 +120,20 @@ const createTicket = async (req, res) => {
 
     console.log("Ticket object before save:", ticket);
 
-    const savedTicket = await ticket.save();
-    console.log("✅ Ticket saved successfully:", savedTicket._id);
+    await ticket.save();
+
+    console.log("Ticket saved successfully:", ticket._id);
 
     // Populate user info
-    await savedTicket.populate("user", "name email");
+    await ticket.populate("user", "name email");
 
     res.status(201).json({
       message: "Support ticket created successfully",
-      ticket: savedTicket,
+      ticket,
     });
   } catch (error) {
-    console.error("❌ Error creating ticket:", error);
-
-    // Handle specific MongoDB errors
-    if (error.code === 11000) {
-      return res.status(409).json({
-        message: "A ticket with this information already exists.",
-      });
-    }
-
-    if (error.name === "ValidationError") {
-      return res.status(400).json({
-        message: "Invalid ticket data. Please check your input.",
-      });
-    }
-
-    res.status(500).json({
-      message: "Failed to create ticket. Please try again.",
-    });
+    console.error("Error creating ticket:", error);
+    res.status(500).json({ message: "Failed to create ticket" });
   }
 };
 
