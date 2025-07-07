@@ -100,6 +100,11 @@ const createTicket = async (req, res) => {
 
     // Validate required fields
     if (!subject || !email || !message) {
+      console.error("Validation failed: Missing required fields", {
+        subject,
+        email,
+        message,
+      });
       return res
         .status(400)
         .json({ message: "Subject, email, and message are required" });
@@ -133,7 +138,19 @@ const createTicket = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating ticket:", error);
-    res.status(500).json({ message: "Failed to create ticket" });
+    if (error.stack) {
+      console.error("Error stack:", error.stack);
+    }
+    if (req && req.body) {
+      console.error("Request body at error:", req.body);
+    }
+    res
+      .status(500)
+      .json({
+        message: "Failed to create ticket",
+        error: error.message,
+        stack: error.stack,
+      });
   }
 };
 
