@@ -404,10 +404,10 @@ const Settings = () => {
           Admin Activity Log
         </Typography>
         <Paper sx={{ p: 2, maxHeight: 300, overflow: 'auto' }}>
-          {activityLog.length === 0 ? (
+          {(Array.isArray(activityLog) ? activityLog : []).length === 0 ? (
             <Typography>No recent admin activity.</Typography>
           ) : (
-            activityLog.map((log) => (
+            (Array.isArray(activityLog) ? activityLog : []).map((log) => (
               <Box key={log._id} sx={{ mb: 1 }}>
                 <Typography variant="body2">
                   <b>{log.admin?.name || 'Unknown Admin'}</b> - {log.action} - {new Date(log.createdAt).toLocaleString()}
