@@ -7,6 +7,7 @@ const adminAuth = require("../middleware/adminAuth");
 const productController = require("../controllers/productController");
 const careerController = require("../controllers/careerController");
 const settingsController = require("../controllers/settingsController");
+const ActivityLog = require("../models/ActivityLog");
 
 // Public routes
 router.post("/signup", authController.signup);
@@ -69,6 +70,19 @@ router.delete("/careers/:id", adminAuth, careerController.deleteCareer);
 // Settings management
 router.get("/settings", adminAuth, settingsController.getSettings);
 router.put("/settings", adminAuth, settingsController.updateSettings);
+
+// Admin activity log route
+router.get("/activity-log", adminAuth, async (req, res) => {
+  try {
+    const logs = await ActivityLog.find()
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .populate("admin", "name email");
+    res.json(logs);
+  } catch (e) {
+    res.status(500).json({ message: "Failed to fetch activity log" });
+  }
+});
 
 // Test admin authentication
 router.get("/test-auth", adminAuth, (req, res) => {

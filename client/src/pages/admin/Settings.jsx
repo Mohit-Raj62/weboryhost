@@ -28,6 +28,7 @@ const Settings = () => {
     maxLoginAttempts: 5,
     sessionTimeout: 30,
     emailNotifications: true,
+    customFooterText: '',
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -37,9 +38,11 @@ const Settings = () => {
     message: '',
     severity: 'success',
   });
+  const [activityLog, setActivityLog] = useState([]);
 
   useEffect(() => {
     fetchSettings();
+    fetchActivityLog();
     // eslint-disable-next-line
   }, []);
 
@@ -60,6 +63,15 @@ const Settings = () => {
       showSnackbar('Error loading settings', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchActivityLog = async () => {
+    try {
+      const res = await axios.get('/api/admin/activity-log');
+      setActivityLog(res.data);
+    } catch (e) {
+      // ignore
     }
   };
 
@@ -365,26 +377,55 @@ const Settings = () => {
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  disabled={submitting}
-                >
-                  {submitting ? <CircularProgress size={24} color="inherit" /> : 'Save Settings'}
-                </Button>
-              </Box>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Custom Footer Text
+              </Typography>
+              <TextField
+                fullWidth
+                label="Footer Text"
+                name="customFooterText"
+                value={settings.customFooterText || ''}
+                onChange={handleChange}
+                multiline
+                rows={2}
+              />
             </Grid>
           </Grid>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button type="submit" variant="contained" color="primary" disabled={submitting}>
+              {submitting ? <CircularProgress size={24} /> : 'Save Settings'}
+            </Button>
+          </Box>
         </form>
       </Paper>
+      <Box sx={{ mt: 5 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Admin Activity Log
+        </Typography>
+        <Paper sx={{ p: 2, maxHeight: 300, overflow: 'auto' }}>
+          {activityLog.length === 0 ? (
+            <Typography>No recent admin activity.</Typography>
+          ) : (
+            activityLog.map((log) => (
+              <Box key={log._id} sx={{ mb: 1 }}>
+                <Typography variant="body2">
+                  <b>{log.admin?.name || 'Unknown Admin'}</b> - {log.action} - {new Date(log.createdAt).toLocaleString()}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {JSON.stringify(log.details)}
+                </Typography>
+                <Divider sx={{ my: 1 }} />
+              </Box>
+            ))
+          )}
+        </Paper>
+      </Box>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}

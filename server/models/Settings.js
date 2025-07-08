@@ -67,6 +67,10 @@ const settingsSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    customFooterText: {
+      type: String,
+      default: "© 2024 Webory. All rights reserved.",
+    },
   },
   {
     timestamps: true,

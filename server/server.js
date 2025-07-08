@@ -10,6 +10,7 @@ const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 const clientRoutes = require("./routes/clientRoutes");
 const supportTicketRoutes = require("./routes/supportTicketRoutes");
 const path = require("path");
+const Settings = require("./models/Settings");
 
 const app = express();
 const server = http.createServer(app);
@@ -128,6 +129,26 @@ app.get("/api/health", (req, res) => {
     env: process.env.NODE_ENV,
     db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
+});
+
+// Maintenance mode middleware
+app.use(async (req, res, next) => {
+  try {
+    const settings = await Settings.findOne();
+    if (
+      settings &&
+      settings.maintenanceMode &&
+      !req.path.startsWith("/api/admin") &&
+      !req.path.startsWith("/api/health")
+    ) {
+      return res
+        .status(503)
+        .send("Site is under maintenance. Please check back later.");
+    }
+    next();
+  } catch (e) {
+    next();
+  }
 });
 
 // 404 handler
