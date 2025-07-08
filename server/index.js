@@ -37,18 +37,14 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   "https://webory.netlify.app",
-  "https://*.netlify.app",
-  // Add your production frontend URL here
+  // Add more frontend URLs as needed
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (
-      allowedOrigins.indexOf(origin) !== -1 ||
-      origin.endsWith(".netlify.app")
-    ) {
+    if (allowedOrigins.includes(origin) || origin.endsWith(".netlify.app")) {
       callback(null, true);
     } else {
       console.log("Blocked by CORS:", origin);
@@ -57,7 +53,7 @@ const corsOptions = {
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-  credentials: true,
+  credentials: false, // Set to false for public APIs
   maxAge: 86400, // 24 hours
   preflightContinue: false,
   optionsSuccessStatus: 204,
@@ -65,20 +61,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
-// Security headers
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Accept"
-  );
-  next();
-});
 
 // Health check endpoint (should be before static files)
 app.get("/health", (req, res) => {
