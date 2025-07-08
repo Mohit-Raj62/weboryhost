@@ -83,53 +83,53 @@ const Contact = () => {
 
     if (activeTab === 'contact') {
       // Handle contact form submission (Web3Forms)
-      const web3FormsData = {
-        ...formData,
+    const web3FormsData = {
+      ...formData,
         access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
-        from_name: "Webory Contact Form",
+      from_name: "Webory Contact Form",
         subject: `New Contact from ${formData.name}`,
         form_type: 'Contact Us'
       };
 
-      try {
-        const response = await axios.post(
-          "https://api.web3forms.com/submit",
-          web3FormsData,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
+    try {
+      const response = await axios.post(
+        "https://api.web3forms.com/submit",
+        web3FormsData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           }
-        );
-        const data = response.data;
-
-        if (data.success) {
-          setStatus({
-            type: 'success',
-            message: data.message || 'Message sent successfully!'
-          });
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            subject: '',
-            message: '',
-            priority: 'medium',
-            category: 'Technical Issue'
-          });
-        } else {
-          setStatus({
-            type: 'error',
-            message: data.message || 'An unknown error occurred.'
-          });
         }
-      } catch (error) {
-        const errorMessage = handleApiError(error);
+      );
+      const data = response.data;
+
+      if (data.success) {
+        setStatus({
+          type: 'success',
+            message: data.message || 'Message sent successfully!'
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+          priority: 'medium',
+            category: 'Technical Issue'
+        });
+      } else {
         setStatus({
           type: 'error',
-          message: errorMessage
+          message: data.message || 'An unknown error occurred.'
         });
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setStatus({
+        type: 'error',
+        message: errorMessage
+      });
       }
     } else {
       // Handle support ticket submission (Web3Forms + Database)
@@ -223,7 +223,7 @@ const Contact = () => {
       }
     }
     
-    setLoading(false);
+      setLoading(false);
   };
 
   const generateTicketNumber = () => {
