@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 const SupportTicketForm = () => {
   const [result, setResult] = useState("");
@@ -56,7 +57,7 @@ const SupportTicketForm = () => {
       let dbSuccess = false;
       try {
         console.log('Sending ticket data to database:', ticketData);
-        const dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
+        const dbResponse = await axios.post(`${API_BASE_URL}/api/support-tickets/create-public`, ticketData);
         if (dbResponse.data) {
           dbSuccess = true;
           console.log('Ticket saved to database:', dbResponse.data);
