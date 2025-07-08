@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import FeedbackForm from '../components/FeedbackForm';
 import axios from 'axios';
-import { handleApiError } from '../config/api';
+import { handleApiError, API_BASE_URL } from '../config/api';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -175,7 +175,7 @@ const Contact = () => {
         let dbSuccess = false;
         try {
           console.log('Sending ticket data to database:', ticketData);
-          const dbResponse = await axios.post('http://localhost:5002/api/support-tickets/create-public', ticketData);
+          const dbResponse = await axios.post(`${API_BASE_URL}/api/support-tickets/create-public`, ticketData);
           if (dbResponse.data) {
             dbSuccess = true;
             console.log('Ticket saved to database:', dbResponse.data);
