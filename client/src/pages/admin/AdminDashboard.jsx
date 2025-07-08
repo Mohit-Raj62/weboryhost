@@ -323,27 +323,27 @@ const AdminDashboard = () => {
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Agency Dashboard</h1>
               <p className="text-gray-500 text-xs md:text-sm">Manage projects, clients, and team performance</p>
             </div>
-          </div>
-          <div className="flex items-center space-x-4">
+            </div>
+            <div className="flex items-center space-x-4">
             <div className={`px-3 py-1 rounded-full text-xs md:text-sm font-semibold ${getStatusColor(stats.systemHealth.status)}`}>{stats.systemHealth.status}</div>
-            <button
-              onClick={() => fetchDashboardData(true)}
-              disabled={refreshing}
+              <button
+                onClick={() => fetchDashboardData(true)}
+                disabled={refreshing}
               className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-4 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              {refreshing ? (
-                <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              ) : (
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              )}
-              <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
-            </button>
+              >
+                {refreshing ? (
+                  <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                ) : (
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                )}
+                <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
+              </button>
+            </div>
           </div>
-        </div>
         {/* Modern Navigation Tabs */}
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
           <div className="flex gap-2 md:gap-4 border-b mb-2 md:mb-4 pb-1 md:pb-2">
@@ -370,8 +370,8 @@ const AdminDashboard = () => {
         {refreshMessage && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 shadow flex items-center gap-2">
             <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-            </svg>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
             <span className="text-green-800 font-medium">{refreshMessage}</span>
           </div>
         )}
@@ -383,194 +383,194 @@ const AdminDashboard = () => {
                 <span className="text-2xl">📊</span>
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900">Overview</h2>
               </div>
-              {/* Summary Cards */}
+            {/* Summary Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {/* Card 1 */}
                 <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
-                  <div className="flex items-center justify-between">
-                    <div>
+                <div className="flex items-center justify-between">
+                  <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Projects</p>
                       <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
                       <p className="text-xs text-green-600 mt-1">+12% from last month</p>
-                    </div>
+                  </div>
                     <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center shadow">
                       <svg className="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                   </div>
                 </div>
+              </div>
                 {/* Card 2 */}
                 <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
-                  <div className="flex items-center justify-between">
-                    <div>
+                <div className="flex items-center justify-between">
+                  <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Clients</p>
                       <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
                       <p className="text-xs text-green-600 mt-1">+8% from last month</p>
-                    </div>
+                  </div>
                     <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center shadow">
                       <svg className="h-7 w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
                   </div>
                 </div>
+              </div>
                 {/* Card 3 */}
                 <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
-                  <div className="flex items-center justify-between">
-                    <div>
+                <div className="flex items-center justify-between">
+                  <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Tasks</p>
                       <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
                       <p className="text-xs text-blue-600 mt-1">{stats.completedTasks} completed</p>
-                    </div>
+                  </div>
                     <div className="h-12 w-12 bg-indigo-100 rounded-xl flex items-center justify-center shadow">
                       <svg className="h-7 w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                      </svg>
-                    </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
                   </div>
                 </div>
+              </div>
                 {/* Card 4 */}
                 <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
-                  <div className="flex items-center justify-between">
-                    <div>
+                <div className="flex items-center justify-between">
+          <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Support Tickets</p>
                       <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
                       <p className="text-xs text-red-600 mt-1">{stats.openTickets || 0} open</p>
-                    </div>
+                  </div>
                     <div className="h-12 w-12 bg-red-100 rounded-xl flex items-center justify-center shadow">
                       <svg className="h-7 w-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                    </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Charts Section */}
+            {/* Charts Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                {/* Revenue Chart */}
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={revenueData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip formatter={(value) => formatCurrency(value)} />
-                      <Area type="monotone" dataKey="revenue" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Project Progress */}
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Status</h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={projectProgressData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {projectProgressData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Task Completion Rate Chart */}
-              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
+              {/* Revenue Chart */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={taskCompletionData}>
+                  <AreaChart data={revenueData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
+                    <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip formatter={(value, name) => [name === 'completionRate' ? `${value}%` : value, name]} />
-                    <Bar dataKey="completionRate" fill="#10B981" name="Completion Rate" />
-                  </BarChart>
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Area type="monotone" dataKey="revenue" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Upcoming Deadlines */}
-              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
-                <div className="space-y-3">
-                  {[
-                    { project: 'E-commerce Website', deadline: '2024-02-15', daysLeft: 3, priority: 'high' },
-                    { project: 'Mobile App Development', deadline: '2024-02-20', daysLeft: 8, priority: 'medium' },
-                    { project: 'SEO Optimization', deadline: '2024-02-25', daysLeft: 13, priority: 'low' },
-                    { project: 'Brand Identity Design', deadline: '2024-03-01', daysLeft: 17, priority: 'medium' }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className={`h-3 w-3 rounded-full ${
-                          item.priority === 'high' ? 'bg-red-500' : 
-                          item.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                        }`}></div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{item.project}</p>
-                          <p className="text-xs text-gray-500">Due: {item.deadline}</p>
-                        </div>
-                      </div>
-                      <div className={`text-sm font-medium ${
-                        item.daysLeft <= 3 ? 'text-red-600' : 
-                        item.daysLeft <= 7 ? 'text-yellow-600' : 'text-green-600'
-                      }`}>
-                        {item.daysLeft} days left
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Recent Activity Feed */}
-              <div className="bg-white/70 rounded-xl shadow p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
-                <div className="space-y-4">
-                  {[
-                    { type: 'project', action: 'Project "E-commerce Website" updated', time: '2 hours ago', user: 'John Doe' },
-                    { type: 'task', action: 'Task "Payment Integration" completed', time: '4 hours ago', user: 'Mike Johnson' },
-                    { type: 'invoice', action: 'Invoice #INV-2024-002 sent', time: '6 hours ago', user: 'Jane Smith' },
-                    { type: 'support_ticket', action: 'New support ticket: "Login Issue"', time: '1 hour ago', user: 'Support Team' },
-                    { type: 'client', action: 'New client "TechCorp Inc." added', time: '1 day ago', user: 'Sarah Wilson' },
-                    { type: 'task', action: 'Task "Mobile Testing" assigned', time: '1 day ago', user: 'Alex Brown' }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                        activity.type === 'project' ? 'bg-blue-100' :
-                        activity.type === 'task' ? 'bg-green-100' :
-                        activity.type === 'invoice' ? 'bg-yellow-100' :
-                        activity.type === 'support_ticket' ? 'bg-red-100' : 'bg-purple-100'
-                      }`}>
-                        <svg className={`h-4 w-4 ${
-                          activity.type === 'project' ? 'text-blue-600' :
-                          activity.type === 'task' ? 'text-green-600' :
-                          activity.type === 'invoice' ? 'text-yellow-600' :
-                          activity.type === 'support_ticket' ? 'text-red-600' : 'text-purple-600'
-                        }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                        <p className="text-xs text-gray-500">by {activity.user} • {activity.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              {/* Project Progress */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Status</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={projectProgressData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {projectProgressData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
+
+            {/* Task Completion Rate Chart */}
+              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={taskCompletionData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip formatter={(value, name) => [name === 'completionRate' ? `${value}%` : value, name]} />
+                  <Bar dataKey="completionRate" fill="#10B981" name="Completion Rate" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Upcoming Deadlines */}
+              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
+              <div className="space-y-3">
+                {[
+                  { project: 'E-commerce Website', deadline: '2024-02-15', daysLeft: 3, priority: 'high' },
+                  { project: 'Mobile App Development', deadline: '2024-02-20', daysLeft: 8, priority: 'medium' },
+                  { project: 'SEO Optimization', deadline: '2024-02-25', daysLeft: 13, priority: 'low' },
+                  { project: 'Brand Identity Design', deadline: '2024-03-01', daysLeft: 17, priority: 'medium' }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className={`h-3 w-3 rounded-full ${
+                        item.priority === 'high' ? 'bg-red-500' : 
+                        item.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                      }`}></div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{item.project}</p>
+                        <p className="text-xs text-gray-500">Due: {item.deadline}</p>
+                      </div>
+                    </div>
+                    <div className={`text-sm font-medium ${
+                      item.daysLeft <= 3 ? 'text-red-600' : 
+                      item.daysLeft <= 7 ? 'text-yellow-600' : 'text-green-600'
+                    }`}>
+                      {item.daysLeft} days left
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Activity Feed */}
+              <div className="bg-white/70 rounded-xl shadow p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
+              <div className="space-y-4">
+                {[
+                  { type: 'project', action: 'Project "E-commerce Website" updated', time: '2 hours ago', user: 'John Doe' },
+                  { type: 'task', action: 'Task "Payment Integration" completed', time: '4 hours ago', user: 'Mike Johnson' },
+                  { type: 'invoice', action: 'Invoice #INV-2024-002 sent', time: '6 hours ago', user: 'Jane Smith' },
+                  { type: 'support_ticket', action: 'New support ticket: "Login Issue"', time: '1 hour ago', user: 'Support Team' },
+                  { type: 'client', action: 'New client "TechCorp Inc." added', time: '1 day ago', user: 'Sarah Wilson' },
+                  { type: 'task', action: 'Task "Mobile Testing" assigned', time: '1 day ago', user: 'Alex Brown' }
+                ].map((activity, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                      activity.type === 'project' ? 'bg-blue-100' :
+                      activity.type === 'task' ? 'bg-green-100' :
+                      activity.type === 'invoice' ? 'bg-yellow-100' :
+                      activity.type === 'support_ticket' ? 'bg-red-100' : 'bg-purple-100'
+                    }`}>
+                      <svg className={`h-4 w-4 ${
+                        activity.type === 'project' ? 'text-blue-600' :
+                        activity.type === 'task' ? 'text-green-600' :
+                        activity.type === 'invoice' ? 'text-yellow-600' :
+                        activity.type === 'support_ticket' ? 'text-red-600' : 'text-purple-600'
+                      }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                      <p className="text-xs text-gray-500">by {activity.user} • {activity.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           </section>
         )}
         {activeTab === 'projects' && (
