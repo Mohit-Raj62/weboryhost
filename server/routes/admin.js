@@ -12,6 +12,9 @@ const settingsController = require("../controllers/settingsController");
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
+// Admin profile route
+router.get("/profile", adminAuth, authController.getProfile);
+
 // Enhanced dashboard routes
 router.get("/stats", adminAuth, dashboardController.getDashboardStats);
 router.get("/activity", adminAuth, dashboardController.getRecentActivity);

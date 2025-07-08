@@ -102,7 +102,7 @@ const login = async (req, res, next) => {
       email: admin.email,
       role: admin.role,
       isActive: admin.isActive,
-      hasPassword: !!admin.password
+      hasPassword: !!admin.password,
     });
 
     if (!admin.isActive) {
@@ -121,7 +121,7 @@ const login = async (req, res, next) => {
 
     admin.lastLogin = new Date();
     await admin.save();
-    
+
     console.log("🎫 Generating JWT token...");
     const token = generateToken(admin);
     console.log("✅ Token generated successfully");
@@ -147,4 +147,15 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login };
+// Get current admin profile
+const getProfile = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.admin._id).select("-password");
+    if (!admin) return res.status(404).json({ error: "Admin not found" });
+    res.json({ admin });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = { signup, login, getProfile };
