@@ -313,48 +313,47 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur shadow-md border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-5">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-100 text-indigo-700 text-2xl font-bold shadow-sm">A</span>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Agency Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage projects, clients, and team performance</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(stats.systemHealth.status)}`}>
-                {stats.systemHealth.status}
-              </div>
-              <button
-                onClick={() => fetchDashboardData(true)}
-                disabled={refreshing}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {refreshing ? (
-                  <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                ) : (
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                )}
-                <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
-              </button>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Agency Dashboard</h1>
+              <p className="text-gray-500 text-xs md:text-sm">Manage projects, clients, and team performance</p>
             </div>
           </div>
-          
-          {/* Navigation Tabs */}
-          <div className="flex gap-4 border-b mb-4 overflow-x-auto">
+          <div className="flex items-center space-x-4">
+            <div className={`px-3 py-1 rounded-full text-xs md:text-sm font-semibold ${getStatusColor(stats.systemHealth.status)}`}>{stats.systemHealth.status}</div>
+            <button
+              onClick={() => fetchDashboardData(true)}
+              disabled={refreshing}
+              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-4 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              {refreshing ? (
+                <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              )}
+              <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
+            </button>
+          </div>
+        </div>
+        {/* Modern Navigation Tabs */}
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+          <div className="flex gap-2 md:gap-4 border-b mb-2 md:mb-4 pb-1 md:pb-2">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
-                className={`py-2 px-4 -mb-px border-b-2 whitespace-nowrap flex items-center space-x-2 ${
-                  activeTab === tab.key 
-                    ? 'border-blue-600 text-blue-600' 
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+                className={`py-2 px-4 rounded-full whitespace-nowrap flex items-center gap-2 font-semibold transition-all duration-200 text-sm md:text-base shadow-sm
+                  ${activeTab === tab.key 
+                    ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-md scale-105' 
+                    : 'bg-white/70 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700'}`}
                 onClick={() => setActiveTab(tab.key)}
               >
                 <span>{tab.icon}</span>
@@ -362,80 +361,79 @@ const AdminDashboard = () => {
               </button>
             ))}
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
         {/* Success Message */}
         {refreshMessage && (
-          <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-green-800">{refreshMessage}</span>
-            </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 shadow flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-green-800 font-medium">{refreshMessage}</span>
           </div>
         )}
         {activeTab === 'overview' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Card 1 */}
+              <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Projects</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalProjects)}</p>
-                    <p className="text-sm text-green-600">+12% from last month</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Projects</p>
+                    <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
+                    <p className="text-xs text-green-600 mt-1">+12% from last month</p>
                   </div>
-                  <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center shadow">
+                    <svg className="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
                 </div>
               </div>
-
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              {/* Card 2 */}
+              <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Active Clients</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalClients)}</p>
-                    <p className="text-sm text-green-600">+8% from last month</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Clients</p>
+                    <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
+                    <p className="text-xs text-green-600 mt-1">+8% from last month</p>
                   </div>
-                  <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center shadow">
+                    <svg className="h-7 w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
                 </div>
               </div>
-
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              {/* Card 3 */}
+              <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Tasks</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalTasks)}</p>
-                    <p className="text-sm text-blue-600">{stats.completedTasks} completed</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Tasks</p>
+                    <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
+                    <p className="text-xs text-blue-600 mt-1">{stats.completedTasks} completed</p>
                   </div>
-                  <div className="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <svg className="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="h-12 w-12 bg-indigo-100 rounded-xl flex items-center justify-center shadow">
+                    <svg className="h-7 w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
                 </div>
               </div>
-
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              {/* Card 4 */}
+              <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
                 <div className="flex items-center justify-between">
-          <div>
-                    <p className="text-sm font-medium text-gray-600">Support Tickets</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.totalTickets || 0)}</p>
-                    <p className="text-sm text-red-600">{stats.openTickets || 0} open</p>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Support Tickets</p>
+                    <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
+                    <p className="text-xs text-red-600 mt-1">{stats.openTickets || 0} open</p>
                   </div>
-                  <div className="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="h-12 w-12 bg-red-100 rounded-xl flex items-center justify-center shadow">
+                    <svg className="h-7 w-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
@@ -693,7 +691,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {activeTab === 'settings' && <SettingsDashboard />}
-      </div>
+      </main>
     </div>
   );
 };
