@@ -45,6 +45,7 @@ const AdminDashboard = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshMessage, setRefreshMessage] = useState('');
 
+  // Memoize fetchDashboardData and fetchTeamData with empty dependency array since they don't use any props/state
   const fetchDashboardData = useCallback(async (isRefresh = false) => {
     try {
       if (isRefresh) {
@@ -187,7 +188,10 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
     fetchTeamData();
-    const interval = setInterval(fetchDashboardData, 30000);
+    // Only set interval once on mount
+    const interval = setInterval(() => {
+      fetchDashboardData();
+    }, 30000);
     return () => clearInterval(interval);
   }, [fetchDashboardData, fetchTeamData]);
 
