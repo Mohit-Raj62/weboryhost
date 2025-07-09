@@ -316,20 +316,20 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Sticky Header */}
       <header className="sticky top-0 z-20 bg-white/80 backdrop-blur shadow-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-5">
-          <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 flex flex-col sm:flex-row justify-between items-center py-4 gap-2 sm:gap-0">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-100 text-indigo-700 text-2xl font-bold shadow-sm">A</span>
             <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Agency Dashboard</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Agency Dashboard</h1>
               <p className="text-gray-500 text-xs md:text-sm">Manage projects, clients, and team performance</p>
             </div>
             </div>
-            <div className="flex items-center space-x-4">
-            <div className={`px-3 py-1 rounded-full text-xs md:text-sm font-semibold ${getStatusColor(stats.systemHealth.status)}`}>{stats.systemHealth.status}</div>
+            <div className="flex items-center space-x-2 sm:space-x-4 mt-2 sm:mt-0 w-full sm:w-auto justify-end">
+            <div className={`px-2 py-1 rounded-full text-xs md:text-sm font-semibold ${getStatusColor(stats.systemHealth.status)}`}>{stats.systemHealth.status}</div>
               <button
                 onClick={() => fetchDashboardData(true)}
                 disabled={refreshing}
-              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-4 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition text-xs sm:text-sm"
               >
                 {refreshing ? (
                   <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -345,12 +345,12 @@ const AdminDashboard = () => {
             </div>
           </div>
         {/* Modern Navigation Tabs */}
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
-          <div className="flex gap-2 md:gap-4 border-b mb-2 md:mb-4 pb-1 md:pb-2">
+        <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 overflow-x-auto">
+          <div className="flex gap-1 sm:gap-2 md:gap-4 border-b mb-2 md:mb-4 pb-1 md:pb-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-200">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
-                className={`py-2 px-4 rounded-full whitespace-nowrap flex items-center gap-2 font-semibold transition-all duration-200 text-sm md:text-base shadow-sm
+                className={`py-2 px-3 sm:px-4 rounded-full whitespace-nowrap flex items-center gap-1 sm:gap-2 font-semibold transition-all duration-200 text-xs sm:text-sm md:text-base shadow-sm
                   ${activeTab === tab.key 
                     ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-md scale-105' 
                     : 'bg-white/70 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700'}`}
@@ -365,11 +365,11 @@ const AdminDashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
+      <main className="max-w-7xl mx-auto px-1 sm:px-2 md:px-6 lg:px-8 py-4 sm:py-6 w-full">
         {/* Success Message */}
         {refreshMessage && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 shadow flex items-center gap-2">
-            <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow flex items-center gap-2 text-xs sm:text-sm w-full">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
             <span className="text-green-800 font-medium">{refreshMessage}</span>
@@ -377,69 +377,69 @@ const AdminDashboard = () => {
         )}
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
-          <section className="space-y-8">
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-2xl">📊</span>
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900">Overview</h2>
+          <section className="space-y-6 sm:space-y-8 w-full">
+            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 xs:p-3 sm:p-6 border border-gray-100 w-full">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="text-xl sm:text-2xl">📊</span>
+                <h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Overview</h2>
               </div>
             {/* Summary Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-6 mb-4 sm:mb-8 w-full">
                 {/* Card 1 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
+                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Projects</p>
-                      <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
+                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
                       <p className="text-xs text-green-600 mt-1">+12% from last month</p>
                   </div>
-                    <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-blue-100 rounded-xl flex items-center justify-center shadow">
+                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
                 </div>
               </div>
                 {/* Card 2 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
+                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Clients</p>
-                      <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
+                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
                       <p className="text-xs text-green-600 mt-1">+8% from last month</p>
                   </div>
-                    <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-7 w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-green-100 rounded-xl flex items-center justify-center shadow">
+                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
                 </div>
               </div>
                 {/* Card 3 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
+                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Tasks</p>
-                      <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
+                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
                       <p className="text-xs text-blue-600 mt-1">{stats.completedTasks} completed</p>
                   </div>
-                    <div className="h-12 w-12 bg-indigo-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-7 w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-indigo-100 rounded-xl flex items-center justify-center shadow">
+                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
                 </div>
               </div>
                 {/* Card 4 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition">
+                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
                 <div className="flex items-center justify-between">
           <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Support Tickets</p>
-                      <p className="text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
+                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
                       <p className="text-xs text-red-600 mt-1">{stats.openTickets || 0} open</p>
                   </div>
-                    <div className="h-12 w-12 bg-red-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-7 w-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-red-100 rounded-xl flex items-center justify-center shadow">
+                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
@@ -448,64 +448,70 @@ const AdminDashboard = () => {
             </div>
 
             {/* Charts Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-8 w-full">
               {/* Revenue Chart */}
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => formatCurrency(value)} />
-                    <Area type="monotone" dataKey="revenue" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <div className="bg-white rounded-xl shadow-sm p-2 sm:p-6 border border-gray-200 w-full overflow-x-auto">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Revenue Trend</h3>
+                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+                  <ResponsiveContainer width="100%" height={220} minWidth={200}>
+                    <AreaChart data={revenueData} margin={{ left: 0, right: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" fontSize={10} />
+                      <YAxis fontSize={10} />
+                      <Tooltip formatter={(value) => formatCurrency(value)} />
+                      <Area type="monotone" dataKey="revenue" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
 
               {/* Project Progress */}
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Status</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={projectProgressData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {projectProgressData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+              <div className="bg-white rounded-xl shadow-sm p-2 sm:p-6 border border-gray-200 w-full overflow-x-auto">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Project Status</h3>
+                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+                  <ResponsiveContainer width="100%" height={220} minWidth={200}>
+                    <PieChart>
+                      <Pie
+                        data={projectProgressData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={60}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {projectProgressData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
 
             {/* Task Completion Rate Chart */}
-              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={taskCompletionData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" />
-                  <YAxis />
-                  <Tooltip formatter={(value, name) => [name === 'completionRate' ? `${value}%` : value, name]} />
-                  <Bar dataKey="completionRate" fill="#10B981" name="Completion Rate" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 mb-4 sm:mb-8 w-full overflow-x-auto">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
+                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+                  <ResponsiveContainer width="100%" height={220} minWidth={200}>
+                    <BarChart data={taskCompletionData} margin={{ left: 0, right: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" fontSize={10} />
+                      <YAxis fontSize={10} />
+                      <Tooltip formatter={(value, name) => [name === 'completionRate' ? `${value}%` : value, name]} />
+                      <Bar dataKey="completionRate" fill="#10B981" name="Completion Rate" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
 
             {/* Upcoming Deadlines */}
-              <div className="bg-white/70 rounded-xl shadow p-4 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
-              <div className="space-y-3">
+              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 mb-4 sm:mb-8 w-full">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
+              <div className="space-y-2 sm:space-y-3">
                 {[
                   { project: 'E-commerce Website', deadline: '2024-02-15', daysLeft: 3, priority: 'high' },
                   { project: 'Mobile App Development', deadline: '2024-02-20', daysLeft: 8, priority: 'medium' },
@@ -535,9 +541,9 @@ const AdminDashboard = () => {
             </div>
 
             {/* Recent Activity Feed */}
-              <div className="bg-white/70 rounded-xl shadow p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
-              <div className="space-y-4">
+              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 w-full">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
+              <div className="space-y-2 sm:space-y-4">
                 {[
                   { type: 'project', action: 'Project "E-commerce Website" updated', time: '2 hours ago', user: 'John Doe' },
                   { type: 'task', action: 'Task "Payment Integration" completed', time: '4 hours ago', user: 'Mike Johnson' },
@@ -570,78 +576,90 @@ const AdminDashboard = () => {
                 ))}
               </div>
             </div>
-          </div>
-          </section>
+          </div> {/* <-- Add this line */}
+        </section>
         )}
         {activeTab === 'projects' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">📁</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Projects</h2></div>
-            <ProjectDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📁</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Projects</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <ProjectDashboard />
+            </div>
           </section>
         )}
         {activeTab === 'tasks' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">✅</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Tasks</h2></div>
-            <TaskDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">✅</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Tasks</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <TaskDashboard />
+            </div>
           </section>
         )}
         {activeTab === 'invoices' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">💰</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Invoices</h2></div>
-            <InvoiceDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">💰</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Invoices</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <InvoiceDashboard />
+            </div>
           </section>
         )}
         {activeTab === 'support-tickets' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">🎫</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Support Tickets</h2></div>
-            <SupportTicketDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🎫</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Support Tickets</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <SupportTicketDashboard />
+            </div>
           </section>
         )}
         {activeTab === 'analytics' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">📈</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Analytics</h2></div>
-            <AnalyticsDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📈</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Analytics</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <AnalyticsDashboard />
+            </div>
           </section>
         )}
         {activeTab === 'content' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">📝</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Content</h2></div>
-            <ContentManager />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📝</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Content</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <ContentManager />
+            </div>
           </section>
         )}
         {activeTab === 'team' && (
-          <section className="space-y-8">
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-              <div className="flex items-center gap-3 mb-6"><span className="text-2xl">👨‍💼</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Team Management</h2></div>
+          <section className="space-y-6 sm:space-y-8 w-full">
+            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">👨‍💼</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Team Management</h2></div>
               {/* Team Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm font-medium text-blue-600">Total Members</p>
-                  <p className="text-2xl font-bold text-blue-900">{teamData.length}</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6 w-full">
+                <div className="bg-blue-50 p-2 sm:p-4 rounded-lg">
+                  <p className="text-xs sm:text-sm font-medium text-blue-600">Total Members</p>
+                  <p className="text-lg sm:text-2xl font-bold text-blue-900">{teamData.length}</p>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm font-medium text-green-600">Active Members</p>
-                  <p className="text-2xl font-bold text-green-900">{teamData.filter(member => member.status === 'active').length}</p>
+                <div className="bg-green-50 p-2 sm:p-4 rounded-lg">
+                  <p className="text-xs sm:text-sm font-medium text-green-600">Active Members</p>
+                  <p className="text-lg sm:text-2xl font-bold text-green-900">{teamData.filter(member => member.status === 'active').length}</p>
                 </div>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <p className="text-sm font-medium text-purple-600">Departments</p>
-                  <p className="text-2xl font-bold text-purple-900">{new Set(teamData.map(member => member.department)).size}</p>
+                <div className="bg-purple-50 p-2 sm:p-4 rounded-lg">
+                  <p className="text-xs sm:text-sm font-medium text-purple-600">Departments</p>
+                  <p className="text-lg sm:text-2xl font-bold text-purple-900">{new Set(teamData.map(member => member.department)).size}</p>
                 </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <p className="text-sm font-medium text-yellow-600">Leadership</p>
-                  <p className="text-2xl font-bold text-yellow-900">{teamData.filter(member => member.department === 'Leadership').length}</p>
+                <div className="bg-yellow-50 p-2 sm:p-4 rounded-lg">
+                  <p className="text-xs sm:text-sm font-medium text-yellow-600">Leadership</p>
+                  <p className="text-lg sm:text-2xl font-bold text-yellow-900">{teamData.filter(member => member.department === 'Leadership').length}</p>
                 </div>
               </div>
 
               {/* Team Members Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 w-full">
                 {teamData.map((member) => (
-                  <div key={member.id} className="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:shadow-md transition-shadow">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div className="text-4xl">{member.image}</div>
+                  <div key={member.id} className="bg-gray-50 rounded-lg p-3 sm:p-6 border border-gray-200 hover:shadow-md transition-shadow w-full">
+                    <div className="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                      <div className="text-2xl sm:text-4xl">{member.image}</div>
                       <div className="flex-1">
-                        <h4 className="text-lg font-semibold text-gray-900">{member.name}</h4>
-                        <p className="text-sm text-gray-600">{member.role}</p>
+                        <h4 className="text-base sm:text-lg font-semibold text-gray-900">{member.name}</h4>
+                        <p className="text-xs sm:text-sm text-gray-600">{member.role}</p>
                         <span className={`inline-block px-2 py-1 text-xs rounded-full ${
                           member.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
@@ -650,10 +668,10 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-3">{member.bio}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">{member.bio}</p>
                     
-                    <div className="mb-4">
-                      <p className="text-xs font-medium text-gray-500 mb-2">Skills</p>
+                    <div className="mb-3 sm:mb-4">
+                      <p className="text-xs font-medium text-gray-500 mb-1 sm:mb-2">Skills</p>
                       <div className="flex flex-wrap gap-1">
                         {member.skills.slice(0, 3).map((skill, index) => (
                           <span key={index} className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full">
@@ -668,7 +686,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                       <div className="flex items-center space-x-2">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -689,11 +707,11 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="mt-4 flex space-x-2">
-                      <button className="flex-1 bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700">
+                    <div className="mt-3 sm:mt-4 flex space-x-2">
+                      <button className="flex-1 bg-indigo-600 text-white px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm hover:bg-indigo-700">
                         Edit
                       </button>
-                      <button className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-md text-sm hover:bg-gray-700">
+                      <button className="flex-1 bg-gray-600 text-white px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm hover:bg-gray-700">
                         View Profile
                       </button>
                     </div>
@@ -703,26 +721,28 @@ const AdminDashboard = () => {
             </div>
 
             {/* Department Overview */}
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100">
-              <div className="flex items-center gap-3 mb-6"><span className="text-2xl">🏢</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Department Overview</h2></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 w-full">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🏢</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Department Overview</h2></div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 w-full">
                 {Array.from(new Set(teamData.map(member => member.department))).map((dept) => (
-                  <div key={dept} className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">{dept}</h4>
-                    <p className="text-2xl font-bold text-indigo-600">
+                  <div key={dept} className="bg-gray-50 p-2 sm:p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-xs sm:text-base">{dept}</h4>
+                    <p className="text-lg sm:text-2xl font-bold text-indigo-600">
                       {teamData.filter(member => member.department === dept).length}
                     </p>
-                    <p className="text-sm text-gray-600">members</p>
+                    <p className="text-xs sm:text-sm text-gray-600">members</p>
                   </div>
                 ))}
               </div>
-            </div>
+            </div> 
           </section>
         )}
         {activeTab === 'settings' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center gap-3 mb-6"><span className="text-2xl">⚙️</span><h2 className="text-xl md:text-2xl font-bold text-gray-900">Settings</h2></div>
-            <SettingsDashboard />
+          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">⚙️</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Settings</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <SettingsDashboard />
+            </div>
           </section>
         )}
       </main>

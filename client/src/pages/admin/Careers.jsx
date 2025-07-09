@@ -33,6 +33,8 @@ import {
   ListItemAvatar,
   Divider,
   CircularProgress,
+  Container,
+  Grid,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -52,8 +54,12 @@ import {
 import axios from "axios";
 import { API_BASE_URL } from "../../config/api";
 import jobListings from "../../data/jobListings";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Careers = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [careers, setCareers] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -434,19 +440,27 @@ const Careers = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Box sx={{ flexGrow: 1, py: 4 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Careers Management
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpen()}
-        >
-          Add Career
-        </Button>
-      </Box>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Grid container spacing={3} justifyContent="space-between" alignItems="center" mb={3}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Careers Management
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} textAlign="right">
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpen()}
+            sx={{
+              width: isMobile ? '100%' : 'auto',
+              mb: isMobile ? 2 : 0,
+            }}
+          >
+            Add Career
+          </Button>
+        </Grid>
+      </Grid>
 
       {/* Tabs for Careers and Applications */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
@@ -475,7 +489,7 @@ const Careers = () => {
           </Box>
 
           {/* Careers Table */}
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ mb: 4 }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -623,7 +637,7 @@ const Careers = () => {
           </Box>
 
           {/* Applications Table */}
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ mb: 4 }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -696,7 +710,7 @@ const Careers = () => {
       )}
 
       {/* Add/Edit Dialog */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth sx={{ p: 2 }}>
         <DialogTitle>
           {selectedCareer ? "Edit Career" : "Add New Career"}
         </DialogTitle>
@@ -710,6 +724,7 @@ const Careers = () => {
               onChange={handleInputChange}
               margin="normal"
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -719,6 +734,7 @@ const Careers = () => {
               onChange={handleInputChange}
               margin="normal"
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -728,6 +744,7 @@ const Careers = () => {
               onChange={handleInputChange}
               margin="normal"
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -737,6 +754,7 @@ const Careers = () => {
               onChange={handleInputChange}
               margin="normal"
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -748,6 +766,7 @@ const Careers = () => {
               multiline
               rows={4}
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -759,6 +778,7 @@ const Careers = () => {
               multiline
               rows={4}
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -769,6 +789,7 @@ const Careers = () => {
               margin="normal"
               multiline
               rows={3}
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -777,6 +798,7 @@ const Careers = () => {
               value={formData.salary}
               onChange={handleInputChange}
               margin="normal"
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -787,6 +809,7 @@ const Careers = () => {
               margin="normal"
               select
               SelectProps={{ native: true }}
+              sx={{ mb: 2 }}
             >
               <option value="open">Open</option>
               <option value="closed">Closed</option>
@@ -803,7 +826,7 @@ const Careers = () => {
       </Dialog>
 
       {/* Application Details Dialog */}
-      <Dialog open={applicationDialogOpen} onClose={() => setApplicationDialogOpen(false)} maxWidth="md" fullWidth>
+      <Dialog open={applicationDialogOpen} onClose={() => setApplicationDialogOpen(false)} maxWidth="md" fullWidth sx={{ p: 2 }}>
         <DialogTitle>
           Application Details - {selectedApplication?.candidateName}
         </DialogTitle>
@@ -977,7 +1000,7 @@ const Careers = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Box>
+    </Container>
   );
 };
 
