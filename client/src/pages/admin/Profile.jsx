@@ -99,6 +99,18 @@ const Profile = () => {
     setToast((prev) => ({ ...prev, open: false }));
   };
 
+  // Helper to generate custom user code
+  const getCustomUserId = (profile) => {
+    if (!profile) return '-';
+    const namePart = (profile.name || '').substring(0,2).toUpperCase();
+    const id = (profile._id || '').toUpperCase();
+    const midPart = id.substring(4,6); // 5th and 6th char (0-based)
+    const endPart = id.slice(-2);
+    const company = 'Webory'.substring(0,2).toUpperCase();
+    const rolePart = (profile.role || '').substring(0,2).toUpperCase();
+    return `${namePart}${midPart}${endPart}${company}${rolePart}`;
+  };
+
   if (loading) return <div>Loading...</div>;
   if (!profile) return <div>Profile not found or error!</div>;
 
@@ -112,6 +124,10 @@ const Profile = () => {
           {profile?.name && (
             <div className="text-xl font-semibold text-gray-800 mb-1 tracking-tight">{profile.name}</div>
           )}
+          <div className="flex flex-col items-center mb-2">
+            <div className="text-xs text-gray-500 font-mono">User ID: <span className="select-all">{getCustomUserId(profile)}</span></div>
+            <div className="text-xs text-gray-500">Role: {profile?.role || '-'}</div>
+          </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-tight">Profile Settings</h1>
         </div>
         <form onSubmit={handleSubmit}>
