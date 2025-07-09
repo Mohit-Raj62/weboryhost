@@ -4,7 +4,7 @@ import FeedbackForm from '../components/FeedbackForm';
 import axios from 'axios';
 import { handleApiError, API_BASE_URL } from '../config/api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://webory.onrender.com';
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);

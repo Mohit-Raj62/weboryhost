@@ -40,7 +40,7 @@ const Profile = () => {
       setLoading(true);
       setError('');
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/user/profile', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://webory.onrender.com'}/api/user/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -73,7 +73,7 @@ const Profile = () => {
       setError('');
       setSuccessMessage('');
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/user/update-profile', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://webory.onrender.com'}/api/user/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/user/change-password', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://webory.onrender.com'}/api/user/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
