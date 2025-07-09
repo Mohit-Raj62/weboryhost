@@ -274,12 +274,18 @@ mongoose
     console.log("Database:", mongoose.connection.name);
     console.log("Host:", mongoose.connection.host);
 
-    // Start server after MongoDB connection
-    server.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`Health check: http://localhost:${PORT}/api/health`);
-    });
+    // Start server only on Render or production
+    if (process.env.NODE_ENV === "production" || process.env.RENDER) {
+      server.listen(PORT, () => {
+        console.log(`🚀 Server is running on port ${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+        console.log(`Health check: http://localhost:${PORT}/api/health`);
+      });
+    } else {
+      console.log(
+        "Server is not running locally. It will only run on Render (production).\nSet NODE_ENV=production to run locally if needed."
+      );
+    }
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
