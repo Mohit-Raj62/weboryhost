@@ -44,6 +44,7 @@ if (missingEnvVars.length > 0) {
 const allowedOrigins = [
   "https://webory.netlify.app",
   "https://webory.onrender.com",
+  "http://localhost:3001", // Allow local frontend for development
 ];
 
 // Middleware
