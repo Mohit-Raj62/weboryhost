@@ -12,6 +12,7 @@ const supportTicketRoutes = require("./routes/supportTicketRoutes");
 const path = require("path");
 const Settings = require("./models/Settings");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 const app = express();
 const server = http.createServer(app);
@@ -74,6 +75,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 // Rate limiting middleware (120 requests per 10 minutes per IP)
 const limiter = rateLimit({
@@ -86,6 +88,16 @@ const limiter = rateLimit({
 
 // Apply rate limiter to all requests
 app.use(limiter);
+
+// Strict rate limiter for login endpoint (5 requests per minute per IP)
+const loginLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 5,
+  message: {
+    error: "Too many login attempts, please try again in a minute.",
+  },
+});
+app.use("/api/auth/login", loginLimiter);
 
 // Request logging middleware
 app.use((req, res, next) => {
