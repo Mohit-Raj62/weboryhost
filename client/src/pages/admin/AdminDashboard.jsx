@@ -223,17 +223,6 @@ const AdminDashboard = () => {
     }).format(amount);
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'healthy': return 'text-green-600 bg-green-100';
-      case 'warning': return 'text-yellow-600 bg-yellow-100';
-      case 'degraded': return 'text-orange-600 bg-orange-100';
-      default: return 'text-red-600 bg-red-100';
-    }
-  };
-
-  // Removed unused getProgressColor function
-
   const tabs = [
     { key: 'overview', label: 'Overview', icon: '📊' },
     { key: 'projects', label: 'Projects', icon: '📁' },
@@ -273,6 +262,9 @@ const AdminDashboard = () => {
     { day: 'Sat', completed: 6, total: 8, completionRate: 75 },
     { day: 'Sun', completed: 3, total: 5, completionRate: 60 }
   ];
+
+  // Sidebar state for mobile
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (loading) {
     return (
@@ -317,23 +309,52 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur shadow-md border-b">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 flex flex-col sm:flex-row justify-between items-center py-4 gap-2 sm:gap-0">
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-            <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-100 text-indigo-700 text-2xl font-bold shadow-sm">A</span>
-            <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Agency Dashboard</h1>
-              <p className="text-gray-500 text-xs md:text-sm">Manage projects, clients, and team performance</p>
+    <div className="min-h-screen flex bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      {/* Sidebar */}
+      <aside className={`fixed z-30 inset-y-0 left-0 w-64 bg-gradient-to-b from-indigo-600 via-indigo-500 to-blue-500 shadow-xl border-r border-indigo-200 transform transition-transform duration-200 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:relative md:translate-x-0 md:w-56 md:block`}>
+        <div className="flex flex-col items-center py-6 px-4 border-b border-indigo-300">
+          <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-white text-indigo-700 text-3xl font-bold shadow">A</span>
+          <span className="mt-2 text-lg font-extrabold text-white tracking-wide">Admin</span>
+        </div>
+        <nav className="mt-6 flex flex-col gap-1 px-2">
+          {tabs.map(tab => (
+            <button
+              key={tab.key}
+              className={`flex items-center gap-3 px-5 py-3 rounded-xl text-base font-semibold transition-all
+                ${activeTab === tab.key
+                  ? 'bg-white text-indigo-700 shadow font-bold scale-105'
+                  : 'text-white/90 hover:bg-indigo-400 hover:text-white/100'}
+              `}
+              onClick={() => { setActiveTab(tab.key); setSidebarOpen(false); }}
+            >
+              <span className="text-2xl">{tab.icon}</span>
+              <span className="truncate">{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 z-20 md:hidden" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Topbar */}
+        <header className="sticky top-0 z-10 bg-white/90 backdrop-blur shadow border-b flex items-center justify-between px-4 py-3 md:py-4">
+          <div className="flex items-center gap-2">
+            <button className="md:hidden text-gray-700" onClick={() => setSidebarOpen(true)}>
+              <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <h1 className="text-lg sm:text-2xl font-extrabold text-gray-900 tracking-tight">Admin Dashboard</h1>
             </div>
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-4 mt-2 sm:mt-0 w-full sm:w-auto justify-end">
-            <div className={`px-2 py-1 rounded-full text-xs md:text-sm font-semibold ${getStatusColor(stats.systemHealth.status)}`}>{stats.systemHealth.status}</div>
               <button
                 onClick={() => fetchDashboardData(true)}
                 disabled={refreshing}
-              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition text-xs sm:text-sm"
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-3 py-2 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
               >
                 {refreshing ? (
                   <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -346,117 +367,82 @@ const AdminDashboard = () => {
                 )}
                 <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
               </button>
-            </div>
-          </div>
-        {/* Modern Navigation Tabs */}
-        <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 overflow-x-auto">
-          <div className="flex gap-1 sm:gap-2 md:gap-4 border-b mb-2 md:mb-4 pb-1 md:pb-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-200">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                className={`py-2 px-3 sm:px-4 rounded-full whitespace-nowrap flex items-center gap-1 sm:gap-2 font-semibold transition-all duration-200 text-xs sm:text-sm md:text-base shadow-sm
-                  ${activeTab === tab.key 
-                    ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-md scale-105' 
-                    : 'bg-white/70 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700'}`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </nav>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-1 sm:px-2 md:px-6 lg:px-8 py-4 sm:py-6 w-full">
+        {/* Main Section */}
+        <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-4 py-4 md:py-8">
         {/* Success Message */}
         {refreshMessage && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow flex items-center gap-2 text-xs sm:text-sm w-full">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4 shadow flex items-center gap-2 text-xs w-full">
+              <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
             <span className="text-green-800 font-medium">{refreshMessage}</span>
           </div>
         )}
-        {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
-          <section className="space-y-6 sm:space-y-8 w-full">
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 xs:p-3 sm:p-6 border border-gray-100 w-full">
-              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <span className="text-xl sm:text-2xl">📊</span>
-                <h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Overview</h2>
-              </div>
+            <section className="w-full max-w-5xl mx-auto flex flex-col gap-6 md:gap-10">
             {/* Summary Cards */}
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-6 mb-4 sm:mb-8 w-full">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {/* Card 1 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
+                <div className="flex flex-col justify-between bg-gradient-to-br from-indigo-100 to-blue-50 rounded-2xl shadow-lg p-5 hover:shadow-2xl transition w-full min-h-[120px]">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Projects</p>
-                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
+                      <p className="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalProjects)}</p>
                       <p className="text-xs text-green-600 mt-1">+12% from last month</p>
                   </div>
-                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-blue-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+                    <div className="h-10 w-10 bg-blue-200 rounded-xl flex items-center justify-center shadow">
+                      <span className="text-2xl">📁</span>
                   </div>
                 </div>
               </div>
                 {/* Card 2 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
+                <div className="flex flex-col justify-between bg-gradient-to-br from-green-100 to-green-50 rounded-2xl shadow-lg p-5 hover:shadow-2xl transition w-full min-h-[120px]">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Clients</p>
-                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
+                      <p className="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalClients)}</p>
                       <p className="text-xs text-green-600 mt-1">+8% from last month</p>
                   </div>
-                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-green-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                    <div className="h-10 w-10 bg-green-200 rounded-xl flex items-center justify-center shadow">
+                      <span className="text-2xl">👥</span>
                   </div>
                 </div>
               </div>
                 {/* Card 3 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
+                <div className="flex flex-col justify-between bg-gradient-to-br from-indigo-100 to-blue-50 rounded-2xl shadow-lg p-5 hover:shadow-2xl transition w-full min-h-[120px]">
                 <div className="flex items-center justify-between">
                   <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Tasks</p>
-                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
+                      <p className="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTasks)}</p>
                       <p className="text-xs text-blue-600 mt-1">{stats.completedTasks} completed</p>
                   </div>
-                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-indigo-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+                    <div className="h-10 w-10 bg-indigo-200 rounded-xl flex items-center justify-center shadow">
+                      <span className="text-2xl">✅</span>
                   </div>
                 </div>
               </div>
                 {/* Card 4 */}
-                <div className="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition w-full">
+                <div className="flex flex-col justify-between bg-gradient-to-br from-red-100 to-orange-50 rounded-2xl shadow-lg p-5 hover:shadow-2xl transition w-full min-h-[120px]">
                 <div className="flex items-center justify-between">
           <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Support Tickets</p>
-                      <p className="text-xl sm:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
+                      <p className="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">{formatNumber(stats.totalTickets || 0)}</p>
                       <p className="text-xs text-red-600 mt-1">{stats.openTickets || 0} open</p>
                   </div>
-                    <div className="h-8 w-8 sm:h-12 sm:w-12 bg-red-100 rounded-xl flex items-center justify-center shadow">
-                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                    <div className="h-10 w-10 bg-red-200 rounded-xl flex items-center justify-center shadow">
+                      <span className="text-2xl">🎫</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
             {/* Charts Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-8 w-full">
+              <div className="flex flex-col lg:flex-row gap-4 md:gap-6 w-full">
               {/* Revenue Chart */}
-              <div className="bg-white rounded-xl shadow-sm p-2 sm:p-6 border border-gray-200 w-full overflow-x-auto">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Revenue Trend</h3>
-                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+                <div className="bg-white rounded-2xl shadow-lg p-4 flex-1 min-w-0">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2"><span>💰</span> Revenue Trend</h3>
+                  <div className="w-full min-w-[220px]">
                   <ResponsiveContainer width="100%" height={220} minWidth={200}>
                     <AreaChart data={revenueData} margin={{ left: 0, right: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -468,11 +454,10 @@ const AdminDashboard = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-
               {/* Project Progress */}
-              <div className="bg-white rounded-xl shadow-sm p-2 sm:p-6 border border-gray-200 w-full overflow-x-auto">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Project Status</h3>
-                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+                <div className="bg-white rounded-2xl shadow-lg p-4 flex-1 min-w-0">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2"><span>📊</span> Project Status</h3>
+                  <div className="w-full min-w-[220px]">
                   <ResponsiveContainer width="100%" height={220} minWidth={200}>
                     <PieChart>
                       <Pie
@@ -495,11 +480,10 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-
             {/* Task Completion Rate Chart */}
-              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 mb-4 sm:mb-8 w-full overflow-x-auto">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
-                <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <div className="bg-white rounded-2xl shadow-lg p-4 w-full">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2"><span>✅</span> Task Completion Rate</h3>
+                <div className="w-full min-w-[220px]">
                   <ResponsiveContainer width="100%" height={220} minWidth={200}>
                     <BarChart data={taskCompletionData} margin={{ left: 0, right: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -511,11 +495,10 @@ const AdminDashboard = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-
             {/* Upcoming Deadlines */}
-              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 mb-4 sm:mb-8 w-full">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
-              <div className="space-y-2 sm:space-y-3">
+              <div className="bg-white rounded-2xl shadow-lg p-4 w-full">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2"><span>⏰</span> Upcoming Deadlines</h3>
+                <div className="space-y-2">
                 {[
                   { project: 'E-commerce Website', deadline: '2024-02-15', daysLeft: 3, priority: 'high' },
                   { project: 'Mobile App Development', deadline: '2024-02-20', daysLeft: 8, priority: 'medium' },
@@ -543,11 +526,10 @@ const AdminDashboard = () => {
                 ))}
               </div>
             </div>
-
             {/* Recent Activity Feed */}
-              <div className="bg-white/70 rounded-xl shadow p-2 sm:p-4 w-full">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
-              <div className="space-y-2 sm:space-y-4">
+              <div className="bg-white rounded-2xl shadow-lg p-4 w-full">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2"><span>🕒</span> Recent Activity Feed</h3>
+                <div className="space-y-2">
                 {[
                   { type: 'project', action: 'Project "E-commerce Website" updated', time: '2 hours ago', user: 'John Doe' },
                   { type: 'task', action: 'Task "Payment Integration" completed', time: '4 hours ago', user: 'Mike Johnson' },
@@ -580,11 +562,10 @@ const AdminDashboard = () => {
                 ))}
               </div>
             </div>
-          </div> {/* <-- Add this line */}
         </section>
         )}
         {activeTab === 'projects' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📁</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Projects</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <ProjectDashboard />
@@ -592,7 +573,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'tasks' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">✅</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Tasks</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <TaskDashboard />
@@ -600,7 +581,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'invoices' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">💰</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Invoices</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <InvoiceDashboard />
@@ -608,7 +589,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'support-tickets' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🎫</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Support Tickets</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <SupportTicketDashboard />
@@ -616,7 +597,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'analytics' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📈</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Analytics</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <AnalyticsDashboard />
@@ -624,7 +605,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'content' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">📝</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Content</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <ContentManager />
@@ -633,7 +614,7 @@ const AdminDashboard = () => {
         )}
         {activeTab === 'team' && (
           <section className="space-y-6 sm:space-y-8 w-full">
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full">
+              <div className="bg-white/80 rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">👨‍💼</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Team Management</h2></div>
               {/* Team Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6 w-full">
@@ -725,7 +706,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Department Overview */}
-            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 w-full">
+              <div className="bg-white/80 rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 w-full">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🏢</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Department Overview</h2></div>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 w-full">
                 {Array.from(new Set(teamData.map(member => member.department))).map((dept) => (
@@ -742,7 +723,7 @@ const AdminDashboard = () => {
           </section>
         )}
         {activeTab === 'settings' && (
-          <section className="bg-white/80 backdrop-blur rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">⚙️</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Settings</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <SettingsDashboard />
@@ -750,6 +731,7 @@ const AdminDashboard = () => {
           </section>
         )}
       </main>
+      </div>
     </div>
   );
 };
