@@ -11,6 +11,7 @@ const clientRoutes = require("./routes/clientRoutes");
 const supportTicketRoutes = require("./routes/supportTicketRoutes");
 const path = require("path");
 const Settings = require("./models/Settings");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 const server = http.createServer(app);
@@ -73,6 +74,18 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Rate limiting middleware (120 requests per 10 minutes per IP)
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 120, // limit each IP to 120 requests per windowMs
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
+
+// Apply rate limiter to all requests
+app.use(limiter);
 
 // Request logging middleware
 app.use((req, res, next) => {
