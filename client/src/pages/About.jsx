@@ -245,7 +245,7 @@ const About = () => {
               
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-               Transforming ideas into digital excellence since 2024 🚀
+              We are a startup web solutions India provider and a web development agency in Patna Bihar.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
             </div>

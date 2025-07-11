@@ -38,6 +38,18 @@ const Services = () => {
       description: 'Expert technical support and troubleshooting for all your IT needs.',
       icon: '💻',
       link: '/support'
+    },
+    {
+      title: 'Startup web solutions India',
+      description: 'App developers in Hyderabad, Website design company in Chennai',
+      icon: '🚀',
+      link: '/startup'
+    },
+    {
+      title: 'Startup web solutions Ahmedabad',
+      description: 'App developers in Hyderabad, Website design company in Chennai',
+      icon: '🚀',
+      link: '/startup'
     }
   ];
 

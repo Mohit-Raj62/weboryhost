@@ -222,14 +222,15 @@ const Home = () => {
               </div>
               
               <h1 className="text-6xl lg:text-8xl xl:text-9xl font-black mb-8 leading-none tracking-tight">
-                We Create
+                We are <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+                Development</span>
                 <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
                   Digital Magic
                 </span>
               </h1>
               
               <p className="text-xl lg:text-2xl xl:text-3xl mb-12 opacity-90 max-w-4xl mx-auto leading-relaxed font-light">
-                Transform your business with stunning websites, powerful applications, and innovative digital solutions that drive extraordinary results.
+                Webory is a full-service web development agency serving clients in Bihar, Delhi, Bangalore, Mumbai, and across India.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
@@ -464,7 +465,7 @@ const Home = () => {
                 <div className="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
                   <span className="text-sm font-medium text-purple-400">Portfolio Showcase</span>
                 </div>
-                <h2 className="text-5xl lg:text-7xl font-black text-white mb-8">Featured Work</h2>
+                <h2 className="text-5xl lg:text-7xl font-black text-white mb-8">Best web agency for startups</h2>
                 <p className="text-xl lg:text-2xl text-white/80 max-w-4xl mx-auto leading-relaxed">
                   Explore some of our recent projects and see how we've helped businesses achieve their digital goals
                 </p>
