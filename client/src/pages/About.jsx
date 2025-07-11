@@ -240,13 +240,14 @@ const About = () => {
         {/* Hero Section */}
         <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center py-20">
           <div className={`space-y-8 ${isVisible.hero ? 'animate-fadeInUp' : 'opacity-0'}`}>
-            <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6">
-              About Webory <br />
-              
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              We are a startup web solutions India provider and a web development agency in Patna Bihar.
-            </p>
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+                About <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Webory</span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                We are a startup web solutions India provider and a web development agency in <span className="text-cyan-400 font-semibold">Patna Bihar</span>.
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
             </div>
           </div>

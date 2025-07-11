@@ -214,36 +214,40 @@ const Home = () => {
             <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
             <div className="relative z-20 text-center text-white max-w-7xl mx-auto">
               <div className="mb-8">
-                <div className="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6 animate-fade-in opacity-0 animate-pulse">
-                  <span className="text-sm font-medium bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                    ✨ Welcome to WEBORY the Future of Digital Design
+                <div className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md rounded-full border border-white/30 mb-8 animate-fade-in opacity-0 animate-pulse shadow-lg">
+                  <span className="text-sm font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                    ✨ Welcome to WEBORY - The Future of Digital Design
                   </span>
                 </div>
               </div>
               
-              <h1 className="text-6xl lg:text-8xl xl:text-9xl font-black mb-8 leading-none tracking-tight">
-                We are <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-                Development</span>
+              <h1 className="text-5xl lg:text-7xl xl:text-8xl font-black mb-8 leading-none tracking-tight">
+                <span className="text-white">We Are Webory</span>
+                <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+                  Your Digital Design Partner
+                </span>
+                <span className="block text-white">Crafting</span>
                 <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
                   Digital Magic
                 </span>
+                <span className="block text-white">Through Development</span>
               </h1>
               
-              <p className="text-xl lg:text-2xl xl:text-3xl mb-12 opacity-90 max-w-4xl mx-auto leading-relaxed font-light">
-                Webory is a full-service web development agency serving clients in Bihar, Delhi, Bangalore, Mumbai, and across India.
+              <p className="text-lg lg:text-xl xl:text-2xl mb-12 opacity-90 max-w-4xl mx-auto leading-relaxed font-medium text-white/90">
+                Webory is a full-service web development agency serving clients in <span className="text-cyan-400 font-semibold">Bihar</span>, <span className="text-purple-400 font-semibold">Delhi</span>, <span className="text-pink-400 font-semibold">Bangalore</span>, <span className="text-cyan-400 font-semibold">Mumbai</span>, and across India.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
                 <Link 
                   to="/contact" 
-                  className="group relative bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-10 py-5 rounded-full text-xl font-bold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50 no-underline overflow-hidden"
+                  className="group relative bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-10 py-5 rounded-full text-xl font-bold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50 no-underline overflow-hidden transform hover:-translate-y-1"
                 >
                   <span className="relative z-10">Start Your Project</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </Link>
                 <Link 
                   to="/portfolio" 
-                  className="group relative border-2 border-white/30 hover:border-white/60 backdrop-blur-md hover:bg-white/10 text-white px-10 py-5 rounded-full text-xl font-bold transition-all duration-500 hover:scale-110 no-underline overflow-hidden"
+                  className="group relative border-2 border-white/30 hover:border-white/60 backdrop-blur-md hover:bg-white/10 text-white px-10 py-5 rounded-full text-xl font-bold transition-all duration-500 hover:scale-110 no-underline overflow-hidden transform hover:-translate-y-1"
                 >
                   <span className="relative z-10">View Our Work</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
