@@ -38,7 +38,7 @@ const SEO = () => {
   const pricingPlans = [
     {
       title: "Basic",
-      price: 499,
+      price: 79,
       features: [
         "Keyword Research",
         "On-page SEO",
@@ -51,7 +51,7 @@ const SEO = () => {
     },
     {
       title: "Professional",
-      price: 999,
+      price: 139,
       features: [
         "Advanced SEO Strategy",
         "Content Marketing",
@@ -66,7 +66,7 @@ const SEO = () => {
     },
     {
       title: "Enterprise",
-      price: 1999,
+      price: 299,
       features: [
         "Full Digital Marketing Suite",
         "Custom Strategy",
@@ -86,10 +86,10 @@ const SEO = () => {
     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleFormSubmit = async (formData) => {
-    console.log('Form submitted:', { ...formData, selectedPlan });
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  };
+  // const handleFormSubmit = async (formData) => {
+  //   console.log('Form submitted:', { ...formData, selectedPlan });
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">

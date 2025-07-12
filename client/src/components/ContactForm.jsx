@@ -190,7 +190,7 @@ const ContactForm = ({
                   name="budget"
                   value={formData.budget}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
                 >
                   <option value="">Select budget range</option>
                   <option value="1k-5k">$1,000 - $5,000</option>
@@ -205,7 +205,7 @@ const ContactForm = ({
                   name="timeline"
                   value={formData.timeline}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
                 >
                   <option value="">Select timeline</option>
                   <option value="1-3months">1-3 months</option>

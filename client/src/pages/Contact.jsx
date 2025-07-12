@@ -446,7 +446,7 @@ const Contact = () => {
                           name="priority"
                           value={formData.priority}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
                         >
                           <option value="low">Low</option>
                           <option value="medium">Medium</option>
@@ -460,7 +460,7 @@ const Contact = () => {
                           name="category"
                           value={formData.category}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
                         >
                           <option value="Technical Issue">Technical Issue</option>
                           <option value="Billing Question">Billing Question</option>

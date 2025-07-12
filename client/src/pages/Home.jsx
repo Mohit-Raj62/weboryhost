@@ -78,9 +78,9 @@ const Home = () => {
       icon: '🚀',
       features: ['Responsive Design', 'E-commerce Solutions', 'CMS Integration', 'SEO Optimization', 'Performance Optimization'],
       pricing: {
-        basic: { price: 'FREE', plan: 'Basic Website', features: ['5 Pages', 'Responsive Design', 'Contact Form', '3 Months Support'] },
-        standard: { price: '$121', plan: 'Business Website', features: ['10 Pages', 'CMS Integration', 'E-commerce Ready', 'SEO Optimization', '6 Months Support'] },
-        premium: { price: '$251', plan: 'Enterprise Solution', features: ['Unlimited Pages', 'Custom Features', 'Advanced Integrations', 'Priority Support', '12 Months Support'] }
+        basic: { price: 'FREE', plan: 'Basic Website', features: ['2-3 Pages', 'Responsive Design', 'Contact Form', '3 Months Support'] },
+        standard: { price: '$199', plan: 'Business Website', features: ['5-10 Pages', 'CMS Integration', 'E-commerce Ready', 'SEO Optimization', '6 Months Support'] },
+        premium: { price: '$299', plan: 'Enterprise Solution', features: ['Unlimited Pages', 'Custom Features', 'Advanced Integrations', 'Priority Support', '12 Months Support'] }
       }
     },
     { 
@@ -94,7 +94,7 @@ const Home = () => {
       pricing: {
         basic: { price: 'FREE', plan: 'Design Package', features: ['5 Screens', 'Wireframes', 'High-fidelity Mockups', '2 Revisions'] },
         standard: { price: '$99', plan: 'Complete UX/UI', features: ['15 Screens', 'User Research', 'Interactive Prototype', 'Design System', '4 Revisions'] },
-        premium: { price: '$139', plan: 'Enterprise Design', features: ['Unlimited Screens', 'Advanced Research', 'Usability Testing', 'Brand Guidelines', 'Unlimited Revisions'] }
+        premium: { price: '$129', plan: 'Enterprise Design', features: ['Unlimited Screens', 'Advanced Research', 'Usability Testing', 'Brand Guidelines', 'Unlimited Revisions'] }
       }
     },
     { 
@@ -107,8 +107,8 @@ const Home = () => {
       features: ['Native Development', 'Cross-platform Apps', 'App Store Optimization', 'Push Notifications', 'Analytics Integration'],
       pricing: {
         basic: { price: 'FREE', plan: 'Simple App', features: ['Single Platform', 'Basic Features', 'App Store Submission', '3 Months Support'] },
-        standard: { price: '$199', plan: 'Cross-platform App', features: ['iOS & Android', 'Advanced Features', 'Push Notifications', 'Analytics', '6 Months Support'] },
-        premium: { price: '$299', plan: 'Enterprise App', features: ['Custom Features', 'Backend Integration', 'Advanced Security', 'Scalable Architecture', '12 Months Support'] }
+        standard: { price: '$299', plan: 'Cross-platform App', features: ['iOS & Android', 'Advanced Features', 'Push Notifications', 'Analytics', '6 Months Support'] },
+        premium: { price: '$399', plan: 'Enterprise App', features: ['Custom Features', 'Backend Integration', 'Advanced Security', 'Scalable Architecture', '12 Months Support'] }
       }
     },
     { 

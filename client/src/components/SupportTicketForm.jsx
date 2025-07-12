@@ -119,7 +119,7 @@ const SupportTicketForm = () => {
         <select
           name="issueType"
           required
-          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
         >
           <option value="">Select issue type</option>
           <option value="Technical Issue">Technical Issue</option>
