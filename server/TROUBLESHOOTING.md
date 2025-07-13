@@ -24,11 +24,13 @@
 #### 1. Database Connection Issues
 
 **Symptoms:**
+
 - Server starts but crashes when making requests
 - "MongoDB connection error" in logs
 - Database shows as "disconnected" in health check
 
 **Solutions:**
+
 ```bash
 # Check if MongoDB URI is correct
 echo $MONGODB_URI
@@ -43,11 +45,13 @@ npm run dev
 #### 2. Memory Issues
 
 **Symptoms:**
+
 - Server becomes slow over time
 - "High memory usage detected" warnings
 - Server crashes with memory errors
 
 **Solutions:**
+
 ```bash
 # Check memory usage
 npm run monitor:health
@@ -62,11 +66,13 @@ npm run monitor
 #### 3. Port Conflicts
 
 **Symptoms:**
+
 - "EADDRINUSE" error
 - Server won't start
 - Port 5002 is already in use
 
 **Solutions:**
+
 ```bash
 # Kill processes using port 5002
 npm run kill-port
@@ -81,10 +87,12 @@ npm run dev
 #### 4. Environment Variables Missing
 
 **Symptoms:**
+
 - "Missing required environment variables" error
 - Server exits immediately
 
 **Solutions:**
+
 ```bash
 # Check if .env file exists
 ls -la .env
@@ -98,11 +106,13 @@ echo "NODE_ENV=development" >> .env
 #### 5. Dependencies Issues
 
 **Symptoms:**
+
 - "Cannot find module" errors
 - Server won't start
 - Missing packages
 
 **Solutions:**
+
 ```bash
 # Reinstall dependencies
 rm -rf node_modules package-lock.json
@@ -146,11 +156,13 @@ node test-support-ticket-model.js
 #### 3. Network and CORS Issues
 
 **Symptoms:**
+
 - Frontend can't connect to backend
 - CORS errors in browser console
 - API requests fail
 
 **Solutions:**
+
 ```bash
 # Check if server is accessible
 curl http://localhost:5002/api/health
@@ -165,10 +177,12 @@ curl -H "Origin: http://localhost:3001" \
 #### 4. Rate Limiting Issues
 
 **Symptoms:**
+
 - "Too many requests" errors
 - API calls failing after multiple requests
 
 **Solutions:**
+
 ```bash
 # Check rate limit settings in server.js
 # Current limits:
@@ -218,6 +232,7 @@ curl http://localhost:5002/api/health
 #### 3. Monitor Memory Usage
 
 The server now includes automatic memory monitoring:
+
 - Checks memory every 5 minutes
 - Warns if heap usage > 500MB
 - Logs memory usage to console
@@ -294,6 +309,7 @@ npm run monitor
    ```
 
 4. **Monitor logs for patterns:**
+
    - High error counts
    - Memory usage spikes
    - Database disconnections
@@ -324,6 +340,7 @@ If the server keeps crashing despite these fixes:
    ```
 
 4. **Check system resources:**
+
    - CPU usage
    - Memory usage
    - Disk space
