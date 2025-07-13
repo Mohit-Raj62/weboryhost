@@ -208,6 +208,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Health check endpoint for Render
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // Enhanced maintenance mode middleware with better error handling
 app.use(async (req, res, next) => {
   try {
@@ -506,5 +511,13 @@ setInterval(() => {
 
 // Start the server
 startServer();
+
+// Global error handlers for crash protection
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
+});
 
 module.exports = app;
