@@ -18,6 +18,7 @@ class EnhancedSaraAI {
         this.responseCount = 0;
         this.userLocation = null;
         this.lastInteraction = null;
+        this.language = 'en'; // 'en' for English, 'hi' for Hinglish
         
         // Enhanced personality traits
         this.personality = {
@@ -234,6 +235,9 @@ class EnhancedSaraAI {
 
     // 🎨 ENHANCED RESPONSE GENERATION
     generateResponse(message) {
+        // Detect language
+        const lang = this.detectLanguage(message);
+        this.language = lang;
         const context = this.analyzeContext(message);
         
         // Get base response using enhanced logic
@@ -244,6 +248,9 @@ class EnhancedSaraAI {
         
         // Add relevant follow-up questions
         response = this.addFollowUpQuestions(response, context);
+        
+        // Translate response if needed
+        response = this.translateResponse(response, lang);
         
         // Store conversation history
         this.conversationHistory.push({
@@ -517,16 +524,27 @@ class EnhancedSaraAI {
     // 🎯 FOLLOW-UP QUESTIONS
     addFollowUpQuestions(response, context) {
         const followUps = {
-            'pricing': '\n\n💡 **Next Steps**:\n• Want a detailed quote?\n• Need to discuss specific features?\n• Ready to start a project?',
-            'information': '\n\n📚 **More Info**:\n• Want to see examples?\n• Need technical details?\n• Questions about process?',
-            'support': '\n\n🔧 **Support Options**:\n• Schedule a call?\n• Screen sharing session?\n• Email detailed steps?',
-            'booking': '\n\n📅 **Booking Help**:\n• Preferred time slot?\n• Specific agenda items?\n• Any preparation needed?'
+            'pricing': {
+                en: '\n\n💡 **Next Steps**:\n• Want a detailed quote?\n• Need to discuss specific features?\n• Ready to start a project?',
+                hi: '\n\n💡 **Agla Kadam**:\n• Detailed quote chahiye?\n• Khaas features discuss karna hai?\n• Project shuru karna hai?'
+            },
+            'information': {
+                en: '\n\n📚 **More Info**:\n• Want to see examples?\n• Need technical details?\n• Questions about process?',
+                hi: '\n\n📚 **Aur Jaankari**:\n• Examples dekhna hai?\n• Technical details chahiye?\n• Process ke baare mein puchna hai?'
+            },
+            'support': {
+                en: '\n\n🔧 **Support Options**:\n• Schedule a call?\n• Screen sharing session?\n• Email detailed steps?',
+                hi: '\n\n🔧 **Support Options**:\n• Call schedule karein?\n• Screen share karna hai?\n• Steps email kar doon?'
+            },
+            'booking': {
+                en: '\n\n📅 **Booking Help**:\n• Preferred time slot?\n• Specific agenda items?\n• Any preparation needed?',
+                hi: '\n\n📅 **Booking Help**:\n• Kaunsa time slot chahiye?\n• Khaas agenda hai?\n• Koi tayari karni hai?'
+            }
         };
-        
+        const lang = this.language || 'en';
         if (followUps[context.intent]) {
-            response += followUps[context.intent];
+            response += followUps[context.intent][lang] || followUps[context.intent]['en'];
         }
-        
         return response;
     }
 
@@ -540,10 +558,59 @@ class EnhancedSaraAI {
             conversationHistory: this.conversationHistory.slice(-10)
         };
     }
+
+    // 🌐 LANGUAGE DETECTION (Hinglish/English)
+    detectLanguage(message) {
+        // Simple check: if message contains common Hindi words, treat as Hinglish
+        const hindiWords = ['hai', 'kya', 'kaise', 'kyun', 'kyon', 'kar', 'bata', 'hota', 'nahi', 'ho', 'raha', 'rha', 'main', 'mera', 'apka', 'aap', 'mujhe', 'tum', 'kyunki', 'par', 'aur', 'se', 'ko', 'mein', 'ke', 'ye', 'wo', 'tha', 'thi', 'hun', 'hoon', 'karna', 'karne', 'kr', 'krna'];
+        const lower = message.toLowerCase();
+        for (let word of hindiWords) {
+            if (lower.includes(word + ' ') || lower.endsWith(word)) {
+                return 'hi';
+            }
+        }
+        return 'en';
+    }
+
+    // 🌐 TRANSLATE RESPONSE (English <-> Hinglish)
+    translateResponse(response, lang) {
+        if (lang === 'en') return response;
+        // For demo: Replace some common phrases with Hinglish
+        let translated = response
+            .replace(/How can I help you/g, 'Main aapki kaise madad kar sakti hoon')
+            .replace(/What can I help you with today\?/g, 'Aaj aapko kis cheez mein madad chahiye?')
+            .replace(/Ready to bring your digital dreams to life\?/g, 'Tayyar hain apne digital sapne poore karne ke liye?')
+            .replace(/Let's connect/g, 'Chaliye baat karte hain')
+            .replace(/I'm here to help/g, 'Main madad ke liye yahan hoon')
+            .replace(/Thank you/g, 'Dhanyavaad')
+            .replace(/You're absolutely welcome/g, 'Aapka swagat hai')
+            .replace(/What specific information can I provide\?/g, 'Kya specific jaankari chahiye aapko?')
+            .replace(/Which service interests you most\?/g, 'Kaunsi service mein interest hai aapko?')
+            .replace(/Want a custom quote\?/g, 'Custom quote chahiye?')
+            .replace(/When do you need to launch\?/g, 'Kab tak launch karna hai?')
+            .replace(/I'm available 24\/7 right here too!/g, 'Main yahan 24x7 available hoon!')
+            .replace(/Great question/g, 'Bohot accha sawal hai')
+            .replace(/Perfect! Let's schedule something!/g, 'Badhiya! Chaliye kuch schedule karte hain!')
+            .replace(/Priority Support Activated/g, 'Priority Support shuru ho gaya hai')
+            .replace(/Support Mode On/g, 'Support mode on ho gaya hai')
+            .replace(/Could you provide a bit more context/g, 'Thoda aur context de sakte hain')
+            .replace(/I'm here to help and want to give you exactly what you need/g, 'Main madad ke liye hoon aur aapko wahi dungi jo aapko chahiye')
+            .replace(/Your timeline is our priority/g, 'Aapka timeline hamari priority hai')
+            .replace(/Free consultation available/g, 'Free consultation mil sakta hai')
+            .replace(/Thank you for reaching out/g, 'Contact karne ke liye dhanyavaad')
+            .replace(/digital agency/g, 'digital agency (डिजिटल एजेंसी)')
+            .replace(/Web Development/g, 'Web Development (वेब डेवलपमेंट)')
+            .replace(/UI\/UX Design/g, 'UI/UX Design (यूआई/यूएक्स डिजाइन)')
+            .replace(/Digital Marketing/g, 'Digital Marketing (डिजिटल मार्केटिंग)')
+            .replace(/E-commerce Solutions/g, 'E-commerce Solutions (ई-कॉमर्स सॉल्यूशंस)');
+        // Add more as needed for demo
+        return translated;
+    }
 }
 
 // 🚀 INITIALIZE ENHANCED SARA
 const enhancedSara = new EnhancedSaraAI();
+
 
 // 🎯 MAIN FUNCTION
 function getSaraResponse(message) {
@@ -551,7 +618,7 @@ function getSaraResponse(message) {
 }
 
 // Export for use
-// export { getSaraResponse, enhancedSara };
+export { getSaraResponse, enhancedSara };
 
 
 
