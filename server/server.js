@@ -18,6 +18,11 @@ const app = express();
 const server = http.createServer(app);
 require("dotenv").config();
 
+// Enhanced error handling and monitoring
+let serverStartTime = Date.now();
+let requestCount = 0;
+let errorCount = 0;
+
 // Set default JWT_SECRET if not provided
 if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = "webory_admin_secret_key_2024_very_secure_and_long";
@@ -49,7 +54,7 @@ const allowedOrigins = [
   "http://localhost:3001", // Allow local frontend for development
 ];
 
-// Middleware
+// Enhanced CORS with better error handling
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -73,16 +78,24 @@ app.use(
     ],
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(helmet());
 
-// Rate limiting middleware (120 requests per 10 minutes per IP)
+// Enhanced rate limiting with better error handling
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 120, // limit each IP to 120 requests per windowMs
   message: {
     error: "Too many requests, please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    console.log(`Rate limit exceeded for IP: ${req.ip}`);
+    res.status(429).json({
+      error: "Too many requests, please try again later.",
+    });
   },
 });
 
@@ -96,68 +109,106 @@ const loginLimiter = rateLimit({
   message: {
     error: "Too many login attempts, please try again in a minute.",
   },
+  handler: (req, res) => {
+    console.log(`Login rate limit exceeded for IP: ${req.ip}`);
+    res.status(429).json({
+      error: "Too many login attempts, please try again in a minute.",
+    });
+  },
 });
 app.use("/api/auth/login", loginLimiter);
 
-// Request logging middleware
+// Enhanced request logging middleware with error tracking
 app.use((req, res, next) => {
   req.startTime = Date.now();
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`, {
-    body: req.body,
-    query: req.query,
-    headers: req.headers,
-  });
+  requestCount++;
+
+  // Add response monitoring
+  const originalSend = res.send;
+  res.send = function (data) {
+    const responseTime = Date.now() - req.startTime;
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} ${req.path} - ${
+        res.statusCode
+      } (${responseTime}ms)`,
+      {
+        body: req.body,
+        query: req.query,
+        userAgent: req.headers["user-agent"],
+        ip: req.ip,
+      }
+    );
+    return originalSend.call(this, data);
+  };
+
   next();
 });
 
 // Serve static files (including favicon.ico)
 app.use(express.static("public"));
 
-// Remove frontend serving since it's deployed separately on Netlify
-// app.use(express.static(path.join(__dirname, "../client/dist")));
-
-// Routes
+// Routes with error handling
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/applications", jobApplicationRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/support-tickets", supportTicketRoutes);
 
-// Test route for debugging
+// Enhanced test route for debugging
 app.get("/api/test", (req, res) => {
   res.json({
     message: "Test route working",
     timestamp: new Date().toISOString(),
+    serverUptime: Date.now() - serverStartTime,
+    requestCount,
+    errorCount,
+    memoryUsage: process.memoryUsage(),
     headers: req.headers,
   });
 });
 
-// Root route - API information
+// Enhanced root route - API information
 app.get("/", (req, res) => {
   res.json({
     message: "Webory Backend API",
     version: "1.0.0",
     status: "running",
+    uptime: Date.now() - serverStartTime,
+    requestCount,
+    errorCount,
     endpoints: {
       auth: "/api/auth",
       admin: "/api/admin",
       health: "/api/health",
+      test: "/api/test",
     },
     frontend: "Deployed separately on Netlify",
   });
 });
 
-// Health check endpoint
+// Enhanced health check endpoint
 app.get("/api/health", (req, res) => {
+  const dbStatus =
+    mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+  const memoryUsage = process.memoryUsage();
+
   res.json({
     status: "ok",
     message: "Server is running",
     env: process.env.NODE_ENV,
-    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    db: dbStatus,
+    uptime: Date.now() - serverStartTime,
+    requestCount,
+    errorCount,
+    memoryUsage: {
+      rss: Math.round(memoryUsage.rss / 1024 / 1024) + "MB",
+      heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024) + "MB",
+      heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024) + "MB",
+    },
   });
 });
 
-// Maintenance mode middleware
+// Enhanced maintenance mode middleware with better error handling
 app.use(async (req, res, next) => {
   try {
     const settings = await Settings.findOne();
@@ -173,11 +224,13 @@ app.use(async (req, res, next) => {
     }
     next();
   } catch (e) {
+    console.error("Error checking maintenance mode:", e);
+    // Continue without maintenance check if there's an error
     next();
   }
 });
 
-// 404 handler
+// Enhanced 404 handler
 app.use((req, res, next) => {
   console.log("404 Not Found:", req.method, req.path);
   res.status(404).json({
@@ -186,13 +239,18 @@ app.use((req, res, next) => {
   });
 });
 
-// Error handling middleware
+// Enhanced error handling middleware
 app.use((err, req, res, next) => {
+  errorCount++;
   console.error("Error:", {
     name: err.name,
     message: err.message,
     stack: err.stack,
     code: err.code,
+    path: req.path,
+    method: req.method,
+    ip: req.ip,
+    userAgent: req.headers["user-agent"],
   });
 
   // Handle specific error types
@@ -229,76 +287,149 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Initialize chat
-initializeChat(io);
+// Initialize chat with error handling
+try {
+  initializeChat(io);
+} catch (error) {
+  console.error("Error initializing chat:", error);
+}
 
-// --- Socket.IO Real-Time Project Management Events ---
+// Enhanced Socket.IO Real-Time Project Management Events with error handling
 io.on("connection", (socket) => {
   console.log("🟢 New client connected:", socket.id);
 
   // Join project room
   socket.on("joinProject", (projectId) => {
-    socket.join(projectId);
-    console.log(`Socket ${socket.id} joined project ${projectId}`);
+    try {
+      socket.join(projectId);
+      console.log(`Socket ${socket.id} joined project ${projectId}`);
+    } catch (error) {
+      console.error("Error joining project:", error);
+    }
   });
 
   // Leave project room
   socket.on("leaveProject", (projectId) => {
-    socket.leave(projectId);
-    console.log(`Socket ${socket.id} left project ${projectId}`);
+    try {
+      socket.leave(projectId);
+      console.log(`Socket ${socket.id} left project ${projectId}`);
+    } catch (error) {
+      console.error("Error leaving project:", error);
+    }
   });
 
   // Project updated
   socket.on("projectUpdated", (project) => {
-    io.to(project._id).emit("projectUpdated", project);
+    try {
+      io.to(project._id).emit("projectUpdated", project);
+    } catch (error) {
+      console.error("Error updating project:", error);
+    }
   });
 
   // Task updated
   socket.on("taskUpdated", ({ projectId, task }) => {
-    io.to(projectId).emit("taskUpdated", task);
+    try {
+      io.to(projectId).emit("taskUpdated", task);
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
   });
 
   // New comment
   socket.on("commentAdded", ({ projectId, comment }) => {
-    io.to(projectId).emit("commentAdded", comment);
+    try {
+      io.to(projectId).emit("commentAdded", comment);
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
   });
 
   // New file
   socket.on("fileAdded", ({ projectId, file }) => {
-    io.to(projectId).emit("fileAdded", file);
+    try {
+      io.to(projectId).emit("fileAdded", file);
+    } catch (error) {
+      console.error("Error adding file:", error);
+    }
   });
 
   // Activity log
   socket.on("activityLogged", ({ projectId, log }) => {
-    io.to(projectId).emit("activityLogged", log);
+    try {
+      io.to(projectId).emit("activityLogged", log);
+    } catch (error) {
+      console.error("Error logging activity:", error);
+    }
   });
 
   // Notifications (task assignment, deadline, etc.)
   socket.on("notify", ({ projectId, notification }) => {
-    io.to(projectId).emit("notification", notification);
+    try {
+      io.to(projectId).emit("notification", notification);
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
   });
 
   socket.on("disconnect", () => {
     console.log("🔴 Client disconnected:", socket.id);
   });
+
+  // Handle socket errors
+  socket.on("error", (error) => {
+    console.error("Socket error:", error);
+  });
 });
 
 const PORT = process.env.PORT || 5002;
 
-// Database connection and server start
-mongoose
-  .connect(
-    process.env.MONGODB_URI ||
-      "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+// Enhanced database connection and server start with retry logic
+const connectWithRetry = async (retries = 5, delay = 5000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await mongoose.connect(
+        process.env.MONGODB_URI ||
+          "mongodb+srv://PatnarealEstate:mohitraj6205@cluster0.em7qp.mongodb.net/webory",
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          serverSelectionTimeoutMS: 5000,
+          socketTimeoutMS: 45000,
+          bufferMaxEntries: 0,
+          bufferCommands: false,
+        }
+      );
+
+      console.log("✅ Connected to MongoDB");
+      console.log("Database:", mongoose.connection.name);
+      console.log("Host:", mongoose.connection.host);
+      return true;
+    } catch (error) {
+      console.error(
+        `❌ MongoDB connection attempt ${i + 1} failed:`,
+        error.message
+      );
+      if (i < retries - 1) {
+        console.log(`Retrying in ${delay / 1000} seconds...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      } else {
+        console.error("Failed to connect to MongoDB after all retries");
+        return false;
+      }
     }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-    console.log("Database:", mongoose.connection.name);
-    console.log("Host:", mongoose.connection.host);
+  }
+};
+
+// Enhanced server startup
+const startServer = async () => {
+  try {
+    const dbConnected = await connectWithRetry();
+
+    if (!dbConnected) {
+      console.error("Cannot start server without database connection");
+      process.exit(1);
+    }
 
     // Start server only on Render or production
     if (process.env.NODE_ENV === "production" || process.env.RENDER) {
@@ -306,22 +437,75 @@ mongoose
         console.log(`🚀 Server is running on port ${PORT}`);
         console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
         console.log(`Health check: http://localhost:${PORT}/api/health`);
+        console.log(`Server started at: ${new Date().toISOString()}`);
       });
     } else {
       console.log(
         "Server is not running locally. It will only run on Render (production).\nSet NODE_ENV=production to run locally if needed."
       );
     }
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
+  } catch (error) {
+    console.error("Error starting server:", error);
     process.exit(1);
-  });
+  }
+};
 
-// Handle unhandled promise rejections
+// Enhanced process event handlers
 process.on("unhandledRejection", (err) => {
-  console.error("Unhandled Promise Rejection:", err);
-  process.exit(1);
+  console.error("❌ Unhandled Promise Rejection:", err);
+  // Don't exit immediately, log the error and continue
+  errorCount++;
 });
+
+process.on("uncaughtException", (err) => {
+  console.error("❌ Uncaught Exception:", err);
+  // Log the error but don't exit immediately
+  errorCount++;
+});
+
+process.on("SIGTERM", () => {
+  console.log("🛑 SIGTERM received, shutting down gracefully");
+  server.close(() => {
+    console.log("Server closed");
+    mongoose.connection.close(() => {
+      console.log("Database connection closed");
+      process.exit(0);
+    });
+  });
+});
+
+process.on("SIGINT", () => {
+  console.log("🛑 SIGINT received, shutting down gracefully");
+  server.close(() => {
+    console.log("Server closed");
+    mongoose.connection.close(() => {
+      console.log("Database connection closed");
+      process.exit(0);
+    });
+  });
+});
+
+// Memory monitoring
+setInterval(() => {
+  const memUsage = process.memoryUsage();
+  const memUsageMB = {
+    rss: Math.round(memUsage.rss / 1024 / 1024),
+    heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024),
+    heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024),
+  };
+
+  console.log(
+    `📊 Memory Usage: RSS: ${memUsageMB.rss}MB, Heap Used: ${memUsageMB.heapUsed}MB, Heap Total: ${memUsageMB.heapTotal}MB`
+  );
+
+  // Restart if memory usage is too high
+  if (memUsageMB.heapUsed > 500) {
+    // 500MB limit
+    console.log("⚠️ High memory usage detected, consider restarting server");
+  }
+}, 300000); // Check every 5 minutes
+
+// Start the server
+startServer();
 
 module.exports = app;

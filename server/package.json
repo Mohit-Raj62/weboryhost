@@ -12,7 +12,11 @@
     "create-admin": "node config/createTestAdmin.js",
     "create-test-admin": "node scripts/createTestAdmin.js",
     "test-server": "node test-server.js",
-    "diagnose": "node diagnose.js"
+    "diagnose": "node diagnose.js",
+    "monitor": "node monitor-server.js",
+    "monitor:test": "node monitor-server.js --test",
+    "monitor:health": "node monitor-server.js --health",
+    "auto-restart": "node monitor-server.js"
   },
   "keywords": [],
   "author": "",
