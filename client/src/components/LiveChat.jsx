@@ -269,38 +269,34 @@ class EnhancedSaraAI {
     // 🚀 ENHANCED RESPONSE SYSTEM
     getEnhancedResponse(message, context) {
         const msg = message.toLowerCase();
-        
         // Handle greetings
         if (this.isGreeting(msg)) {
             return this.getGreetingResponse();
         }
-        
+        // Direct response for pricing intent
+        if (context.intent === 'pricing') {
+            return this.getPricingResponse(context, true); // force show pricing
+        }
+        // Direct response for complaint intent
+        if (context.intent === 'complaint') {
+            return this.getComplaintResponse(context);
+        }
         // Handle specific questions based on intent and topic
         switch (context.intent) {
-            case 'pricing':
-                return this.getPricingResponse(context);
-            
             case 'information':
                 return this.getInformationResponse(context);
-            
             case 'support':
                 return this.getSupportResponse(context);
-            
             case 'booking':
                 return this.getBookingResponse();
-            
             case 'comparison':
                 return this.getComparisonResponse();
-            
             case 'timeline':
                 return this.getTimelineResponse(context);
-            
             case 'technology':
                 return this.getTechnologyResponse();
-            
             case 'portfolio':
                 return this.getPortfolioResponse();
-            
             default:
                 return this.getTopicBasedResponse(context);
         }
@@ -319,33 +315,40 @@ class EnhancedSaraAI {
     }
 
     // 💰 PRICING RESPONSE
-    getPricingResponse(context) {
+    getPricingResponse(context, alwaysShowAll) {
         const keywords = context.keywords;
         let response = "Great question about pricing! 💰 Here's what we offer:\n\n";
-        
+        let added = false;
         if (keywords.includes('website') || keywords.includes('web')) {
             response += "🌐 **Website Development**: ₹15,000 - ₹1,50,000\n";
+            added = true;
         }
         if (keywords.includes('design')) {
             response += "🎨 **UI/UX Design**: ₹10,000 - ₹80,000\n";
+            added = true;
         }
         if (keywords.includes('marketing') || keywords.includes('seo')) {
             response += "📈 **Digital Marketing**: ₹20,000 - ₹1,00,000/month\n";
+            added = true;
         }
         if (keywords.includes('ecommerce') || keywords.includes('e-commerce')) {
             response += "🛒 **E-commerce**: ₹25,000 - ₹2,00,000\n";
+            added = true;
         }
-        
-        if (keywords.length === 0) {
+        if (!added || alwaysShowAll) {
             response += "🌐 **Websites**: ₹15,000 - ₹1,50,000\n";
             response += "🎨 **UI/UX Design**: ₹10,000 - ₹80,000\n";
             response += "📈 **Digital Marketing**: ₹20,000 - ₹1,00,000/month\n";
             response += "🛒 **E-commerce**: ₹25,000 - ₹2,00,000\n";
         }
-        
         response += "\n✨ **Free consultation available!** Prices vary based on requirements. Want a custom quote?";
-        
         return response;
+    }
+
+    // 😔 COMPLAINT RESPONSE
+    getComplaintResponse(context) {
+        // Empathetic, ask for details
+        return "I'm really sorry for the trouble! 😔\n\nPlease share your issue in detail so I can help you quickly.\n• Kya problem aa rahi hai?\n• Kis feature mein dikkat hai?\n• Agar screenshot hai to bhej sakte hain.\n\nAapka feedback hamare liye important hai!";
     }
 
     // 📚 INFORMATION RESPONSE
