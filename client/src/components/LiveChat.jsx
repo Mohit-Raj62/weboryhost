@@ -6,7 +6,9 @@ import dayjs from 'dayjs';
 
 // 🚀 SARA - NEXT-GEN AI ASSISTANT WITH ADVANCED FEATURES 2025 🚀
 
-class SaraAI {
+// 🚀 ENHANCED SARA AI - IMPROVED QUESTION HANDLING SYSTEM 2025 🚀
+
+class EnhancedSaraAI {
     constructor() {
         this.userName = null;
         this.userPreferences = {};
@@ -17,7 +19,7 @@ class SaraAI {
         this.userLocation = null;
         this.lastInteraction = null;
         
-        // Advanced personality traits
+        // Enhanced personality traits
         this.personality = {
             empathy: 0.8,
             humor: 0.7,
@@ -25,23 +27,72 @@ class SaraAI {
             creativity: 0.8
         };
         
-        // Learning patterns
+        // Improved learning patterns
         this.userPatterns = {
             preferredTimeOfDay: null,
             commonQuestions: [],
             interests: [],
             communication_style: 'casual'
         };
+
+        // Enhanced knowledge base
+        this.knowledgeBase = {
+            services: {
+                'web development': {
+                    description: 'Custom websites, web apps, and responsive designs',
+                    pricing: '₹15,000 - ₹1,50,000',
+                    timeline: '1-8 weeks',
+                    technologies: ['React', 'Next.js', 'Node.js', 'MongoDB']
+                },
+                'ui/ux design': {
+                    description: 'User interface and experience design',
+                    pricing: '₹10,000 - ₹80,000',
+                    timeline: '1-4 weeks',
+                    technologies: ['Figma', 'Adobe XD', 'Sketch']
+                },
+                'digital marketing': {
+                    description: 'SEO, social media, PPC campaigns',
+                    pricing: '₹20,000 - ₹1,00,000/month',
+                    timeline: '2-6 months',
+                    technologies: ['Google Ads', 'Facebook Ads', 'Analytics']
+                },
+                'e-commerce': {
+                    description: 'Online stores and shopping platforms',
+                    pricing: '₹25,000 - ₹2,00,000',
+                    timeline: '2-10 weeks',
+                    technologies: ['Shopify', 'WooCommerce', 'Magento']
+                }
+            },
+            company: {
+                founded: '2020',
+                team_size: '15+ professionals',
+                projects_completed: '500+',
+                clients: '200+',
+                rating: '4.9/5',
+                office_location: 'India',
+                work_model: 'Remote-first'
+            },
+            contact: {
+                whatsapp: '+91-94704-89367',
+                email: 'weboryinfo@gmail.com',
+                instagram: '@webory_official',
+                linkedin: 'webory-digital',
+                website: 'webory.in'
+            }
+        };
     }
 
-    // 🧠 ADVANCED CONTEXT UNDERSTANDING
+    // 🧠 ENHANCED CONTEXT UNDERSTANDING
     analyzeContext(message) {
         const context = {
             sentiment: this.analyzeSentiment(message),
             intent: this.detectIntent(message),
             urgency: this.detectUrgency(message),
             complexity: this.assessComplexity(message),
-            personalInfo: this.extractPersonalInfo(message)
+            personalInfo: this.extractPersonalInfo(message),
+            questionType: this.detectQuestionType(message),
+            keywords: this.extractKeywords(message),
+            topic: this.identifyTopic(message)
         };
         return context;
     }
@@ -59,15 +110,19 @@ class SaraAI {
         return 'neutral';
     }
 
-    // 🎯 INTENT DETECTION
+    // 🎯 ENHANCED INTENT DETECTION
     detectIntent(message) {
         const intents = {
-            'pricing': /\b(price|cost|rate|budget|expensive|cheap|affordable|quote)\b/i,
-            'support': /\b(help|support|problem|issue|fix|error|bug)\b/i,
-            'information': /\b(what|how|when|where|why|tell me|explain)\b/i,
-            'booking': /\b(book|schedule|appointment|meet|call|demo)\b/i,
-            'complaint': /\b(complaint|complain|dissatisfied|unhappy|refund)\b/i,
-            'praise': /\b(great|excellent|amazing|love|fantastic|awesome)\b/i
+            'pricing': /\b(price|cost|rate|budget|expensive|cheap|affordable|quote|charges|fee|payment)\b/i,
+            'support': /\b(help|support|problem|issue|fix|error|bug|not working|broken)\b/i,
+            'information': /\b(what|how|when|where|why|tell me|explain|describe|details|about)\b/i,
+            'booking': /\b(book|schedule|appointment|meet|call|demo|consultation|meeting)\b/i,
+            'complaint': /\b(complaint|complain|dissatisfied|unhappy|refund|cancel|disappointed)\b/i,
+            'praise': /\b(great|excellent|amazing|love|fantastic|awesome|wonderful|perfect)\b/i,
+            'comparison': /\b(vs|versus|compare|difference|better|best|which|between)\b/i,
+            'timeline': /\b(time|duration|timeline|deadline|delivery|when|how long|complete)\b/i,
+            'technology': /\b(tech|technology|stack|framework|language|tool|software)\b/i,
+            'portfolio': /\b(work|portfolio|example|project|showcase|previous|sample)\b/i
         };
         
         for (let intent in intents) {
@@ -114,21 +169,86 @@ class SaraAI {
         return info;
     }
 
-    // 🎨 DYNAMIC RESPONSE GENERATION
+    // ❓ QUESTION TYPE DETECTION
+    detectQuestionType(message) {
+        const questionTypes = {
+            'what': /\bwhat\b/i,
+            'how': /\bhow\b/i,
+            'when': /\bwhen\b/i,
+            'where': /\bwhere\b/i,
+            'why': /\bwhy\b/i,
+            'who': /\bwho\b/i,
+            'which': /\bwhich\b/i,
+            'can': /\bcan\b/i,
+            'do': /\bdo\b/i,
+            'is': /\bis\b/i,
+            'are': /\bare\b/i
+        };
+        
+        for (let type in questionTypes) {
+            if (questionTypes[type].test(message)) return type;
+        }
+        return 'statement';
+    }
+
+    // 🔍 KEYWORD EXTRACTION
+    extractKeywords(message) {
+        const keywords = [];
+        const serviceKeywords = ['website', 'web', 'app', 'design', 'marketing', 'seo', 'ecommerce', 'e-commerce', 'ai', 'chatbot'];
+        const techKeywords = ['react', 'node', 'javascript', 'python', 'php', 'wordpress', 'shopify'];
+        
+        serviceKeywords.forEach(keyword => {
+            if (message.toLowerCase().includes(keyword)) {
+                keywords.push(keyword);
+            }
+        });
+        
+        techKeywords.forEach(keyword => {
+            if (message.toLowerCase().includes(keyword)) {
+                keywords.push(keyword);
+            }
+        });
+        
+        return keywords;
+    }
+
+    // 📚 TOPIC IDENTIFICATION
+    identifyTopic(message) {
+        const topics = {
+            'services': /\b(service|offer|solution|product|what do you do|provide)\b/i,
+            'pricing': /\b(price|cost|rate|budget|expensive|cheap|affordable)\b/i,
+            'company': /\b(about|company|webory|story|team|founded|history)\b/i,
+            'contact': /\b(contact|email|phone|whatsapp|reach|connect)\b/i,
+            'technology': /\b(technology|tech|stack|framework|language|tool)\b/i,
+            'portfolio': /\b(portfolio|work|example|project|showcase)\b/i,
+            'process': /\b(process|how|work|methodology|approach|steps)\b/i,
+            'timeline': /\b(time|duration|timeline|deadline|delivery|when)\b/i,
+            'career': /\b(job|career|hiring|work|employment|vacancy)\b/i
+        };
+        
+        for (let topic in topics) {
+            if (topics[topic].test(message)) return topic;
+        }
+        return 'general';
+    }
+
+    // 🎨 ENHANCED RESPONSE GENERATION
     generateResponse(message) {
         const context = this.analyzeContext(message);
-        const response = this.getBaseResponse(message, context);
         
-        // Add personality based on context
-        const personalizedResponse = this.addPersonality(response, context);
+        // Get base response using enhanced logic
+        let response = this.getEnhancedResponse(message, context);
         
-        // Add follow-up suggestions
-        const enhancedResponse = this.addFollowUpSuggestions(personalizedResponse, context);
+        // Add personality and context
+        response = this.addPersonality(response, context);
+        
+        // Add relevant follow-up questions
+        response = this.addFollowUpQuestions(response, context);
         
         // Store conversation history
         this.conversationHistory.push({
             user: message,
-            sara: enhancedResponse,
+            sara: response,
             context: context,
             timestamp: new Date().toISOString()
         });
@@ -136,126 +256,241 @@ class SaraAI {
         this.responseCount++;
         this.lastInteraction = new Date();
         
-        return enhancedResponse;
+        return response;
     }
 
-    // 📝 BASE RESPONSE SYSTEM (Enhanced)
-    getBaseResponse(message, context) {
+    // 🚀 ENHANCED RESPONSE SYSTEM
+    getEnhancedResponse(message, context) {
         const msg = message.toLowerCase();
         
-        // 🌟 PERSONALIZED GREETINGS
-        if (/\b(hi|hello|hey|namaste|good morning|good afternoon|good evening)\b/.test(msg)) {
-            const timeBasedGreeting = this.getTimeBasedGreeting();
-            const personalTouch = this.userName ? ` ${this.userName}` : '';
-            return `${timeBasedGreeting}${personalTouch}! I'm Sara from Webory! 🌟 ${this.getContextualGreeting(context)}`;
+        // Handle greetings
+        if (this.isGreeting(msg)) {
+            return this.getGreetingResponse();
         }
-
-        // 💎 SMART PRICING WITH CONTEXT
-        if (context.intent === 'pricing') {
-            const urgencyBonus = context.urgency === 'high' ? ' I can fast-track a quote for you!' : '';
-            return `Let's talk numbers! 💎 Our pricing starts from ₹15k for websites, ₹25k for e-commerce. Custom quotes available!${urgencyBonus} What's your project scope? 📊`;
+        
+        // Handle specific questions based on intent and topic
+        switch (context.intent) {
+            case 'pricing':
+                return this.getPricingResponse(context);
+            
+            case 'information':
+                return this.getInformationResponse(context);
+            
+            case 'support':
+                return this.getSupportResponse(context);
+            
+            case 'booking':
+                return this.getBookingResponse();
+            
+            case 'comparison':
+                return this.getComparisonResponse();
+            
+            case 'timeline':
+                return this.getTimelineResponse(context);
+            
+            case 'technology':
+                return this.getTechnologyResponse();
+            
+            case 'portfolio':
+                return this.getPortfolioResponse();
+            
+            default:
+                return this.getTopicBasedResponse(context);
         }
-
-        // 🔧 INTELLIGENT SUPPORT
-        if (context.intent === 'support') {
-            const empathyLevel = context.sentiment === 'negative' ? 'I totally understand your frustration! ' : '';
-            return `${empathyLevel}Sara's debugging mode activated! 🔧 I'm here to solve this step-by-step. Can you share more details about the issue? 💻⚡`;
-        }
-
-        // 🎯 SERVICES WITH SMART RECOMMENDATIONS
-        if (/\b(service|offer|solution|product|what do you do)\b/.test(msg)) {
-            const recommendations = this.getSmartRecommendations();
-            return `I'd love to help you grow! 🎯 We offer: Web Dev | UI/UX | Digital Marketing | E-commerce | SEO | AI Solutions. ${recommendations} 🚀`;
-        }
-
-        // 📱 CONTACT WITH PREFERRED CHANNEL
-        if (/\b(contact|email|phone|whatsapp|reach)\b/.test(msg)) {
-            return `Let's connect! 📱 Choose your preferred way: WhatsApp: +91-94704-89367 | Email: weboryinfo@gmail.com | Or continue chatting here! I'm available 24/7! 🌐`;
-        }
-
-        // 💼 CAREER OPPORTUNITIES
-        if (/\b(job|career|hiring|work|employment)\b/.test(msg)) {
-            return `Join Team Webory! 💼 We're hiring talented folks! Remote-first | Flexible hours | Growth opportunities | Slide into our careers page! 🚀`;
-        }
-
-        // 🙏 GRATITUDE WITH FOLLOW-UP
-        if (/\b(thanks|thank you|appreciate)\b/.test(msg)) {
-            const followUp = this.getPersonalizedFollowUp();
-            return `You're absolutely welcome! 🙏 ${followUp} Always happy to help amazing people like you! 💫`;
-        }
-
-        // 🌟 COMPANY INFO WITH STORYTELLING
-        if (/\b(about|company|webory|story)\b/.test(msg)) {
-            return `We're Webory - where digital dreams come true! 🌟 Founded by passionate creators, we've helped 500+ businesses transform their online presence. Innovation is our DNA! 🧬✨`;
-        }
-
-        // 🎨 PORTFOLIO WITH SOCIAL PROOF
-        if (/\b(portfolio|work|example|project|showcase)\b/.test(msg)) {
-            return `Our work speaks volumes! 🎨 500+ projects delivered | 50+ happy clients | 4.9★ rated | Check our latest work @webory_official! Which industry interests you? 📸`;
-        }
-
-        // 💻 TECH STACK WITH TREND AWARENESS
-        if (/\b(technology|tech|stack|ai|ml|web3)\b/.test(msg)) {
-            return `We're tech obsessed! 💻 Latest stack: React, Next.js, Node.js, Python, AI/ML, Web3, Blockchain ⛓️ | Always learning cutting-edge tech! What excites you? 🤖`;
-        }
-
-        // ⏰ SMART TIMELINE ESTIMATION
-        if (/\b(time|duration|timeline|deadline|delivery)\b/.test(msg)) {
-            const timeEstimate = this.getSmartTimeEstimate(context);
-            return `Speed meets quality! ⏰ ${timeEstimate} | Agile sprints | Daily updates | Your timeline is our priority! When do you need to launch? 🎯`;
-        }
-
-        // 🔄 PROCESS WITH TRANSPARENCY
-        if (/\b(process|how|work|methodology|approach)\b/.test(msg)) {
-            return `Our proven process: 🔄 Discovery Call → Strategy → Design → Develop → Test → Launch → Optimize! Transparent workflow with daily updates! 📊`;
-        }
-
-        // 💳 FLEXIBLE PAYMENT OPTIONS
-        if (/\b(payment|billing|invoice|emi|crypto)\b/.test(msg)) {
-            return `Payment made simple! 💳 All methods accepted: UPI, Cards, Bank, Crypto! 30-70 milestone based | EMI options | Student discounts available! 🎓`;
-        }
-
-        // 🛠️ PROACTIVE SUPPORT
-        if (/\b(support|maintenance|help|24x7)\b/.test(msg)) {
-            return `Your success partner! 🛠️ 24/7 support | Free updates (60 days) | Dedicated Slack channel | Monthly health checks | We never leave you hanging! 🤝`;
-        }
-
-        // 🌍 GLOBAL PRESENCE
-        if (/\b(location|global|remote|office)\b/.test(msg)) {
-            return `Digital nomads at heart! 🌍 HQ: India | Clients: 20+ countries | Remote-first culture | Timezone flexible | Where are you located? 🕐`;
-        }
-
-        // ⚡ URGENCY HANDLING
-        if (context.urgency === 'high') {
-            return `Lightning mode activated! ⚡ I can see this is urgent. Let me connect you with our rapid response team immediately! What's the situation? 🚨`;
-        }
-
-        // 🤖 AI & AUTOMATION
-        if (/\b(ai|artificial intelligence|chatbot|automation)\b/.test(msg)) {
-            return `That's me! 🤖 I'm Sara, your AI assistant! We build smart chatbots, automation workflows, and AI-powered solutions. Want to create your own AI assistant? 🧠`;
-        }
-
-        // 💡 INNOVATION & TRENDS
-        if (/\b(innovation|future|trending|latest|cutting edge)\b/.test(msg)) {
-            return `Innovation drives us! 💡 We're experimenting with: AI, Web3, AR/VR, IoT, Blockchain | Always 2 steps ahead of trends! What's your vision? 🔮`;
-        }
-
-        // 🔒 SECURITY & PRIVACY
-        if (/\b(security|privacy|safe|gdpr|ssl)\b/.test(msg)) {
-            return `Your data fortress! 🔒 Bank-level security | GDPR compliant | SSL certificates | Regular security audits | Privacy by design! 🛡️`;
-        }
-
-        // 👋 INTELLIGENT GOODBYE
-        if (/\b(bye|goodbye|see you|thanks|end)\b/.test(msg)) {
-            const personalizedGoodbye = this.getPersonalizedGoodbye();
-            return `${personalizedGoodbye} 🌟 Follow us @webory_official | Your digital journey starts here! Until next time! ✨`;
-        }
-
-        // 🎭 SMART DEFAULT RESPONSE
-        return this.getIntelligentDefault();
     }
 
-    // 🕐 TIME-BASED GREETINGS
+    // 👋 GREETING DETECTION
+    isGreeting(msg) {
+        return /\b(hi|hello|hey|namaste|good morning|good afternoon|good evening|hola|bonjour)\b/.test(msg);
+    }
+
+    // 🌟 GREETING RESPONSE
+    getGreetingResponse() {
+        const timeBasedGreeting = this.getTimeBasedGreeting();
+        const personalTouch = this.userName ? ` ${this.userName}` : '';
+        return `${timeBasedGreeting}${personalTouch}! I'm Sara from Webory! 🌟 Ready to bring your digital dreams to life? What can I help you with today?`;
+    }
+
+    // 💰 PRICING RESPONSE
+    getPricingResponse(context) {
+        const keywords = context.keywords;
+        let response = "Great question about pricing! 💰 Here's what we offer:\n\n";
+        
+        if (keywords.includes('website') || keywords.includes('web')) {
+            response += "🌐 **Website Development**: ₹15,000 - ₹1,50,000\n";
+        }
+        if (keywords.includes('design')) {
+            response += "🎨 **UI/UX Design**: ₹10,000 - ₹80,000\n";
+        }
+        if (keywords.includes('marketing') || keywords.includes('seo')) {
+            response += "📈 **Digital Marketing**: ₹20,000 - ₹1,00,000/month\n";
+        }
+        if (keywords.includes('ecommerce') || keywords.includes('e-commerce')) {
+            response += "🛒 **E-commerce**: ₹25,000 - ₹2,00,000\n";
+        }
+        
+        if (keywords.length === 0) {
+            response += "🌐 **Websites**: ₹15,000 - ₹1,50,000\n";
+            response += "🎨 **UI/UX Design**: ₹10,000 - ₹80,000\n";
+            response += "📈 **Digital Marketing**: ₹20,000 - ₹1,00,000/month\n";
+            response += "🛒 **E-commerce**: ₹25,000 - ₹2,00,000\n";
+        }
+        
+        response += "\n✨ **Free consultation available!** Prices vary based on requirements. Want a custom quote?";
+        
+        return response;
+    }
+
+    // 📚 INFORMATION RESPONSE
+    getInformationResponse(context) {
+        const topic = context.topic;
+        
+        switch (topic) {
+            case 'services':
+                return this.getServicesInfo();
+            case 'company':
+                return this.getCompanyInfo();
+            case 'contact':
+                return this.getContactInfo();
+            case 'technology':
+                return this.getTechnologyInfo();
+            case 'portfolio':
+                return this.getPortfolioInfo();
+            case 'process':
+                return this.getProcessInfo();
+            default:
+                return this.getGeneralInfo();
+        }
+    }
+
+    // 🎯 SERVICES INFO
+    getServicesInfo() {
+        return `Here's what we excel at! 🎯\n\n🌐 **Web Development** - Custom websites & web applications\n🎨 **UI/UX Design** - Beautiful, user-friendly interfaces\n📈 **Digital Marketing** - SEO, social media, PPC campaigns\n🛒 **E-commerce Solutions** - Online stores that convert\n🤖 **AI Solutions** - Chatbots, automation, and more\n🔧 **Maintenance & Support** - 24/7 technical support\n\nWhich service interests you most?`;
+    }
+
+    // 🏢 COMPANY INFO
+    getCompanyInfo() {
+        return `About Webory - Your Digital Success Partner! 🏢\n\n🚀 **Founded**: 2020\n👥 **Team**: 15+ skilled professionals\n📊 **Projects**: 500+ completed successfully\n🌟 **Clients**: 200+ happy customers\n⭐ **Rating**: 4.9/5 stars\n🌍 **Presence**: India-based, serving globally\n💼 **Model**: Remote-first culture\n\nWe're passionate about turning ideas into digital reality!`;
+    }
+
+    // 📞 CONTACT INFO
+    getContactInfo() {
+        return `Let's connect! 📞 Choose your preferred way:\n\n📱 **WhatsApp**: +91-94704-89367\n📧 **Email**: weboryinfo@gmail.com\n📸 **Instagram**: @webory_official\n💼 **LinkedIn**: webory-digital\n🌐 **Website**: webory.in\n\nI'm available 24/7 right here too! How would you like to proceed?`;
+    }
+
+    // 💻 TECHNOLOGY INFO
+    getTechnologyInfo() {
+        return `We're tech obsessed! 💻 Here's our cutting-edge stack:\n\n**Frontend**: React, Next.js, Vue.js, Angular\n**Backend**: Node.js, Python, PHP, Java\n**Database**: MongoDB, MySQL, PostgreSQL\n**Cloud**: AWS, Google Cloud, Azure\n**Mobile**: React Native, Flutter\n**AI/ML**: Python, TensorFlow, OpenAI\n**E-commerce**: Shopify, WooCommerce, Magento\n\nWhat technology are you curious about?`;
+    }
+
+    // 🎨 PORTFOLIO INFO
+    getPortfolioInfo() {
+        return `Our work speaks for itself! 🎨\n\n📊 **Stats**: 500+ projects | 200+ clients | 4.9★ rating\n🏆 **Industries**: Healthcare, E-commerce, Education, Finance\n🌟 **Highlights**: Award-winning designs, performance-optimized\n📱 **Follow**: @webory_official for latest work\n\nWant to see examples from your industry? Which sector interests you?`;
+    }
+
+    // 🔄 PROCESS INFO
+    getProcessInfo() {
+        return `Our proven development process! 🔄\n\n1️⃣ **Discovery Call** - Understanding your needs\n2️⃣ **Strategy & Planning** - Roadmap creation\n3️⃣ **Design Phase** - UI/UX mockups\n4️⃣ **Development** - Building your solution\n5️⃣ **Testing & QA** - Ensuring perfection\n6️⃣ **Launch** - Going live!\n7️⃣ **Support** - Ongoing maintenance\n\nTransparent workflow with daily updates! Ready to start?`;
+    }
+
+    // 🛠️ SUPPORT RESPONSE
+    getSupportResponse(context) {
+        const urgency = context.urgency;
+        let response = "";
+        
+        if (urgency === 'high') {
+            response = "🚨 **Priority Support Activated!** I can see this is urgent. ";
+        } else {
+            response = "🛠️ **Support Mode On!** ";
+        }
+        
+        response += "I'm here to help solve this step-by-step.\n\n";
+        response += "To assist you better, please share:\n";
+        response += "• What specific issue are you facing?\n";
+        response += "• What were you trying to do?\n";
+        response += "• Any error messages you saw?\n\n";
+        response += "I can also schedule a quick debug call if needed!";
+        
+        return response;
+    }
+
+    // 📅 BOOKING RESPONSE
+    getBookingResponse() {
+        return `Perfect! Let's schedule something! 📅\n\n**Available Options:**\n📞 **Free Consultation** - 30 minutes\n🎨 **Design Review** - 45 minutes\n💻 **Technical Discussion** - 60 minutes\n🚀 **Project Kickoff** - 90 minutes\n\n**Booking Methods:**\n• WhatsApp: +91-94704-89367\n• Email: weboryinfo@gmail.com\n• Continue here and I'll connect you!\n\nWhat type of meeting works best for you?`;
+    }
+
+    // ⚖️ COMPARISON RESPONSE
+    getComparisonResponse() {
+        return `Great question! Let me help you compare! ⚖️\n\n**Why Choose Webory?**\n✅ **Quality**: 4.9★ rating, 500+ projects\n✅ **Speed**: Agile development, faster delivery\n✅ **Support**: 24/7 availability, dedicated team\n✅ **Price**: Transparent, competitive rates\n✅ **Tech**: Latest frameworks, future-proof\n\n**vs Traditional Agencies:**\n• More flexible, less bureaucracy\n• Direct communication with developers\n• Faster iterations and feedback\n\nWhat specific comparison can I help you with?`;
+    }
+
+    // ⏰ TIMELINE RESPONSE
+    getTimelineResponse(context) {
+        const keywords = context.keywords;
+        let response = "Here are our typical timelines! ⏰\n\n";
+        
+        if (keywords.includes('website') || keywords.includes('web')) {
+            response += "🌐 **Website**: 1-8 weeks (depends on complexity)\n";
+        }
+        if (keywords.includes('design')) {
+            response += "🎨 **Design**: 1-4 weeks\n";
+        }
+        if (keywords.includes('ecommerce')) {
+            response += "🛒 **E-commerce**: 2-10 weeks\n";
+        }
+        if (keywords.includes('app')) {
+            response += "📱 **Mobile App**: 4-16 weeks\n";
+        }
+        
+        response += "\n⚡ **Rush Jobs**: 50% extra, 2x faster delivery\n";
+        response += "📊 **Factors**: Features, integrations, revisions\n";
+        response += "🎯 **Promise**: Your timeline is our priority!\n\n";
+        response += "When do you need to launch?";
+        
+        return response;
+    }
+
+    // 💻 TECHNOLOGY RESPONSE
+    getTechnologyResponse() {
+        return this.getTechnologyInfo();
+    }
+
+    // 🎨 PORTFOLIO RESPONSE
+    getPortfolioResponse() {
+        return this.getPortfolioInfo();
+    }
+
+    // 🎭 TOPIC-BASED RESPONSE
+    getTopicBasedResponse(context) {
+        const topic = context.topic;
+        
+        switch (topic) {
+            case 'career':
+                return "Join Team Webory! 💼\n\nWe're always looking for talented individuals!\n🏠 **Remote-first** culture\n⏰ **Flexible** working hours\n📈 **Growth** opportunities\n💰 **Competitive** packages\n\nSend your portfolio to: careers@webory.com";
+            
+            default:
+                return this.getIntelligentDefault(context);
+        }
+    }
+
+    // 🎯 GENERAL INFO
+    getGeneralInfo() {
+        return `I'd love to help you more! 🎯\n\nI'm Sara, your AI assistant from Webory. We're a digital agency specializing in:\n• Web Development\n• UI/UX Design\n• Digital Marketing\n• E-commerce Solutions\n\nWhat specific information can I provide? Feel free to ask about our services, pricing, process, or anything else!`;
+    }
+
+    // 🤔 INTELLIGENT DEFAULT
+    getIntelligentDefault(context) {
+        const questionType = context.questionType;
+        const keywords = context.keywords;
+        
+        if (questionType === 'what' && keywords.length > 0) {
+            return `Interesting question about ${keywords.join(', ')}! 🤔\n\nI'd love to give you detailed information. Could you be more specific about what aspect you'd like to know? For example:\n• Pricing and packages\n• Technical details\n• Timeline and process\n• Examples and portfolio\n\nJust let me know what's most important to you!`;
+        }
+        
+        return `That's a great question! 🌟\n\nI want to make sure I give you the most helpful answer. Could you provide a bit more context about:\n• What specific area interests you?\n• Are you looking for pricing, process, or technical details?\n• Any particular requirements you have?\n\nI'm here to help and want to give you exactly what you need!`;
+    }
+
+    // 🕐 TIME-BASED GREETING
     getTimeBasedGreeting() {
         const hour = new Date().getHours();
         if (hour < 12) return "Good morning";
@@ -264,130 +499,59 @@ class SaraAI {
         return "Hey there";
     }
 
-    // 🎯 CONTEXTUAL GREETING
-    getContextualGreeting(context) {
-        switch (context.sentiment) {
-            case 'positive': return 'Love the positive energy! How can I help you shine brighter?';
-            case 'negative': return 'I\'m here to turn things around! What\'s on your mind?';
-            default: return 'Ready to create something amazing together?';
-        }
-    }
-
-    // 🔮 SMART RECOMMENDATIONS
-    getSmartRecommendations() {
-        const recommendations = [
-            'Based on current trends, I\'d recommend starting with a modern website!',
-            'Most clients love our AI-powered solutions - very trending!',
-            'E-commerce is booming - perfect timing to start selling online!',
-            'SEO is crucial right now - let\'s get you ranking!'
-        ];
-        return recommendations[Math.floor(Math.random() * recommendations.length)];
-    }
-
-    // ⏰ SMART TIME ESTIMATION
-    getSmartTimeEstimate(context) {
-        const estimates = {
-            'low': 'Simple projects: 1-2 weeks',
-            'medium': 'Standard projects: 3-6 weeks',
-            'high': 'Complex projects: 6-12 weeks'
-        };
-        return estimates[context.complexity] || 'MVP in 2 weeks | Full project 4-8 weeks';
-    }
-
     // 🎭 PERSONALITY ENHANCEMENT
     addPersonality(response, context) {
-        // Add humor for casual conversations
-        if (context.sentiment === 'positive' && this.personality.humor > 0.5) {
-            const humorous = ['😄', '🎉', '🚀', '💫', '✨'];
-            response += ` ${humorous[Math.floor(Math.random() * humorous.length)]}`;
+        // Add empathy for support requests
+        if (context.intent === 'support' && context.sentiment === 'negative') {
+            response = "I understand how frustrating this can be! " + response;
         }
         
-        // Add empathy for support requests
-        if (context.intent === 'support' && this.personality.empathy > 0.7) {
-            response = "I totally get it! " + response;
+        // Add enthusiasm for positive interactions
+        if (context.sentiment === 'positive' && this.personality.humor > 0.5) {
+            response += " 🎉";
         }
         
         return response;
     }
 
-    // 🎯 FOLLOW-UP SUGGESTIONS
-    addFollowUpSuggestions(response, context) {
-        const suggestions = {
-            'pricing': '\n\n💡 Quick suggestions:\n• Free consultation available\n• Custom quotes in 24 hours\n• Portfolio review included',
-            'support': '\n\n🔧 Next steps:\n• Share screenshots if possible\n• Describe expected vs actual behavior\n• I can schedule a quick debug call',
-            'information': '\n\n📚 Helpful resources:\n• Check our blog for tips\n• Free website audit available\n• Join our community for updates'
+    // 🎯 FOLLOW-UP QUESTIONS
+    addFollowUpQuestions(response, context) {
+        const followUps = {
+            'pricing': '\n\n💡 **Next Steps**:\n• Want a detailed quote?\n• Need to discuss specific features?\n• Ready to start a project?',
+            'information': '\n\n📚 **More Info**:\n• Want to see examples?\n• Need technical details?\n• Questions about process?',
+            'support': '\n\n🔧 **Support Options**:\n• Schedule a call?\n• Screen sharing session?\n• Email detailed steps?',
+            'booking': '\n\n📅 **Booking Help**:\n• Preferred time slot?\n• Specific agenda items?\n• Any preparation needed?'
         };
         
-        if (suggestions[context.intent]) {
-            response += suggestions[context.intent];
+        if (followUps[context.intent]) {
+            response += followUps[context.intent];
         }
         
         return response;
     }
 
-    // 🔄 PERSONALIZED FOLLOW-UP
-    getPersonalizedFollowUp() {
-        const followUps = [
-            'What else can I help you with?',
-            'Any other questions on your mind?',
-            'Ready to take the next step?',
-            'Curious about anything else?'
-        ];
-        return followUps[Math.floor(Math.random() * followUps.length)];
-    }
-
-    // 👋 PERSONALIZED GOODBYE
-    getPersonalizedGoodbye() {
-        const goodbyes = [
-            'It was awesome chatting with you!',
-            'Thanks for the great conversation!',
-            'Hope I could help you today!',
-            'Looking forward to working together!'
-        ];
-        return goodbyes[Math.floor(Math.random() * goodbyes.length)];
-    }
-
-    // 🎭 INTELLIGENT DEFAULT
-    getIntelligentDefault() {
-        const defaults = [
-            'That\'s an interesting question! 🤔 I\'m Sara, and I\'d love to help you more. Could you give me a bit more context?',
-            'Hey! Sara here! 💫 I want to make sure I give you the best answer. Can you tell me more about what you\'re looking for?',
-            'Great question! 🌟 I\'m processing that... Could you elaborate a bit more so I can help you better?',
-            'I love curious minds! 🧠 Let me understand your needs better. What specific area interests you most?'
-        ];
-        return defaults[Math.floor(Math.random() * defaults.length)];
-    }
-
-    // 📊 ANALYTICS & LEARNING
+    // 📊 ANALYTICS
     getAnalytics() {
         return {
             totalConversations: this.conversationHistory.length,
             responseCount: this.responseCount,
             lastInteraction: this.lastInteraction,
             userPatterns: this.userPatterns,
-            conversationHistory: this.conversationHistory.slice(-10) // Last 10 conversations
+            conversationHistory: this.conversationHistory.slice(-10)
         };
     }
-
-    // 🔄 CONTINUOUS LEARNING
-    learn(feedback) {
-        if (feedback.rating >= 4) {
-            this.personality.empathy += 0.01;
-            this.personality.humor += 0.01;
-        }
-        
-        if (feedback.category) {
-            this.userPatterns.interests.push(feedback.category);
-        }
-    }
 }
 
-// 🚀 SARA INSTANCE & MAIN FUNCTION
-const sara = new SaraAI();
+// 🚀 INITIALIZE ENHANCED SARA
+const enhancedSara = new EnhancedSaraAI();
 
+// 🎯 MAIN FUNCTION
 function getSaraResponse(message) {
-    return sara.generateResponse(message);
+    return enhancedSara.generateResponse(message);
 }
+
+// Export for use
+// export { getSaraResponse, enhancedSara };
 
 
 
@@ -514,8 +678,8 @@ const LiveChat = () => {
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-2 rounded-t-2xl border-b border-gray-100 bg-white">
                         <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-600 text-white text-lg font-bold">S</span>
-                            <span className="font-bold text-gray-900 text-base tracking-wide">Sara AI</span>
+                            <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-600 text-pink-400 text-lg font-bold">S</span>
+                            <span className="font-bold text-pink-400 text-base tracking-wide">Sara AI</span>
                             <span className={`ml-2 text-xs px-2 py-1 rounded font-semibold ${isOnline ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{isOnline ? '🟢' :'🔴'}</span>
                         </div>
                         <div className="flex items-center gap-1">
