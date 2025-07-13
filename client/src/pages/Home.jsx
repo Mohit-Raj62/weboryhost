@@ -31,7 +31,7 @@ const Home = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [selectedService, setSelectedService] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // REMOVED: const [isLoading, setIsLoading] = useState(true);
 
   const featuredProjects = [
     {
@@ -176,14 +176,7 @@ const Home = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  useEffect(() => {
-    // Simulate loading time for images and content
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // REMOVED: useEffect for artificial loading delay
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
@@ -203,13 +196,10 @@ const Home = () => {
         <div className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-gradient-to-r from-yellow-400/20 to-orange-500/20 blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {isLoading ? (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-cyan-400"></div>
-        </div>
-      ) : (
-        <div className="relative z-10">
-          {/* Hero Section */}
+      {/* REMOVED: isLoading loader overlay */}
+      {/* Always render the main content */}
+      <div className="relative z-10">
+        {/* Hero Section */}
           <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
             <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
             <div className="relative z-20 text-center text-white max-w-7xl mx-auto">
@@ -623,7 +613,6 @@ const Home = () => {
             </div>
           </section>
         </div>
-      )}
 
       <style>{`
         @keyframes float {
