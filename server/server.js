@@ -396,7 +396,6 @@ const connectWithRetry = async (retries = 5, delay = 5000) => {
           useUnifiedTopology: true,
           serverSelectionTimeoutMS: 5000,
           socketTimeoutMS: 45000,
-          bufferMaxEntries: 0,
           bufferCommands: false,
         }
       );
