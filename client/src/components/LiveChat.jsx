@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import { API_BASE_URL } from '../config/api';
 import dayjs from 'dayjs';
+import axios from 'axios';
 
 // 🎯 OPTIMIZED SARA AI CLASS
 class OptimizedSaraAI {
@@ -339,6 +340,33 @@ const ChatIcons = {
     )
 };
 
+// Add OpenAI GPT API call function
+async function fetchOpenAIResponse(message) {
+    // For Vite: define VITE_OPENAI_API_KEY in your .env file
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const endpoint = 'https://api.openai.com/v1/chat/completions';
+  try {
+    const response = await axios.post(
+      endpoint,
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: message }],
+        max_tokens: 150,
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+      }
+    );
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    return "Sorry, I couldn't get an answer right now.";
+  }
+}
+
 // 🎯 OPTIMIZED LIVECHAT COMPONENT
 const LiveChat = React.memo(() => {
     const location = useLocation();
@@ -417,6 +445,12 @@ const LiveChat = React.memo(() => {
             setIsBotTyping(true);
             
         // Get AI response from OpenAI
+                const botReply = await fetchOpenAIResponse(inputValue);
+                setMessages(prev => [...prev, {
+                    text: botReply,
+                    sender: 'bot',
+                    timestamp: new Date().toISOString(),
+                }]);
                 setIsBotTyping(false);
     }, [inputValue, isBotTyping]);
 
