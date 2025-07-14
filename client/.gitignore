@@ -13,7 +13,6 @@ dist-ssr
 *.local
 .env
 .env
-.openaiProxy
 
 # Editor directories and files
 .vscode/*
