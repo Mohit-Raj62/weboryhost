@@ -15,7 +15,7 @@ router.post("/chat", async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer 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`,
+          Authorization: `Bearer sk-proj-fSeLWNW`,
           "Content-Type": "application/json",
         },
       }
