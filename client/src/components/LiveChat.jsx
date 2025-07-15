@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import io from 'socket.io-client';
 import { API_BASE_URL } from '../config/api';
 import dayjs from 'dayjs';
-import axios from 'axios';
 
 // 🎯 OPTIMIZED SARA AI CLASS
 class OptimizedSaraAI {
@@ -15,87 +13,86 @@ class OptimizedSaraAI {
         this.responseCount = 0;
         this.lastInteraction = null;
         this.language = 'en';
-        
-        // Enhanced personality traits
         this.personality = {
             empathy: 0.8,
             humor: 0.7,
             professionalism: 0.9,
             creativity: 0.8
         };
-        
-        // Optimized knowledge base with lazy loading
         this.knowledgeBase = {
             services: {
                 'web development': {
                     description: 'Custom websites, web apps, and responsive designs',
-                    pricing: '₹15,000 - ₹1,50,000',
+                    pricing: '₹3,000 - ₹50,000',
                     timeline: '1-8 weeks',
                     technologies: ['React', 'Next.js', 'Node.js', 'MongoDB']
                 },
                 'ui/ux design': {
                     description: 'User interface and experience design',
-                    pricing: '₹10,000 - ₹80,000',
+                    pricing: '₹5,000 - ₹50,000',
                     timeline: '1-4 weeks',
                     technologies: ['Figma', 'Adobe XD', 'Sketch']
                 },
                 'digital marketing': {
                     description: 'SEO, social media, PPC campaigns',
-                    pricing: '₹20,000 - ₹1,00,000/month',
+                    pricing: '₹10,000 - ₹1,00,000/month',
                     timeline: '2-6 months',
                     technologies: ['Google Ads', 'Facebook Ads', 'Analytics']
                 },
                 'e-commerce': {
                     description: 'Online stores and shopping platforms',
-                    pricing: '₹25,000 - ₹2,00,000',
+                    pricing: '₹10,000 - ₹2,00,000',
                     timeline: '2-10 weeks',
                     technologies: ['Shopify', 'WooCommerce', 'Magento']
                 }
             },
             company: {
-                founded: '2020',
-                team_size: '15+ professionals',
-                projects_completed: '500+',
-                clients: '200+',
-                rating: '4.9/5'
+                // founded: '20',
+                team_size: '5+ professionals',
+                projects_completed: '100+',
+                clients: '50+',
+                rating: '4.6/5'
             },
             contact: {
                 whatsapp: '+91-94704-89367',
                 email: 'weboryinfo@gmail.com',
-                instagram: '@webory_official',
-                linkedin: 'webory-digital',
-                website: 'webory.in'
+                instagram: '@weboryinfo',
+                linkedin: 'weboryinfo',
+                website: 'webory.netlify.app'
             }
         };
-
-        // Pre-compiled regex patterns for better performance
         this.patterns = {
-            greeting: /\b(hi|hello|hey|namaste|good morning|good afternoon|good evening)\b/i,
-            pricing: /\b(price|cost|rate|budget|expensive|cheap|affordable|quote|charges|fee|payment)\b/i,
-            support: /\b(help|support|problem|issue|fix|error|bug|not working|broken)\b/i,
-            information: /\b(what|how|when|where|why|tell me|explain|describe|details|about)\b/i,
-            booking: /\b(book|schedule|appointment|meet|call|demo|consultation|meeting)\b/i,
-            complaint: /\b(complaint|complain|dissatisfied|unhappy|refund|cancel|disappointed)\b/i,
-            praise: /\b(great|excellent|amazing|love|fantastic|awesome|wonderful|perfect)\b/i,
-            urgent: /\b(urgent|asap|emergency|quickly|immediate|now|today)\b/i,
-            email: /[\w.-]+@[\w.-]+\.\w+/,
+            greeting: /\b(hi|hello|hey|namaste|good morning|good afternoon|good evening|pranam|salaam|greetings|ram ram|hello sara|hey sara|sara ji|sara)\b/i,
+            pricing: /\b(price|cost|rate|budget|expensive|cheap|affordable|quote|charges|fee|payment|kharcha|kitna|daam|kimat|kitne|paise|charge|lagat|estimate|quotation|how much|how many|total cost|website ka kharcha|banwane ka kharcha|banane ka kharcha|pricing plan|pricing plans|plans|web design|website design|design price|design cost|design charges|designing|designing ka kharcha)\b/i,
+            support: /\b(help|support|problem|issue|fix|error|bug|not working|broken|madad|samasya|samasyaen|samasyao|samasya hai|problem hai|madad karo|help karo|sahayata|trouble|samasya ka hal|samasya ka solution|technical issue|technical problem|site down|website down|login issue|login problem)\b/i,
+            information: /\b(what|how|when|where|why|tell me|explain|describe|details|about|kya|kaise|kab|kahan|kyun|batao|jankari|jaankari|detail|samjhao|kaun|kis|company|team|location|office|address|timing|hours|kab khula|kab band|kab tak|kab se|kab tak open|kab se open|kab se band|kab se start|kab se close|kab se available|kab se service|kab se support)\b/i,
+            booking: /\b(book|schedule|appointment|meet|call|demo|consultation|meeting|milna|samay|time|slot|baat|baatcheet|baatcheet karna|call lagana|call karna|baat karna|meeting fix|meeting set|appointment fix|appointment set)\b/i,
+            complaint: /\b(complaint|complain|dissatisfied|unhappy|refund|cancel|disappointed|shikayat|shikayat karna|naraaz|naraz|pareshan|refund chahiye|cancel karna|bad experience|not happy|not satisfied|service bad|service poor)\b/i,
+            praise: /\b(great|excellent|amazing|love|fantastic|awesome|wonderful|perfect|shandar|badhiya|accha|mast|badiya|superb|best|bahut accha|bahut badhiya|thank you|thanks|shukriya|dhanyavaad|good job|well done|nice work|nice|awesome work|great job)\b/i,
+            urgent: /\b(urgent|asap|emergency|quickly|immediate|now|today|jaldi|abhi|turant|fauran|foran|aaj hi|abhi chahiye|immediately|jaldi karo|abhi karo)\b/i,
+            job: /\b(job|career|opening|vacancy|hiring|join|kaam|naukri|bharti|job chahiye|career opportunity|job opportunity|internship|intern|work with|work at|join team|join webory)\b/i,
+            feedback: /\b(feedback|suggestion|review|opinion|feedback dena|suggestion dena|review dena|opinion dena|feedback form|feedback submit|feedback do|feedback doge)\b/i,
+            goodbye: /\b(bye|goodbye|see you|see ya|alvida|phir milenge|phir milte hain|phir milenge sara|bye sara|good night|goodnight|shubh ratri|shubhratri|take care|tc)\b/i,
+            email: /[\w.-]+@[\w.-]+\.\w+/, 
             phone: /\d{10}|\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/,
-            name: /my name is (\w+)|i'm (\w+)|i am (\w+)/i
+            name: /my name is (\w+)|i'm (\w+)|i am (\w+)|mera naam (\w+)/i,
+            acknowledge: /\b(ok|okay|thik hai|theek hai|haan|hmm|hmmm|hmm.|h|yes|sure|done|great|acha|accha|thik|thik h|fine|cool|alright|sahi)\b/i,
+            contact: /\b(contact|whatsapp|email|phone|call|number|mobile|contact number|phone number|mobile number|nambar|numb|no|contact info|contact details)\b/i,
         };
-
-        // Optimized response templates
         this.responseTemplates = {
-            greeting: `{timeGreeting}{personalTouch}! I'm Sara from Webory! 🌟 Ready to bring your digital dreams to life? What can I help you with today?`,
-            pricing: `Great question about pricing! 💰 Here's what we offer:\n\n{pricingInfo}\n\n✨ **Free consultation available!** Prices vary based on requirements. Want a custom quote?`,
-            services: `Here's what we excel at! 🎯\n\n🌐 **Web Development** - Custom websites & web applications\n🎨 **UI/UX Design** - Beautiful, user-friendly interfaces\n📈 **Digital Marketing** - SEO, social media, PPC campaigns\n🛒 **E-commerce Solutions** - Online stores that convert\n🤖 **AI Solutions** - Chatbots, automation, and more\n🔧 **Maintenance & Support** - 24/7 technical support\n\nWhich service interests you most?`,
-            company: `About Webory - Your Digital Success Partner! 🏢\n\n🚀 **Founded**: 2020\n👥 **Team**: 15+ skilled professionals\n📊 **Projects**: 500+ completed successfully\n🌟 **Clients**: 200+ happy customers\n⭐ **Rating**: 4.9/5 stars\n🌍 **Presence**: India-based, serving globally\n💼 **Model**: Remote-first culture\n\nWe're passionate about turning ideas into digital reality!`,
-            contact: `Let's connect! 📞 Choose your preferred way:\n\n📱 **WhatsApp**: +91-94704-89367\n📧 **Email**: weboryinfo@gmail.com\n📸 **Instagram**: @webory_official\n💼 **LinkedIn**: webory-digital\n🌐 **Website**: webory.in\n\nI'm available 24/7 right here too! How would you like to proceed?`,
-            support: `🛠️ **Support Mode On!** I'm here to help solve this step-by-step.\n\nTo assist you better, please share:\n• What specific issue are you facing?\n• What were you trying to do?\n• Any error messages you saw?\n\nI can also schedule a quick debug call if needed!`,
-            default: `That's a great question! 🌟\n\nI want to make sure I give you the most helpful answer. Could you provide a bit more context about:\n• What specific area interests you?\n• Are you looking for pricing, process, or technical details?\n• Any particular requirements you have?\n\nI'm here to help and want to give you exactly what you need!`
+            greeting: `{timeGreeting}{personalTouch}! I'm Sara from Webory. How can I help you today?\n\n(Ask in Hindi or English!)`,
+            pricing: `Here's our pricing:\n{pricingInfo}\n\nFree consultation! Prices depend on your needs. Want a custom quote?`,
+            services: `We offer:\n- Web Development\n- UI/UX Design\n- Digital Marketing\n- E-commerce\n- AI Solutions\n- 24/7 Support\n\nWhich service interests you?`,
+            company: `About Webory:\n- Founded: 2020\n- Team: 15+\n- Projects: 500+\n- Clients: 200+\n- Rating: 4.9/5\n- India-based, global service.`,
+            contact: `Contact us:\nWhatsApp: +91-94704-89367\nEmail: weboryinfo@gmail.com\nInstagram: @webory_official\nLinkedIn: webory-digital\nWebsite: webory.in`,
+            support: `Support mode on!\nPlease share:\n- Your issue\n- What you tried\n- Any error message`,
+            job: `We're hiring!\nSend your resume to weboryinfo@gmail.com or check our Careers page.`,
+            feedback: `Thanks for your feedback! You can also fill our feedback form on the website.`,
+            goodbye: `Thanks for chatting! Have a great day!`,
+            praise: `Thank you! 😊 Glad to help.`,
+            default: `Could you give more details?\nTry asking about pricing, services, support, company, or contact.\nEg: 'Website ka kharcha?', 'What services do you offer?'`
         };
     }
-
-    // 🚀 OPTIMIZED CONTEXT ANALYSIS
     analyzeContext(message) {
         const lowerMsg = message.toLowerCase();
         const context = {
@@ -107,8 +104,6 @@ class OptimizedSaraAI {
         };
         return context;
     }
-
-    // 🎯 OPTIMIZED INTENT DETECTION
     detectIntent(lowerMsg) {
         if (this.patterns.greeting.test(lowerMsg)) return 'greeting';
         if (this.patterns.pricing.test(lowerMsg)) return 'pricing';
@@ -117,68 +112,54 @@ class OptimizedSaraAI {
         if (this.patterns.complaint.test(lowerMsg)) return 'complaint';
         if (this.patterns.praise.test(lowerMsg)) return 'praise';
         if (this.patterns.information.test(lowerMsg)) return 'information';
+        if (this.patterns.job.test(lowerMsg)) return 'job';
+        if (this.patterns.feedback.test(lowerMsg)) return 'feedback';
+        if (this.patterns.goodbye.test(lowerMsg)) return 'goodbye';
+        if (this.patterns.acknowledge.test(lowerMsg)) return 'acknowledge';
+        if (this.patterns.contact.test(lowerMsg)) return 'contact';
         return 'general';
     }
-
-    // 🎭 OPTIMIZED SENTIMENT ANALYSIS
     analyzeSentiment(lowerMsg) {
         const positiveScore = (lowerMsg.match(/\b(good|great|awesome|love|excellent|amazing|fantastic|happy|pleased)\b/g) || []).length;
         const negativeScore = (lowerMsg.match(/\b(bad|terrible|hate|awful|disappointed|frustrated|angry|sad|upset)\b/g) || []).length;
-        
         if (positiveScore > negativeScore) return 'positive';
         if (negativeScore > positiveScore) return 'negative';
         return 'neutral';
     }
-
-    // 👤 OPTIMIZED PERSONAL INFO EXTRACTION
     extractPersonalInfo(message) {
         const info = {};
-        
         const nameMatch = message.match(this.patterns.name);
         if (nameMatch) {
             info.name = nameMatch[1] || nameMatch[2] || nameMatch[3];
             this.userName = info.name;
         }
-        
         const emailMatch = message.match(this.patterns.email);
         if (emailMatch) info.email = emailMatch[0];
-        
         const phoneMatch = message.match(this.patterns.phone);
         if (phoneMatch) info.phone = phoneMatch[0];
-        
         return info;
     }
-
-    // 🔍 OPTIMIZED KEYWORD EXTRACTION
     extractKeywords(lowerMsg) {
         const keywords = [];
-        const serviceKeywords = ['website', 'web', 'app', 'design', 'marketing', 'seo', 'ecommerce', 'e-commerce', 'ai', 'chatbot'];
-        
+        const serviceKeywords = [
+            'website', 'web', 'app', 'design', 'web design', 'website design', 'marketing', 'seo', 'ecommerce', 'e-commerce', 'ai', 'chatbot', 'pricing', 'plans', 'pricing plans'
+        ];
         for (const keyword of serviceKeywords) {
             if (lowerMsg.includes(keyword)) {
                 keywords.push(keyword);
             }
         }
-        
         return keywords;
     }
-
-    // 🎨 OPTIMIZED RESPONSE GENERATION
     generateResponse(message) {
         const context = this.analyzeContext(message);
         let response = this.getResponse(context, message);
-        
-        // Add personality and store conversation
         response = this.addPersonality(response, context);
         this.storeConversation(message, response, context);
-        
         return response;
     }
-
-    // 🎯 OPTIMIZED RESPONSE LOGIC
     getResponse(context, message) {
         const lowerMsg = message.toLowerCase();
-        
         switch (context.intent) {
             case 'greeting':
                 return this.getGreetingResponse();
@@ -192,12 +173,20 @@ class OptimizedSaraAI {
                 return this.getInformationResponse(lowerMsg);
             case 'booking':
                 return this.getBookingResponse();
+            case 'job':
+                return this.responseTemplates.job;
+            case 'feedback':
+                return this.responseTemplates.feedback;
+            case 'goodbye':
+                return this.responseTemplates.goodbye;
+            case 'praise':
+                return this.responseTemplates.praise;
+            case 'contact':
+                return this.responseTemplates.contact;
             default:
                 return this.getDefaultResponse();
         }
     }
-
-    // 🌟 OPTIMIZED RESPONSE METHODS
     getGreetingResponse() {
         const timeGreeting = this.getTimeBasedGreeting();
         const personalTouch = this.userName ? ` ${this.userName}` : '';
@@ -205,15 +194,14 @@ class OptimizedSaraAI {
             .replace('{timeGreeting}', timeGreeting)
             .replace('{personalTouch}', personalTouch);
     }
-
     getPricingResponse(keywords) {
         let pricingInfo = '';
         const services = this.knowledgeBase.services;
-        
-        if (keywords.includes('website') || keywords.includes('web')) {
+
+        if (keywords.includes('website') || keywords.includes('web') || keywords.includes('website design') || keywords.includes('web design')) {
             pricingInfo += `🌐 **Website Development**: ${services['web development'].pricing}\n`;
         }
-        if (keywords.includes('design')) {
+        if (keywords.includes('design') || keywords.includes('web design') || keywords.includes('website design')) {
             pricingInfo += `🎨 **UI/UX Design**: ${services['ui/ux design'].pricing}\n`;
         }
         if (keywords.includes('marketing') || keywords.includes('seo')) {
@@ -222,45 +210,45 @@ class OptimizedSaraAI {
         if (keywords.includes('ecommerce') || keywords.includes('e-commerce')) {
             pricingInfo += `🛒 **E-commerce**: ${services['e-commerce'].pricing}\n`;
         }
-        
+        // Fallback: If no specific keyword matched, show all pricing
         if (!pricingInfo) {
             pricingInfo = `🌐 **Websites**: ${services['web development'].pricing}\n🎨 **UI/UX Design**: ${services['ui/ux design'].pricing}\n📈 **Digital Marketing**: ${services['digital marketing'].pricing}\n🛒 **E-commerce**: ${services['e-commerce'].pricing}`;
         }
-        
         return this.responseTemplates.pricing.replace('{pricingInfo}', pricingInfo);
     }
-
     getSupportResponse(urgency) {
         const prefix = urgency === 'high' ? '🚨 **Priority Support Activated!** ' : '';
         return prefix + this.responseTemplates.support;
     }
-
     getComplaintResponse() {
         return "I'm really sorry for the trouble! 😔\n\nPlease share your issue in detail so I can help you quickly.\n• What problem are you facing?\n• Which feature is causing issues?\n• Any screenshots would be helpful.\n\nYour feedback is important to us!";
     }
-
     getInformationResponse(lowerMsg) {
         if (lowerMsg.includes('service') || lowerMsg.includes('offer')) {
             return this.responseTemplates.services;
         }
-        if (lowerMsg.includes('company') || lowerMsg.includes('about')) {
+        if (lowerMsg.includes('company') || lowerMsg.includes('about') || lowerMsg.includes('team') || lowerMsg.includes('office') || lowerMsg.includes('location') || lowerMsg.includes('address')) {
             return this.responseTemplates.company;
         }
-        if (lowerMsg.includes('contact')) {
+        if (
+            lowerMsg.includes('contact') ||
+            lowerMsg.includes('whatsapp') ||
+            lowerMsg.includes('email') ||
+            lowerMsg.includes('phone') ||
+            lowerMsg.includes('call') ||
+            lowerMsg.includes('number') ||
+            lowerMsg.includes('mobile')
+        ) {
             return this.responseTemplates.contact;
         }
         return this.responseTemplates.default;
     }
-
     getBookingResponse() {
         return `Perfect! Let's schedule something! 📅\n\n**Available Options:**\n📞 **Free Consultation** - 30 minutes\n🎨 **Design Review** - 45 minutes\n💻 **Technical Discussion** - 60 minutes\n🚀 **Project Kickoff** - 90 minutes\n\n**Contact Methods:**\n• WhatsApp: +91-94704-89367\n• Email: weboryinfo@gmail.com\n• Continue here!\n\nWhat type of meeting works best for you?`;
     }
-
     getDefaultResponse() {
         return this.responseTemplates.default;
     }
-
-    // 🕐 TIME-BASED GREETING
     getTimeBasedGreeting() {
         const hour = new Date().getHours();
         if (hour < 12) return "Good morning";
@@ -268,8 +256,6 @@ class OptimizedSaraAI {
         if (hour < 20) return "Good evening";
         return "Hey there";
     }
-
-    // 🎭 ADD PERSONALITY
     addPersonality(response, context) {
         if (context.sentiment === 'positive') {
             response += " 🎉";
@@ -279,8 +265,6 @@ class OptimizedSaraAI {
         }
         return response;
     }
-
-    // 💾 STORE CONVERSATION
     storeConversation(message, response, context) {
         this.conversationHistory.push({
             user: message,
@@ -288,23 +272,21 @@ class OptimizedSaraAI {
             context: context,
             timestamp: new Date().toISOString()
         });
-        
-        // Keep only last 20 conversations for memory efficiency
         if (this.conversationHistory.length > 20) {
             this.conversationHistory = this.conversationHistory.slice(-20);
         }
-        
         this.responseCount++;
         this.lastInteraction = new Date();
     }
 }
 
 // 🚀 INITIALIZE OPTIMIZED SARA
-// const optimizedSara = new OptimizedSaraAI();
-
+const optimizedSara = new OptimizedSaraAI();
 
 // 🎯 MAIN FUNCTION
-
+function getSaraResponse(message) {
+    return optimizedSara.generateResponse(message);
+}
 
 // 📱 OPTIMIZED QUICK REPLIES
 const QUICK_REPLIES = [
@@ -340,28 +322,103 @@ const ChatIcons = {
     )
 };
 
-// Add Ollama LLM API call function (no API key needed)
-async function fetchOpenAIResponse(message, model = 'llama2') {
-    // Using Ollama's local API (make sure Ollama is running)
-    const endpoint = 'http://localhost:11434/v1/chat/completions';
-    try {
-        const response = await axios.post(
-            endpoint,
-            {
-                model: model, // Use the selected model
-                messages: [{ role: 'user', content: message }],
-                stream: false
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-        return response.data.choices[0].message.content.trim();
-    } catch (error) {
-        return "Sorry, I couldn't get an answer right now.";
-    }
+// Chat Header Component
+function ChatHeader({ onClear, onClose }) {
+    return (
+        <div className="flex items-center justify-between px-4 py-2 rounded-t-2xl border-b bg-gradient-to-r from-blue-600 to-blue-400 shadow-md">
+            <div className="flex items-center gap-2">
+                <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-white text-blue-600 text-lg font-bold shadow">S</span>
+                <span className="font-bold text-white text-base tracking-wide drop-shadow">SARA AI</span>
+                <span className="text-xs">🟢</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <button 
+                    onClick={onClear} 
+                    title="Clear chat" 
+                    className="p-1 rounded-full hover:bg-blue-100 transition"
+                >
+                    <ChatIcons.Clear />
+                </button>
+                <button 
+                    onClick={onClose} 
+                    title="Close chat" 
+                    className="p-1 rounded-full hover:bg-blue-100 transition"
+                >
+                    <ChatIcons.Close />
+                </button>
+            </div>
+        </div>
+    );
+}
+
+// Message List Component
+function MessageList({ messages, isBotTyping, messagesEndRef }) {
+    return (
+        <div
+            className="flex-1 px-4 py-4 overflow-y-auto bg-white custom-scrollbar scrollbar-thin"
+            aria-live="polite"
+            style={{ scrollbarWidth: 'thin' }}
+        >
+            {messages.map((msg, index) => (
+                <div key={index} className={`flex mb-4 ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'} animate-fadeInUpPremium`}>
+                    {msg.sender === 'bot' && (
+                        <span className="mr-2 flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-blue-600 font-bold shadow">👱🏻‍♀️</span>
+                    )}
+                    <div className={`max-w-[75%] px-4 py-3 rounded-3xl shadow text-base break-words transition-all duration-200 ${
+                        msg.sender === 'bot' 
+                            ? 'bg-gray-100 text-gray-900 border border-gray-200' 
+                            : 'bg-blue-600 text-white border border-blue-700'
+                    }`} aria-label={msg.sender === 'bot' ? 'Bot message' : 'User message'}>
+                        {msg.text}
+                        <div className="text-[10px] text-gray-400 mt-1 text-right">
+                            {dayjs(msg.timestamp).format('HH:mm')}
+                        </div>
+                    </div>
+                    {msg.sender === 'user' && (
+                        <span className="ml-2 flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shadow">🧑</span>
+                    )}
+                </div>
+            ))}
+            {isBotTyping && (
+                <div className="flex items-center gap-2 mb-2 animate-pulse">
+                    <span className="mr-2 flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-blue-600 font-bold shadow">
+                        🤖
+                    </span>
+                    <div className="bg-gray-100 border border-gray-200 px-4 py-3 rounded-3xl shadow text-base">
+                        Typing...
+                    </div>
+                </div>
+            )}
+            <div ref={messagesEndRef} />
+        </div>
+    );
+}
+
+// Input Area Component
+function InputArea({ inputValue, setInputValue, handleSendMessage, isBotTyping, inputRef }) {
+    return (
+        <form onSubmit={handleSendMessage} className="relative px-4 py-3 border-t border-gray-100 bg-white rounded-b-2xl flex items-center shadow-inner">
+            <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Type a message..."
+                className="w-full pl-5 pr-12 py-3 rounded-full border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 text-base shadow-sm placeholder-gray-400"
+                autoComplete="off"
+                disabled={isBotTyping}
+                aria-label="Type your message"
+            />
+            <button
+                type="submit"
+                className="absolute right-6 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-blue-400 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition disabled:opacity-50 border-2 border-white"
+                disabled={!inputValue.trim() || isBotTyping}
+                aria-label="Send message"
+            >
+                <ChatIcons.Send />
+            </button>
+        </form>
+    );
 }
 
 // 🎯 OPTIMIZED LIVECHAT COMPONENT
@@ -371,41 +428,13 @@ const LiveChat = React.memo(() => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [isBotTyping, setIsBotTyping] = useState(false);
-    const [isOnline, setIsOnline] = useState(false);
     const [hasShownWelcome, setHasShownWelcome] = useState(false);
-    const [selectedModel, setSelectedModel] = useState('llama2');
     
-    const socket = useRef(null);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
     // 🚫 HIDE CHAT ON ADMIN ROUTES
-    const shouldHideChat = useMemo(() => {
-        return location.pathname.startsWith('/admin');
-    }, [location.pathname]);
-
-    // 🔌 SOCKET CONNECTION
-    useEffect(() => {
-        if (shouldHideChat) return;
-        
-        socket.current = io(API_BASE_URL);
-
-        socket.current.on('connect', () => {
-            setIsOnline(true);
-        });
-
-        socket.current.on('receiveMessage', (message) => {
-            setMessages(prev => [...prev, message]);
-        });
-
-        socket.current.on('disconnect', () => {
-            setIsOnline(false);
-        });
-
-        return () => {
-            socket.current?.disconnect();
-        };
-    }, [shouldHideChat]);
+    const shouldHideChat = location.pathname.startsWith('/admin');
 
     // 📜 AUTO SCROLL TO BOTTOM
     useEffect(() => {
@@ -428,29 +457,27 @@ const LiveChat = React.memo(() => {
     }, [isOpen, hasShownWelcome, messages.length]);
 
     // 📤 SEND MESSAGE
-    const handleSendMessage = useCallback(async (e) => {
+    const handleSendMessage = useCallback((e) => {
         e.preventDefault();
         if (!inputValue.trim() || isBotTyping) return;
-
             const userMessage = {
                 text: inputValue,
                 sender: 'user',
                 timestamp: new Date().toISOString(),
             };
-            
             setMessages(prev => [...prev, userMessage]);
             setInputValue('');
             setIsBotTyping(true);
-            
-        // Get AI response from Ollama with selected model
-                const botReply = await fetchOpenAIResponse(inputValue, selectedModel);
+            setTimeout(() => {
+            const botReply = getSaraResponse(inputValue);
                 setMessages(prev => [...prev, {
                     text: botReply,
                     sender: 'bot',
                     timestamp: new Date().toISOString(),
                 }]);
                 setIsBotTyping(false);
-    }, [inputValue, isBotTyping, selectedModel]);
+        }, 800);
+    }, [inputValue, isBotTyping]);
 
     // 🧹 CLEAR CHAT
     const handleClearChat = useCallback(() => {
@@ -470,131 +497,36 @@ const LiveChat = React.memo(() => {
     if (shouldHideChat) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 max-w-full">
+        <div className="fixed bottom-6 right-6 z-50 max-w-full" aria-label="Live chat">
             {isOpen ? (
-                <div className="w-80 max-w-xs sm:max-w-sm h-[32rem] bg-white border border-gray-200 rounded-2xl shadow-lg flex flex-col animate-fadeInPremium transition-all duration-300">
-                    {/* Model Selector */}
-                    <div className="px-4 pt-3 pb-1 bg-white border-b border-gray-100 flex items-center gap-2">
-                        <label htmlFor="model-select" className="text-sm font-medium text-gray-700">Model:</label>
-                        <select
-                            id="model-select"
-                            value={selectedModel}
-                            onChange={e => setSelectedModel(e.target.value)}
-                            className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                        >
-                            <option value="llama2">Llama 2</option>
-                            <option value="mistral">Mistral</option>
-                            <option value="phi3">Phi-3</option>
-                        </select>
-                    </div>
+                <div className="w-80 max-w-xs sm:max-w-sm h-[32rem] bg-white border-2 border-blue-200 rounded-2xl shadow-2xl flex flex-col animate-fadeInPremium transition-all duration-300">
                     {/* Header */}
-                    <div className="flex items-center justify-between px-4 py-2 rounded-t-2xl border-b border-gray-100 bg-white">
-                        <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-600 text-white text-lg font-bold">S</span>
-                            <span className="font-bold text-blue-600 text-base tracking-wide">Sara AI</span>
-                            <span className={`ml-2 text-xs px-2 py-1 rounded font-semibold ${isOnline ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                {isOnline ? '🟢' : '🔴'}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <button 
-                                onClick={handleClearChat} 
-                                title="Clear chat" 
-                                className="p-1 rounded-full hover:bg-gray-100 transition"
-                            >
-                                <ChatIcons.Clear />
-                            </button>
-                            <button 
-                                onClick={toggleChat} 
-                                title="Close chat" 
-                                className="p-1 rounded-full hover:bg-gray-100 transition"
-                            >
-                                <ChatIcons.Close />
-                            </button>
-                        </div>
-                    </div>
-
+                    <ChatHeader onClear={handleClearChat} onClose={toggleChat} />
                     {/* Chat Area */}
-                    <div className="flex-1 px-4 py-4 overflow-y-auto bg-white custom-scrollbar scrollbar-hide">
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`flex mb-4 ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'} animate-fadeInUpPremium`}>
-                                {msg.sender === 'bot' && (
-                                    <span className="mr-2 flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-blue-600 font-bold">
-                                        👱🏻‍♀️
-                                    </span>
-                                )}
-                                <div className={`max-w-[75%] px-4 py-3 rounded-2xl shadow-sm text-base break-words transition-all duration-200 ${
-                                    msg.sender === 'bot' 
-                                        ? 'bg-gray-100 text-gray-900 border border-gray-200' 
-                                        : 'bg-blue-600 text-white border border-blue-700'
-                                }`}>
-                                    {msg.text}
-                                    <div className="text-[10px] text-gray-400 mt-1 text-right">
-                                        {dayjs(msg.timestamp).format('HH:mm')}
-                                    </div>
-                                </div>
-                                {msg.sender === 'user' && (
-                                    <span className="ml-2 flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                                        🧑
-                                    </span>
-                                )}
-                            </div>
-                        ))}
-                        
-                        {isBotTyping && (
-                            <div className="flex items-center gap-2 mb-2 animate-pulse">
-                                <span className="mr-2 flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-blue-600 font-bold">
-                                    🤖
-                                </span>
-                                <div className="bg-gray-100 border border-gray-200 px-4 py-3 rounded-2xl shadow-sm text-base">
-                                    Typing...
-                                </div>
-                            </div>
-                        )}
-                        
-                        <div ref={messagesEndRef} />
-                    </div>
-
+                    <MessageList messages={messages} isBotTyping={isBotTyping} messagesEndRef={messagesEndRef} />
                     {/* Quick Replies */}
-                    <div className="px-4 pb-2 -mt-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <div className="px-4 pb-2 -mt-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin">
                         {QUICK_REPLIES.map((qr) => (
                             <button
                                 key={qr.label}
                                 type="button"
-                                className="px-4 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-gray-200 hover:bg-blue-50 hover:text-blue-700 transition mr-2"
+                                className="px-4 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-gray-200 hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-700 transition mr-2 shadow-sm"
                                 onClick={() => handleQuickReply(qr.value)}
                                 disabled={isBotTyping}
+                                aria-label={`Quick reply: ${qr.label}`}
                             >
                                 {qr.label}
                             </button>
                         ))}
                     </div>
-
                     {/* Input Area */}
-                    <form onSubmit={handleSendMessage} className="relative px-4 py-3 border-t border-gray-100 bg-white rounded-b-2xl flex items-center">
-                            <input
-                            ref={inputRef}
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            placeholder="Type a message..."
-                            className="w-full pl-5 pr-12 py-3 rounded-full border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 text-base shadow-sm placeholder-gray-400"
-                            autoComplete="off"
-                                disabled={isBotTyping}
-                            />
-                            <button
-                                type="submit"
-                            className="absolute right-6 top-1/2 -translate-y-1/2 bg-blue-600 text-white w-10 h-10 rounded-full shadow flex items-center justify-center hover:bg-blue-700 transition disabled:opacity-50"
-                                disabled={!inputValue.trim() || isBotTyping}
-                            >
-                            <ChatIcons.Send />
-                            </button>
-                    </form>
+                    <InputArea inputValue={inputValue} setInputValue={setInputValue} handleSendMessage={handleSendMessage} isBotTyping={isBotTyping} inputRef={inputRef} />
                 </div>
             ) : (
                 <button
                     onClick={toggleChat}
-                    className="bg-blue-600 text-white w-16 h-16 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center animate-bounce border-4 border-white/60"
+                    className="bg-gradient-to-r from-blue-600 to-blue-400 text-white w-16 h-16 rounded-full shadow-2xl hover:bg-blue-700 transition-colors flex items-center justify-center animate-bounce border-4 border-white/60"
+                    aria-label="Open chat"
                 >
                     <ChatIcons.Chat />
                 </button>

@@ -100,3 +100,28 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Modern thin scrollbar for chat and quick reply area */
+.scrollbar-thin::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  border-radius: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+/* For Firefox */
+.scrollbar-thin,
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #fcfdff #ffffff;
+}
