@@ -340,31 +340,28 @@ const ChatIcons = {
     )
 };
 
-// Add OpenAI GPT API call function
-async function fetchOpenAIResponse(message) {
-    // For Vite: define VITE_OPENAI_API_KEY in your .env file
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  const endpoint = 'https://api.openai.com/v1/chat/completions';
-  try {
-    const response = await axios.post(
-      endpoint,
-      {
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: message }],
-        max_tokens: 150,
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-      }
-    );
-    return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    return "Sorry, I couldn't get an answer right now.";
-  }
+// Add Ollama LLM API call function (no API key needed)
+async function fetchOpenAIResponse(message, model = 'llama2') {
+    // Using Ollama's local API (make sure Ollama is running)
+    const endpoint = 'http://localhost:11434/v1/chat/completions';
+    try {
+        const response = await axios.post(
+            endpoint,
+            {
+                model: model, // Use the selected model
+                messages: [{ role: 'user', content: message }],
+                stream: false
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        return response.data.choices[0].message.content.trim();
+    } catch (error) {
+        return "Sorry, I couldn't get an answer right now.";
+    }
 }
 
 // 🎯 OPTIMIZED LIVECHAT COMPONENT
@@ -376,6 +373,7 @@ const LiveChat = React.memo(() => {
     const [isBotTyping, setIsBotTyping] = useState(false);
     const [isOnline, setIsOnline] = useState(false);
     const [hasShownWelcome, setHasShownWelcome] = useState(false);
+    const [selectedModel, setSelectedModel] = useState('llama2');
     
     const socket = useRef(null);
     const messagesEndRef = useRef(null);
@@ -444,15 +442,15 @@ const LiveChat = React.memo(() => {
             setInputValue('');
             setIsBotTyping(true);
             
-        // Get AI response from OpenAI
-                const botReply = await fetchOpenAIResponse(inputValue);
+        // Get AI response from Ollama with selected model
+                const botReply = await fetchOpenAIResponse(inputValue, selectedModel);
                 setMessages(prev => [...prev, {
                     text: botReply,
                     sender: 'bot',
                     timestamp: new Date().toISOString(),
                 }]);
                 setIsBotTyping(false);
-    }, [inputValue, isBotTyping]);
+    }, [inputValue, isBotTyping, selectedModel]);
 
     // 🧹 CLEAR CHAT
     const handleClearChat = useCallback(() => {
@@ -475,6 +473,20 @@ const LiveChat = React.memo(() => {
         <div className="fixed bottom-6 right-6 z-50 max-w-full">
             {isOpen ? (
                 <div className="w-80 max-w-xs sm:max-w-sm h-[32rem] bg-white border border-gray-200 rounded-2xl shadow-lg flex flex-col animate-fadeInPremium transition-all duration-300">
+                    {/* Model Selector */}
+                    <div className="px-4 pt-3 pb-1 bg-white border-b border-gray-100 flex items-center gap-2">
+                        <label htmlFor="model-select" className="text-sm font-medium text-gray-700">Model:</label>
+                        <select
+                            id="model-select"
+                            value={selectedModel}
+                            onChange={e => setSelectedModel(e.target.value)}
+                            className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        >
+                            <option value="llama2">Llama 2</option>
+                            <option value="mistral">Mistral</option>
+                            <option value="phi3">Phi-3</option>
+                        </select>
+                    </div>
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-2 rounded-t-2xl border-b border-gray-100 bg-white">
                         <div className="flex items-center gap-2">
