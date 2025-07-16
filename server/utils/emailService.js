@@ -12,7 +12,7 @@ exports.sendEmail = async ({ to, subject, text, html }) => {
         {
           From: {
             Email: process.env.EMAIL_FROM,
-            Name: process.env.EMAIL_FROM_NAME || "Webory Team",
+            Name: process.env.EMAIL_FROM_NAME || "Webory Team ",
           },
           To: [
             {
