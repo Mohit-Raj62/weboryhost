@@ -1,52 +1,27 @@
+// Mailjet setup
 const mailjet = require("node-mailjet").apiConnect(
   process.env.MJ_APIKEY_PUBLIC,
   process.env.MJ_APIKEY_PRIVATE
 );
-import { neon } from "@netlify/neon";
 
-// Initialize the database client
-const sql = neon();
-
-// Example function to get a post by ID
-async function getPostById(postId) {
-  try {
-    const [post] = await sql`SELECT * FROM posts WHERE id = ${postId}`;
-    return post;
-  } catch (error) {
-    console.error("Error fetching post:", error);
-    throw error;
-  }
-}
-
-// Example function to get all posts
-async function getAllPosts() {
-  try {
-    const posts = await sql`SELECT * FROM posts ORDER BY created_at DESC`;
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    throw error;
-  }
-}
-
-// Send email using Mailjet
-exports.sendEmail = async ({ email, subject, message }) => {
+// Send a generic email
+exports.sendEmail = async ({ to, subject, text, html }) => {
   try {
     const request = await mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
           From: {
             Email: process.env.EMAIL_FROM,
-            Name: process.env.EMAIL_FROM_NAME,
+            Name: process.env.EMAIL_FROM_NAME || "Webory Team",
           },
           To: [
             {
-              Email: email,
+              Email: to,
             },
           ],
           Subject: subject,
-          TextPart: message,
-          HTMLPart: message.replace(/\n/g, "<br>"),
+          TextPart: text,
+          HTMLPart: html || text.replace(/\n/g, "<br>"),
         },
       ],
     });
@@ -57,3 +32,27 @@ exports.sendEmail = async ({ email, subject, message }) => {
     throw new Error("Error sending email");
   }
 };
+
+/**
+ * Send a confirmation email to the user after form submission/registration.
+ * @param {Object} opts
+ * @param {string} opts.to - Recipient email
+ * @param {string} opts.name - Recipient name (optional)
+ * @param {string} opts.formType - Type of form (e.g., Registration, Contact, Support, etc.)
+ */
+exports.sendConfirmationEmail = async ({
+  to,
+  name = "User",
+  formType = "Form",
+}) => {
+  const subject = `Thank you for your ${formType} submission!`;
+  const text = `Dear ${name},\n\nThank you for submitting your details for ${formType} on Webory. We have received your information and will get back to you soon.\n\nBest regards,\nWebory Team`;
+  await exports.sendEmail({ to, subject, text });
+};
+
+// --- SETUP INSTRUCTIONS ---
+// Add the following to your .env file after Mailjet verification:
+// MJ_APIKEY_PUBLIC=your_mailjet_public_key
+// MJ_APIKEY_PRIVATE=your_mailjet_private_key
+// EMAIL_FROM=your_verified_sender_email
+// EMAIL_FROM_NAME=Webory Team

@@ -1,5 +1,6 @@
 const JobApplication = require("../models/JobApplication");
 const Career = require("../models/Career");
+const emailService = require("../utils/emailService");
 
 // Get all job applications
 const getAllApplications = async (req, res) => {
@@ -27,23 +28,23 @@ const getAllApplications = async (req, res) => {
 const getApplicationStats = async (req, res) => {
   try {
     const stats = await JobApplication.getStatistics();
-    
+
     // Get department-wise statistics
     const departmentStats = await JobApplication.aggregate([
       {
         $group: {
           _id: "$department",
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     // Get recent applications (last 7 days)
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
+
     const recentApplications = await JobApplication.countDocuments({
-      appliedDate: { $gte: sevenDaysAgo }
+      appliedDate: { $gte: sevenDaysAgo },
     });
 
     res.status(200).json({
@@ -69,9 +70,10 @@ const getApplicationStats = async (req, res) => {
 const getApplicationsByJob = async (req, res) => {
   try {
     const { jobId } = req.params;
-    
-    const applications = await JobApplication.find({ jobId })
-      .sort({ appliedDate: -1 });
+
+    const applications = await JobApplication.find({ jobId }).sort({
+      appliedDate: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -92,9 +94,11 @@ const getApplicationsByJob = async (req, res) => {
 const getApplication = async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const application = await JobApplication.findById(id)
-      .populate("jobId", "title department");
+
+    const application = await JobApplication.findById(id).populate(
+      "jobId",
+      "title department"
+    );
 
     if (!application) {
       return res.status(404).json({
@@ -135,7 +139,14 @@ const createApplication = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!jobId || !candidateName || !email || !phone || !resume || !coverLetter) {
+    if (
+      !jobId ||
+      !candidateName ||
+      !email ||
+      !phone ||
+      !resume ||
+      !coverLetter
+    ) {
       return res.status(400).json({
         success: false,
         message: "Please provide all required fields",
@@ -176,6 +187,12 @@ const createApplication = async (req, res) => {
     });
 
     await application.save();
+    // Send confirmation email to user
+    await emailService.sendConfirmationEmail({
+      to: email,
+      name: candidateName || email,
+      formType: "Job Application",
+    });
 
     res.status(201).json({
       success: true,
@@ -200,7 +217,7 @@ const updateApplicationStatus = async (req, res) => {
     const adminId = req.admin.id; // From auth middleware
 
     const application = await JobApplication.findById(id);
-    
+
     if (!application) {
       return res.status(404).json({
         success: false,
@@ -235,9 +252,9 @@ const updateApplicationStatus = async (req, res) => {
 const deleteApplication = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const application = await JobApplication.findByIdAndDelete(id);
-    
+
     if (!application) {
       return res.status(404).json({
         success: false,
@@ -263,7 +280,7 @@ const deleteApplication = async (req, res) => {
 const getRecentApplications = async (req, res) => {
   try {
     const { limit = 10 } = req.query;
-    
+
     const applications = await JobApplication.getRecent(parseInt(limit));
 
     res.status(200).json({
@@ -290,4 +307,4 @@ module.exports = {
   updateApplicationStatus,
   deleteApplication,
   getRecentApplications,
-}; 
+};

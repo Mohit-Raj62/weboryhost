@@ -84,7 +84,12 @@ class OptimizedSaraAI {
             pricing: `Here's our pricing:\n{pricingInfo}\n\nFree consultation! Prices depend on your needs. Want a custom quote?`,
             services: `We offer:\n- Web Development\n- UI/UX Design\n- Digital Marketing\n- E-commerce\n- AI Solutions\n- 24/7 Support\n\nWhich service interests you?`,
             company: `About Webory:\n- Founded: 2020\n- Team: 15+\n- Projects: 500+\n- Clients: 200+\n- Rating: 4.9/5\n- India-based, global service.`,
-            contact: `Contact us:\nWhatsApp: +91-94704-89367\nEmail: weboryinfo@gmail.com\nInstagram: @webory_official\nLinkedIn: webory-digital\nWebsite: webory.in`,
+            contact: () => `Contact us:
+WhatsApp: ${this.knowledgeBase.contact.whatsapp}
+Email: ${this.knowledgeBase.contact.email}
+Instagram: ${this.knowledgeBase.contact.instagram}
+LinkedIn: ${this.knowledgeBase.contact.linkedin}
+Website: ${this.knowledgeBase.contact.website}`,
             support: `Support mode on!\nPlease share:\n- Your issue\n- What you tried\n- Any error message`,
             job: `We're hiring!\nSend your resume to weboryinfo@gmail.com or check our Careers page.`,
             feedback: `Thanks for your feedback! You can also fill our feedback form on the website.`,
@@ -182,7 +187,7 @@ class OptimizedSaraAI {
             case 'praise':
                 return this.responseTemplates.praise;
             case 'contact':
-                return this.responseTemplates.contact;
+                return this.responseTemplates.contact();
             default:
                 return this.getDefaultResponse();
         }
@@ -230,16 +235,8 @@ class OptimizedSaraAI {
         if (lowerMsg.includes('company') || lowerMsg.includes('about') || lowerMsg.includes('team') || lowerMsg.includes('office') || lowerMsg.includes('location') || lowerMsg.includes('address')) {
             return this.responseTemplates.company;
         }
-        if (
-            lowerMsg.includes('contact') ||
-            lowerMsg.includes('whatsapp') ||
-            lowerMsg.includes('email') ||
-            lowerMsg.includes('phone') ||
-            lowerMsg.includes('call') ||
-            lowerMsg.includes('number') ||
-            lowerMsg.includes('mobile')
-        ) {
-            return this.responseTemplates.contact;
+        if (lowerMsg.includes('contact') || lowerMsg.includes('whatsapp') || lowerMsg.includes('email') || lowerMsg.includes('phone') || lowerMsg.includes('call') || lowerMsg.includes('number') || lowerMsg.includes('mobile')) {
+            return this.responseTemplates.contact();
         }
         return this.responseTemplates.default;
     }

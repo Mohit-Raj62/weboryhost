@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const bcrypt = require("bcryptjs");
+const emailService = require("../utils/emailService");
 
 // Role management functions
 const getRoles = async (req, res) => {
@@ -306,6 +307,12 @@ const createUser = async (req, res) => {
       permissions,
     });
     await user.save();
+    // Send confirmation email to user
+    await emailService.sendConfirmationEmail({
+      to: email,
+      name,
+      formType: "User Creation (Admin Panel)",
+    });
     res
       .status(201)
       .json({ message: "User created successfully", user: user.toJSON() });

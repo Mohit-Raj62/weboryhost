@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 const { body, validationResult } = require("express-validator");
+const emailService = require("../utils/emailService");
 
 // Admin Login
 router.post(
@@ -182,6 +183,12 @@ router.post(
 
       // Save user
       await user.save();
+      // Send confirmation email to user
+      await emailService.sendConfirmationEmail({
+        to: email,
+        name,
+        formType: "Registration",
+      });
 
       // Generate JWT token
       const token = jwt.sign(

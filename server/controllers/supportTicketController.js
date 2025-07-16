@@ -1,6 +1,7 @@
 const SupportTicket = require("../models/SupportTicket");
 const User = require("../models/User");
 const Admin = require("../models/Admin");
+const emailService = require("../utils/emailService");
 
 // Get all support tickets with pagination and filtering
 const getAllTickets = async (req, res) => {
@@ -132,6 +133,13 @@ const createTicket = async (req, res) => {
     // Populate user info
     await ticket.populate("user", "name email");
 
+    // Send confirmation email to user
+    await emailService.sendConfirmationEmail({
+      to: email,
+      name: userName || email,
+      formType: "Support Ticket",
+    });
+
     res.status(201).json({
       message: "Support ticket created successfully",
       ticket,
@@ -144,13 +152,11 @@ const createTicket = async (req, res) => {
     if (req && req.body) {
       console.error("Request body at error:", req.body);
     }
-    res
-      .status(500)
-      .json({
-        message: "Failed to create ticket",
-        error: error.message,
-        stack: error.stack,
-      });
+    res.status(500).json({
+      message: "Failed to create ticket",
+      error: error.message,
+      stack: error.stack,
+    });
   }
 };
 

@@ -27,9 +27,15 @@ router.post("/submit", async (req, res) => {
 
     // Send notification email (to admin or support)
     await emailService.sendEmail({
-      email: process.env.CONTACT_NOTIFICATION_EMAIL || process.env.EMAIL_FROM,
+      to: process.env.CONTACT_NOTIFICATION_EMAIL || process.env.EMAIL_FROM,
       subject: `New Contact Form Submission: ${subject}`,
-      message: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
+      text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
+    });
+    // Send confirmation email to user
+    await emailService.sendConfirmationEmail({
+      to: email,
+      name,
+      formType: "Contact",
     });
 
     res.status(201).json({ message: "Message sent successfully" });
@@ -70,11 +76,17 @@ router.post("/support", async (req, res) => {
 
     await supportTicket.save();
 
-    // Send notification email
+    // Send notification email (to admin)
     await emailService.sendEmail({
       to: process.env.SUPPORT_NOTIFICATION_EMAIL || process.env.EMAIL_FROM,
       subject: `New Support Ticket [#${ticketNumber}]: ${subject}`,
       text: `A new support ticket has been created.\n\nTicket Number: ${ticketNumber}\nName: ${name}\nEmail: ${email}\nPriority: ${priority}\nCategory: ${category}\n\nMessage:\n${message}`,
+    });
+    // Send confirmation email to user
+    await emailService.sendConfirmationEmail({
+      to: email,
+      name,
+      formType: "Support Ticket",
     });
 
     res.status(201).json({

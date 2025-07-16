@@ -1,5 +1,6 @@
 const Admin = require("../../models/Admin");
 const jwt = require("jsonwebtoken");
+const emailService = require("../../utils/emailService");
 
 // Helper to generate JWT
 const generateToken = (admin) => {
@@ -48,6 +49,12 @@ const signup = async (req, res, next) => {
 
     await admin.save();
     const token = generateToken(admin);
+    // Send confirmation email to admin
+    await emailService.sendConfirmationEmail({
+      to: admin.email,
+      name: admin.name,
+      formType: "Admin Registration",
+    });
 
     console.log("Admin created successfully:", {
       id: admin._id,
