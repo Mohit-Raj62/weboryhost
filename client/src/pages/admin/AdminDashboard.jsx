@@ -44,6 +44,26 @@ const AdminDashboard = () => {
   const [teamData, setTeamData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshMessage, setRefreshMessage] = useState('');
+  const [quotes, setQuotes] = useState([]);
+  const [actionLoading, setActionLoading] = useState({});
+
+  const handleStatusChange = async (id, status) => {
+    setActionLoading((prev) => ({ ...prev, [id]: true }));
+    try {
+      await axios.patch(`${API_BASE_URL}/api/quotes/${id}/status`, { status });
+      setQuotes((prev) => prev.map(q => q._id === id ? { ...q, status } : q));
+    } catch (err) {
+      // Optionally show error
+    } finally {
+      setActionLoading((prev) => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const statusColors = {
+    pending: 'bg-yellow-100 text-yellow-800',
+    accepted: 'bg-green-100 text-green-800',
+    rejected: 'bg-red-100 text-red-800',
+  };
 
   // Memoize fetchDashboardData and fetchTeamData with empty dependency array since they don't use any props/state
   const fetchDashboardData = useCallback(async (isRefresh = false) => {
@@ -185,6 +205,17 @@ const AdminDashboard = () => {
     setTeamData(teamMembers);
   }, []);
 
+  const fetchQuotes = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/api/quotes`);
+      if (res.data && res.data.success) {
+        setQuotes(res.data.quotes);
+      }
+    } catch (err) {
+      // Optionally handle error
+    }
+  }, []);
+
   useEffect(() => {
     fetchDashboardData();
     fetchTeamData();
@@ -194,6 +225,12 @@ const AdminDashboard = () => {
     }, 30000);
     return () => clearInterval(interval);
   }, [fetchDashboardData, fetchTeamData]);
+
+  useEffect(() => {
+    if (activeTab === 'serviceRequests') {
+      fetchQuotes();
+    }
+  }, [activeTab, fetchQuotes]);
 
   // Add keyboard shortcut for refresh (Ctrl+R)
   useEffect(() => {
@@ -234,6 +271,7 @@ const AdminDashboard = () => {
     { key: 'analytics', label: 'Analytics', icon: '📈' },
     { key: 'content', label: 'Content', icon: '📝' },
     { key: 'settings', label: 'Settings', icon: '⚙️' },
+    { key: 'serviceRequests', label: 'Service Requests', icon: '💬' },
   ];
 
   // Mock data for charts
@@ -722,6 +760,115 @@ const AdminDashboard = () => {
             </div> 
           </section>
         )}
+        {activeTab === 'serviceRequests' && (
+  <section className="bg-white/90 rounded-2xl shadow-2xl p-4 md:p-8 mb-8 w-full overflow-x-auto border border-gray-200">
+    <div className="flex items-center gap-2 mb-6">
+      <span className="text-2xl">💬</span>
+      <h2 className="text-xl md:text-2xl font-bold text-gray-900">Service Requests</h2>
+    </div>
+    {quotes.length === 0 ? (
+      <div className="text-center text-gray-500 py-12 text-lg font-medium">No service requests found yet.</div>
+    ) : (
+      <>
+        <div className="overflow-x-auto hidden md:block">
+          <table className="min-w-full divide-y divide-gray-200 rounded-xl overflow-hidden shadow-md">
+            <thead className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white sticky top-0 z-10">
+              <tr>
+                <th className="px-4 py-3 text-left font-semibold">Name</th>
+                <th className="px-4 py-3 text-left font-semibold">Email</th>
+                <th className="px-4 py-3 text-left font-semibold">Phone</th>
+                <th className="px-4 py-3 text-left font-semibold">Service</th>
+                <th className="px-4 py-3 text-left font-semibold">Budget</th>
+                <th className="px-4 py-3 text-left font-semibold">Timeline</th>
+                <th className="px-4 py-3 text-left font-semibold">Message</th>
+                <th className="px-4 py-3 text-left font-semibold">Date</th>
+                <th className="px-4 py-3 text-left font-semibold">Status</th>
+                <th className="px-4 py-3 text-left font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100">
+              {quotes.map((q, idx) => (
+                <tr key={q._id} className={idx % 2 === 0 ? 'bg-gray-50 hover:bg-cyan-50 transition' : 'bg-white hover:bg-cyan-50 transition'}>
+                  <td className="px-4 py-3 whitespace-nowrap font-medium text-gray-900">{q.name}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-cyan-700 underline">{q.email}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{q.phone}</td>
+                  <td className="px-4 py-3 whitespace-nowrap capitalize">{q.service}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{q.budget}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{q.timeline}</td>
+                  <td className="px-4 py-3 max-w-xs break-words">{q.message}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-500">{new Date(q.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusColors[q.status] || 'bg-gray-200 text-gray-700'}`}>{q.status.charAt(0).toUpperCase() + q.status.slice(1)}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {q.status === 'pending' ? (
+                      <div className="flex gap-2">
+                        <button
+                          className="px-3 py-1 rounded bg-green-500 hover:bg-green-600 text-white text-xs font-semibold shadow disabled:opacity-60"
+                          disabled={actionLoading[q._id]}
+                          onClick={() => handleStatusChange(q._id, 'accepted')}
+                        >
+                          {actionLoading[q._id] ? 'Accepting...' : 'Accept'}
+                        </button>
+                        <button
+                          className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs font-semibold shadow disabled:opacity-60"
+                          disabled={actionLoading[q._id]}
+                          onClick={() => handleStatusChange(q._id, 'rejected')}
+                        >
+                          {actionLoading[q._id] ? 'Rejecting...' : 'Reject'}
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400 text-xs">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* Card/List view for mobile */}
+        <div className="md:hidden flex flex-col gap-4">
+          {quotes.map((q) => (
+            <div key={q._id} className="bg-white rounded-xl shadow p-4 border border-gray-100">
+              <div className="flex items-center justify-between mb-2">
+                <div className="font-bold text-lg text-gray-900">{q.name}</div>
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusColors[q.status] || 'bg-gray-200 text-gray-700'}`}>{q.status.charAt(0).toUpperCase() + q.status.slice(1)}</span>
+              </div>
+              <div className="text-sm text-gray-700 mb-1"><span className="font-semibold">Email:</span> <a href={`mailto:${q.email}`} className="text-cyan-700 underline">{q.email}</a></div>
+              <div className="text-sm text-gray-700 mb-1"><span className="font-semibold">Phone:</span> {q.phone}</div>
+              <div className="text-sm text-gray-700 mb-1"><span className="font-semibold">Service:</span> {q.service}</div>
+              <div className="text-sm text-gray-700 mb-1"><span className="font-semibold">Budget:</span> {q.budget}</div>
+              <div className="text-sm text-gray-700 mb-1"><span className="font-semibold">Timeline:</span> {q.timeline}</div>
+              <div className="text-sm text-gray-700 mb-2"><span className="font-semibold">Message:</span> {q.message}</div>
+              <div className="text-xs text-gray-400 mb-2">{new Date(q.createdAt).toLocaleString()}</div>
+              {q.status === 'pending' ? (
+                <div className="flex gap-2 mt-2">
+                  <button
+                    className="px-3 py-1 rounded bg-green-500 hover:bg-green-600 text-white text-xs font-semibold shadow disabled:opacity-60"
+                    disabled={actionLoading[q._id]}
+                    onClick={() => handleStatusChange(q._id, 'accepted')}
+                  >
+                    {actionLoading[q._id] ? 'Accepting...' : 'Accept'}
+                  </button>
+                  <button
+                    className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs font-semibold shadow disabled:opacity-60"
+                    disabled={actionLoading[q._id]}
+                    onClick={() => handleStatusChange(q._id, 'rejected')}
+                  >
+                    {actionLoading[q._id] ? 'Rejecting...' : 'Reject'}
+                  </button>
+                </div>
+              ) : (
+                <span className="text-gray-400 text-xs">—</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+  </section>
+)}
         {activeTab === 'settings' && (
             <section className="bg-white/80 rounded-2xl shadow-xl p-2 sm:p-6 border border-gray-100 mb-4 sm:mb-8 w-full overflow-x-auto">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">⚙️</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Settings</h2></div>

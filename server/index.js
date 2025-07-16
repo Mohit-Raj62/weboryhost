@@ -15,7 +15,8 @@ let authRoutes,
   projectRoutes,
   invoiceRoutes,
   supportTicketRoutes,
-  openaiProxy;
+  openaiProxy,
+  quoteRoutes;
 
 try {
   authRoutes = require("./routes/authRoutes");
@@ -28,6 +29,7 @@ try {
   invoiceRoutes = require("./routes/invoiceRoutes");
   supportTicketRoutes = require("./routes/supportTicketRoutes");
   openaiProxy = require("./openaiProxy");
+  quoteRoutes = require("./routes/quoteRoutes");
 } catch (error) {
   console.error("Error loading routes:", error.message);
   process.exit(1);
@@ -97,6 +99,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/support-tickets", supportTicketRoutes);
 app.use("/api/openai", openaiProxy);
+app.use("/api/quotes", quoteRoutes);
 // Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));

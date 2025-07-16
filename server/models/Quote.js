@@ -36,6 +36,16 @@ const quoteSchema = new mongoose.Schema({
     required: [true, "Message is required"],
     trim: true,
   },
+  company: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  timeline: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   status: {
     type: String,
     enum: ["pending", "contacted", "quoted", "closed"],

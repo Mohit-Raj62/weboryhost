@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SupportTicketForm from '../components/SupportTicketForm';
 import GetInTouchForm from '../components/GetInTouchForm';
+import { API_BASE_URL } from '../config/api';
 
 const ContactForm = ({ 
   serviceType, 
@@ -48,6 +49,8 @@ const ContactForm = ({
       generatedTicketNumber = `SUP-${ymd}-${rand}`;
       setTicketNumber(generatedTicketNumber);
     }
+    let web3Success = false;
+    let dbSuccess = false;
     try {
       // Create FormData from controlled state
       const form = new FormData();
@@ -63,12 +66,38 @@ const ContactForm = ({
       if (plan) form.append("plan", plan);
       if (generatedTicketNumber) form.append("ticketNumber", generatedTicketNumber);
 
+      // Send to Web3Forms
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: form
       });
       const data = await response.json();
       if (data.success) {
+        web3Success = true;
+      }
+      // Send to backend
+      const dbPayload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        service: serviceType || '',
+        budget: formData.budget,
+        message: formData.message,
+        timeline: formData.timeline,
+      };
+      try {
+        const dbRes = await fetch(`${API_BASE_URL}/api/quotes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dbPayload),
+        });
+        const dbData = await dbRes.json();
+        if (dbData.success) dbSuccess = true;
+      } catch (dbErr) {
+        // Ignore DB error for now
+      }
+      if (web3Success || dbSuccess) {
         setSuccess(true);
         if (generatedTicketNumber) {
           setResult(`Support Ticket Submitted Successfully!\nYour Ticket Number: ${generatedTicketNumber}`);
