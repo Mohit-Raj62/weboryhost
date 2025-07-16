@@ -1,36 +1,19 @@
 // Mailjet setup
-const mailjet = require("node-mailjet").apiConnect(
-  process.env.MJ_APIKEY_PUBLIC,
-  process.env.MJ_APIKEY_PRIVATE
-);
+// const mailjet = require("node-mailjet").apiConnect(
+//   process.env.MJ_APIKEY_PUBLIC,
+//   process.env.MJ_APIKEY_PRIVATE
+// );
 
-// Send a generic email
-exports.sendEmail = async ({ to, subject, text, html }) => {
-  try {
-    const request = await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: process.env.EMAIL_FROM,
-            Name: process.env.EMAIL_FROM_NAME || "Webory Team ",
-          },
-          To: [
-            {
-              Email: to,
-            },
-          ],
-          Subject: subject,
-          TextPart: text,
-          HTMLPart: html || text.replace(/\n/g, "<br>"),
-        },
-      ],
-    });
-    console.log("Email sent:", request.body.Messages[0].Status);
-    return request.body;
-  } catch (error) {
-    console.error("Email sending error:", error);
-    throw new Error("Error sending email");
-  }
+// Fallback: Dummy sendEmail function for development
+exports.sendEmail = async function (options) {
+  console.log(
+    "[DEV] Email sending is disabled. Email would be sent to:",
+    options.To || options.to
+  );
+  console.log("Subject:", options.Subject || options.subject);
+  console.log("Text:", options.TextPart || options.text);
+  console.log("HTML:", options.HtmlPart || options.html);
+  return { success: true, dev: true };
 };
 
 /**
