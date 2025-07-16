@@ -99,7 +99,6 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/support-tickets", supportTicketRoutes);
 app.use("/api/openai", openaiProxy);
-app.use("/api/quotes", quoteRoutes);
 // Serve static files (only in production) - but only for non-API routes
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
