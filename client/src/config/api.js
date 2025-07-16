@@ -22,7 +22,7 @@ const getApiUrl = () => {
   return "https://webory.onrender.com";
 };
 
-export const API_BASE_URL = getApiUrl();
+export const API_BASE_URL = "https://webory.onrender.com";
 
 export const API_ENDPOINTS = {
   // Auth endpoints
