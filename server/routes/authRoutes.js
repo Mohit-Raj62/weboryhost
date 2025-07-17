@@ -298,4 +298,20 @@ router.get("/verify-email", async (req, res) => {
   }
 });
 
+// Test Brevo email endpoint
+router.post("/test-brevo", async (req, res) => {
+  try {
+    await emailService.sendConfirmationEmail({
+      to: req.body.email,
+      name: req.body.name || "Test User",
+      formType: "Test Email",
+    });
+    res.json({ message: "Test email sent (if Brevo is working)!" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to send test email." });
+  }
+});
+
 module.exports = router;
