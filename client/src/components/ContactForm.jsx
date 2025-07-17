@@ -80,20 +80,27 @@ const ContactForm = ({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        company: formData.company,
-        service: serviceType || '',
-        budget: formData.budget,
         message: formData.message,
-        timeline: formData.timeline,
+        selectedPlan: plan,
       };
       try {
-        const dbRes = await fetch(`${API_BASE_URL}/api/quotes`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dbPayload),
-        });
-        const dbData = await dbRes.json();
-        if (dbData.success) dbSuccess = true;
+        if (serviceType === 'web development') {
+          const dbRes = await fetch(`${API_BASE_URL}/api/webdev-inquiries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dbPayload),
+          });
+          const dbData = await dbRes.json();
+          if (dbData.success) dbSuccess = true;
+        } else {
+          const dbRes = await fetch(`${API_BASE_URL}/api/quotes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dbPayload),
+          });
+          const dbData = await dbRes.json();
+          if (dbData.success) dbSuccess = true;
+        }
       } catch (dbErr) {
         // Ignore DB error for now
       }

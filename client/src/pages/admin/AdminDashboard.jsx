@@ -10,6 +10,7 @@ import ContentManager from '../../components/content/ContentManager';
 import SettingsDashboard from '../../components/settings/SettingsDashboard';
 import UserList from '../../components/admin/UserList';
 import SupportTicketDashboard from '../../components/admin/SupportTicketDashboard';
+import WebDevInquiries from '../../components/admin/WebDevInquiries';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   LineChart, Line, PieChart, Pie, Cell, AreaChart, Area
@@ -267,6 +268,7 @@ const AdminDashboard = () => {
     { key: 'tasks', label: 'Tasks', icon: '✅' },
     { key: 'invoices', label: 'Invoices', icon: '💰' },
     { key: 'support-tickets', label: 'Support Tickets', icon: '🎫' },
+    { key: 'webdev-inquiries', label: 'WebDev Inquiries', icon: '🌐' },
     { key: 'team', label: 'Team', icon: '👨‍💼' },
     { key: 'analytics', label: 'Analytics', icon: '📈' },
     { key: 'content', label: 'Content', icon: '📝' },
@@ -631,6 +633,14 @@ const AdminDashboard = () => {
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🎫</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">Support Tickets</h2></div>
             <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
               <SupportTicketDashboard />
+            </div>
+          </section>
+        )}
+        {activeTab === 'webdev-inquiries' && (
+            <section className="bg-white/80 rounded-2xl shadow-xl p-2 md:p-6 mb-4 w-full overflow-x-auto">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"><span className="text-xl sm:text-2xl">🌐</span><h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900">WebDev Inquiries</h2></div>
+            <div className="w-full min-w-[250px]" style={{ minWidth: 0 }}>
+              <WebDevInquiries />
             </div>
           </section>
         )}

@@ -156,7 +156,6 @@ const WebDevelopment = () => {
         <div id="contact-form" className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">
             {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
-            from_name: "Webory Contact Form",
           </h2>
           <ContactForm
             serviceType="web development"
