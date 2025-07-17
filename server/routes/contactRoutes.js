@@ -29,13 +29,35 @@ router.post("/submit", async (req, res) => {
     await emailService.sendEmail({
       to: process.env.CONTACT_NOTIFICATION_EMAIL || process.env.EMAIL_FROM,
       subject: `New Contact Form Submission: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
+      text: `Contact Form Submission\n----------------------\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
+      html: `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
+  <div style='text-align:center;margin-bottom:24px;'>
+    <img src='https://yourdomain.com/logo.png' alt='Webory Logo' style='height:48px;'>
+  </div>
+  <div style='background:#fff;padding:24px;border-radius:8px;'>
+    <h2 style='color:#6C63FF;'>Thank you for contacting Webory!</h2>
+    <p style='color:#333;'>Hi ${name},</p>
+    <p style='color:#333;'>Thank you for reaching out to us. We have received your message regarding <b>${subject}</b> and will get back to you soon.</p>
+  </div>
+  <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+</div>`,
     });
     // Send confirmation email to user
-    await emailService.sendConfirmationEmail({
+    await emailService.sendEmail({
       to: email,
-      name,
-      formType: "Contact",
+      subject: "Thank you for contacting Webory!",
+      text: `Hi ${name},\n\nThank you for reaching out to us. We have received your message regarding "${subject}" and will get back to you soon.\n\nBest regards,\nWebory Team`,
+      html: `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
+  <div style='text-align:center;margin-bottom:24px;'>
+    <img src='https://yourdomain.com/logo.png' alt='Webory Logo' style='height:48px;'>
+  </div>
+  <div style='background:#fff;padding:24px;border-radius:8px;'>
+    <h2 style='color:#6C63FF;'>Thank you for contacting Webory!</h2>
+    <p style='color:#333;'>Hi ${name},</p>
+    <p style='color:#333;'>Thank you for reaching out to us. We have received your message regarding <b>${subject}</b> and will get back to you soon.</p>
+  </div>
+  <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+</div>`,
     });
 
     res.status(201).json({ message: "Message sent successfully" });
@@ -80,13 +102,39 @@ router.post("/support", async (req, res) => {
     await emailService.sendEmail({
       to: process.env.SUPPORT_NOTIFICATION_EMAIL || process.env.EMAIL_FROM,
       subject: `New Support Ticket [#${ticketNumber}]: ${subject}`,
-      text: `A new support ticket has been created.\n\nTicket Number: ${ticketNumber}\nName: ${name}\nEmail: ${email}\nPriority: ${priority}\nCategory: ${category}\n\nMessage:\n${message}`,
+      text: `Support Ticket\n----------------------\nTicket Number: ${ticketNumber}\nName: ${name}\nEmail: ${email}\nPriority: ${priority}\nCategory: ${category}\nMessage: ${message}`,
+      html: `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
+  <div style='text-align:center;margin-bottom:24px;'>
+    <img src='https://yourdomain.com/logo.png' alt='Webory Logo' style='height:48px;'>
+  </div>
+  <div style='background:#fff;padding:24px;border-radius:8px;'>
+    <h2 style='color:#6C63FF;'>New Support Ticket</h2>
+    <p><b>Ticket Number:</b> ${ticketNumber}</p>
+    <p><b>Name:</b> ${name}</p>
+    <p><b>Email:</b> ${email}</p>
+    <p><b>Priority:</b> ${priority}</p>
+    <p><b>Category:</b> ${category}</p>
+    <p><b>Message:</b> ${message}</p>
+  </div>
+  <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+</div>`,
     });
     // Send confirmation email to user
-    await emailService.sendConfirmationEmail({
+    await emailService.sendEmail({
       to: email,
-      name,
-      formType: "Support Ticket",
+      subject: "Your support ticket has been received! [Webory]",
+      text: `Hi ${name},\n\nThank you for submitting a support ticket. Your ticket number is ${ticketNumber}. Our team will review your request and get back to you as soon as possible.\n\nBest regards,\nWebory Support Team`,
+      html: `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
+  <div style='text-align:center;margin-bottom:24px;'>
+    <img src='https://yourdomain.com/logo.png' alt='Webory Logo' style='height:48px;'>
+  </div>
+  <div style='background:#fff;padding:24px;border-radius:8px;'>
+    <h2 style='color:#6C63FF;'>Your support ticket has been received!</h2>
+    <p>Hi ${name},</p>
+    <p>Thank you for submitting a support ticket. Your ticket number is <b>${ticketNumber}</b>. Our team will review your request and get back to you as soon as possible.</p>
+  </div>
+  <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+</div>`,
     });
 
     res.status(201).json({

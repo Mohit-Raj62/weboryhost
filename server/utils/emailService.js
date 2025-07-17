@@ -30,7 +30,85 @@ exports.sendConfirmationEmail = async ({
 }) => {
   const subject = `Thank you for your ${formType} submission!`;
   const text = `Dear ${name},\n\nThank you for submitting your details for ${formType} on Webory. We have received your information and will get back to you soon.\n\nBest regards,\nWebory Team`;
-  await exports.sendEmail({ to, subject, text });
+  const html = `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
+    <div style='text-align:center;margin-bottom:24px;'>
+      <img src='https://yourdomain.com/logo.png' alt='Webory Logo' style='height:48px;'>
+    </div>
+    <div style='background:#fff;padding:24px;border-radius:8px;'>
+      <h2 style='color:#6C63FF;'>Thank you for your ${formType} submission!</h2>
+      <p style='color:#333;'>Dear ${name},</p>
+      <p style='color:#333;'>Thank you for submitting your details for <b>${formType}</b> on Webory. We have received your information and will get back to you soon.</p>
+    </div>
+    <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+  </div>`;
+  if (brevoApiKey) {
+    const SibApiV3Sdk = require("sib-api-v3-sdk");
+    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    const sendSmtpEmail = {
+      to: [{ email: to, name }],
+      sender: {
+        email: process.env.EMAIL_FROM || "no-reply@webory.com",
+        name: process.env.EMAIL_FROM_NAME || "Webory Team",
+      },
+      subject,
+      htmlContent: html,
+    };
+    try {
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      return { success: true };
+    } catch (error) {
+      console.error("[Brevo] Error sending confirmation email:", error);
+      throw error;
+    }
+  } else {
+    await exports.sendEmail({ to, subject, text, html });
+  }
+};
+
+// Brevo (Sendinblue) setup for transactional emails
+const SibApiV3Sdk = require("sib-api-v3-sdk");
+require("dotenv").config();
+
+const brevoApiKey = process.env.BREVO_API_KEY;
+if (brevoApiKey) {
+  SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
+    brevoApiKey;
+}
+
+/**
+ * Send a verification email with a link
+ * @param {Object} opts
+ * @param {string} opts.to - Recipient email
+ * @param {string} opts.link - Verification link
+ * @param {string} [opts.name] - Recipient name (optional)
+ */
+exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
+  if (!brevoApiKey) {
+    console.warn("[Brevo] BREVO_API_KEY not set. Skipping real email send.");
+    return exports.sendEmail({
+      to,
+      subject: "Verify your email address",
+      text: `Hi ${name}, please verify your email: ${link}`,
+      html: `<p>Hi ${name},</p><p>Please verify your email: <a href='${link}'>Verify Email</a></p>`,
+    });
+  }
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  const sendSmtpEmail = {
+    to: [{ email: to, name }],
+    sender: {
+      email: process.env.EMAIL_FROM || "no-reply@webory.com",
+      name: process.env.EMAIL_FROM_NAME || "Webory Team",
+    },
+    subject: "Verify your email address",
+    htmlContent: `<h1>Email Verification</h1><p>Hi ${name},</p><p>Click the link below to verify your email address:</p><a href="${link}">Verify Email</a>`,
+  };
+  try {
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    return { success: true };
+  } catch (error) {
+    console.error("[Brevo] Error sending verification email:", error);
+    throw error;
+  }
 };
 
 // --- SETUP INSTRUCTIONS ---
