@@ -299,20 +299,22 @@ router.get("/verify-email", async (req, res) => {
 });
 
 // Public GET endpoint for testing (browser se bhi test ho sake)
-router.get('/test-public', (req, res) => {
-  res.json({ message: 'Public test endpoint working!' });
+router.get("/test-public", (req, res) => {
+  res.json({ message: "Public test endpoint working!" });
 });
-// Test Brevo email endpoint (public)
-router.post('/test-brevo', async (req, res) => {
+// Public POST endpoint for Brevo test (no auth required)
+router.post("/test-brevo", async (req, res) => {
   try {
     await emailService.sendConfirmationEmail({
       to: req.body.email,
-      name: req.body.name || 'Test User',
-      formType: 'Test Email'
+      name: req.body.name || "Test User",
+      formType: "Test Email",
     });
-    res.json({ message: 'Test email sent (if Brevo is working)!' });
+    res.json({ message: "Test email sent (if Brevo is working)!" });
   } catch (error) {
-    res.status(500).json({ error: error.message || 'Failed to send test email.' });
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to send test email." });
   }
 });
 
