@@ -87,6 +87,12 @@ if (brevoApiKey) {
     brevoApiKey;
 }
 
+console.log(
+  "BREVO_API_KEY loaded:",
+  process.env.BREVO_API_KEY ? "[SET]" : "[NOT SET]"
+);
+console.log("EMAIL_FROM loaded:", process.env.EMAIL_FROM);
+
 /**
  * Send a verification email with a link
  * @param {Object} opts
