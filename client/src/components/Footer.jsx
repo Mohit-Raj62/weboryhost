@@ -339,8 +339,99 @@ const Footer = () => {
         }} />
 
         <Box sx={{ mb: 4 }}>
+          <style>{`
+            .webory-logo-animate {
+              animation: logoFadeIn 1.1s cubic-bezier(0.23, 1, 0.32, 1), logoFloat 3.5s ease-in-out infinite;
+              transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s, border 0.4s;
+              border: 3px solid transparent;
+              background: linear-gradient(white, white) padding-box, linear-gradient(120deg, #2196F3, #9C27B0, #4caf50) border-box;
+              box-shadow: 0 2px 16px 0 rgba(33,150,243,0.10), 0 2px 8px 0 rgba(156,39,176,0.10);
+              position: relative;
+            }
+            .webory-logo-animate:hover {
+              transform: scale(1.18) rotate(-10deg);
+              box-shadow: 0 8px 32px 0 rgba(33,150,243,0.22), 0 4px 16px 0 rgba(156,39,176,0.18);
+              border: 3px solid #90caf9;
+              animation: logoPulse 0.7s;
+            }
+            .about-webory-heading {
+              transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+              position: relative;
+            }
+            .about-webory-heading:hover {
+              color: #90caf9 !important;
+              text-shadow: 0 2px 12px #2196f3a0;
+              transform: scale(1.04);
+            }
+            .about-webory-heading::after {
+              content: '';
+              display: block;
+              position: absolute;
+              left: 0;
+              bottom: -6px;
+              width: 0;
+              height: 3px;
+              background: linear-gradient(90deg, #2196F3, #9C27B0);
+              border-radius: 2px;
+              transition: width 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+            .about-webory-heading:hover::after {
+              width: 100%;
+            }
+            .webory-contact-row {
+              transition: color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+              border-radius: 8px;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+            }
+            .webory-contact-row:hover {
+              color: #fff !important;
+              background: rgba(33,150,243,0.13);
+              transform: scale(1.045) translateX(4px);
+              box-shadow: 0 2px 12px 0 #2196f355;
+            }
+            .webory-contact-row:active::after {
+              content: '';
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              width: 120%;
+              height: 120%;
+              background: radial-gradient(circle, #90caf9 0%, transparent 70%);
+              opacity: 0.18;
+              transform: translate(-50%, -50%) scale(1.2);
+              pointer-events: none;
+              animation: ripple 0.5s linear;
+            }
+            .webory-contact-row .MuiSvgIcon-root {
+              transition: color 0.3s;
+            }
+            .webory-contact-row:hover .MuiSvgIcon-root {
+              color: #2196f3 !important;
+            }
+            @keyframes ripple {
+              0% { opacity: 0.18; }
+              100% { opacity: 0; }
+            }
+            @keyframes logoFadeIn {
+              0% { opacity: 0; transform: scale(0.7) rotate(-20deg); }
+              60% { opacity: 1; transform: scale(1.08) rotate(6deg); }
+              100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            }
+            @keyframes logoFloat {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-8px); }
+            }
+            @keyframes logoPulse {
+              0% { box-shadow: 0 0 0 0 #90caf9; }
+              70% { box-shadow: 0 0 16px 8px #90caf9; }
+              100% { box-shadow: 0 2px 16px 0 rgba(33,150,243,0.10), 0 2px 8px 0 rgba(156,39,176,0.10); }
+            }
+          `}</style>
           <Box sx={{
-            background: 'rgba(255,255,255,0.04)',
+            background: 'rgba(255,255,255,0.10)',
+            backdropFilter: 'blur(8px)',
             borderRadius: '16px',
             p: 3,
             boxShadow: '0 2px 16px 0 rgba(156,39,176,0.08)',
@@ -350,7 +441,7 @@ const Footer = () => {
             gap: 1.5,
             border: '1px solid rgba(255,255,255,0.08)'
           }}>
-            <Typography variant="h6" sx={{
+            <Typography variant="h6" className="about-webory-heading" sx={{
               color: '#fff',
               fontWeight: 700,
               letterSpacing: 1,
@@ -362,14 +453,19 @@ const Footer = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'linear-gradient(45deg, #2196F3, #9C27B0)',
+                // background: 'linear-gradient(45deg, #2196F3, #9C27B0)',
                 borderRadius: '50%',
                 width: 56,
                 height: 56,
                 marginRight: 16,
-                boxShadow: '0 4px 16px 0 rgba(33,150,243,0.10)',
+                // boxShadow: '0 4px 16px 0 rgba(33,150,243,0.10)',
               }}>
-                <img src="/webs.jpg" alt="Webory Logo" style={{ width: 40, height: 40, borderRadius: '12px', boxShadow: '0 2px 8px 0 rgba(156,39,176,0.10)' }} />
+                <img 
+                  src="/webs.jpg" 
+                  alt="Webory Logo" 
+                  style={{ width: 50, height: 50, borderRadius: '30px', boxShadow: '0 2px 8px 0 rgba(156,39,176,0.10)' }} 
+                  className="webory-logo-animate"
+                />
               </span>
               About Webory
             </Typography>
@@ -377,25 +473,25 @@ const Footer = () => {
             Webory is a top digital agency in India offering website development, UI/UX design, SEO services, digital marketing, and IT solutions to help businesses grow online with mobile-friendly websites and result-driven strategies.
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', mt: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <EmailIcon sx={{ color: '#90caf9', fontSize: 20 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="mailto:weboryinfo@gmail.com">
                   weboryinfo@gmail.com
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <PhoneIcon sx={{ color: '#a5d6a7', fontSize: 20 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="tel:+919470489367">
                   +91 94704-89367
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <LocationIcon sx={{ color: '#fbc02d', fontSize: 20 }} />
                 <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                   Patna, Bihar, India
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <SettingsIcon sx={{ color: '#ce93d8', fontSize: 20 }} />
                 <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                   Mon–Sat: 9:00 AM – 7:00 PM | <span style={{ color: '#4caf50' }}>Support: 24/7</span>
