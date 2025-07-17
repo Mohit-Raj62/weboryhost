@@ -39,7 +39,7 @@ exports.sendConfirmationEmail = async ({
       <p style='color:#333;'>Dear ${name},</p>
       <p style='color:#333;'>Thank you for submitting your details for <b>${formType}</b> on Webory. We have received your information and will get back to you soon.</p>
     </div>
-    <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
+    <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024 | CEO: Mohit Sinha</div>
   </div>`;
   console.log("[Brevo] sendConfirmationEmail called:", {
     to,
@@ -107,7 +107,7 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
       to,
       subject: "Verify your email address",
       text: `Hi ${name}, please verify your email: ${link}`,
-      html: `<p>Hi ${name},</p><p>Please verify your email: <a href='${link}'>Verify Email</a></p>`,
+      html: `<p>Hi ${name},</p><p>Please verify your email: <a href='${link}'>Verify Email</a><div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024 | CEO: Mohit Sinha</div>`,
     });
   }
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
@@ -118,7 +118,7 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
       name: process.env.EMAIL_FROM_NAME || "Webory Team",
     },
     subject: "Verify your email address",
-    htmlContent: `<h1>Email Verification</h1><p>Hi ${name},</p><p>Click the link below to verify your email address:</p><a href="${link}">Verify Email</a>`,
+    htmlContent: `<h1>Email Verification</h1><p>Hi ${name},</p><p>Click the link below to verify your email address:</p><a href="${link}">Verify Email</a><div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024 | CEO: Mohit Sinha</div>`,
   };
   try {
     console.log(
