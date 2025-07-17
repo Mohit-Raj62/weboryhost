@@ -41,6 +41,12 @@ exports.sendConfirmationEmail = async ({
     </div>
     <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024</div>
   </div>`;
+  console.log("[Brevo] sendConfirmationEmail called:", {
+    to,
+    subject,
+    brevoApiKeyExists: !!brevoApiKey,
+    sender: process.env.EMAIL_FROM,
+  });
   if (brevoApiKey) {
     const SibApiV3Sdk = require("sib-api-v3-sdk");
     const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
@@ -54,13 +60,19 @@ exports.sendConfirmationEmail = async ({
       htmlContent: html,
     };
     try {
+      console.log(
+        "[Brevo] Attempting to send email via Brevo API:",
+        sendSmtpEmail
+      );
       await apiInstance.sendTransacEmail(sendSmtpEmail);
+      console.log("[Brevo] Email sent via Brevo API");
       return { success: true };
     } catch (error) {
       console.error("[Brevo] Error sending confirmation email:", error);
       throw error;
     }
   } else {
+    console.warn("[Brevo] BREVO_API_KEY not set, using fallback sendEmail.");
     await exports.sendEmail({ to, subject, text, html });
   }
 };
@@ -83,6 +95,12 @@ if (brevoApiKey) {
  * @param {string} [opts.name] - Recipient name (optional)
  */
 exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
+  console.log("[Brevo] sendVerificationEmail called:", {
+    to,
+    link,
+    brevoApiKeyExists: !!brevoApiKey,
+    sender: process.env.EMAIL_FROM,
+  });
   if (!brevoApiKey) {
     console.warn("[Brevo] BREVO_API_KEY not set. Skipping real email send.");
     return exports.sendEmail({
@@ -103,7 +121,12 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
     htmlContent: `<h1>Email Verification</h1><p>Hi ${name},</p><p>Click the link below to verify your email address:</p><a href="${link}">Verify Email</a>`,
   };
   try {
+    console.log(
+      "[Brevo] Attempting to send verification email via Brevo API:",
+      sendSmtpEmail
+    );
     await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("[Brevo] Verification email sent via Brevo API");
     return { success: true };
   } catch (error) {
     console.error("[Brevo] Error sending verification email:", error);
