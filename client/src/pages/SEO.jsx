@@ -161,6 +161,8 @@ const SEO = () => {
             serviceType="digital marketing"
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
+            subject={selectedPlan ? `New Digital Marketing Inquiry: ${selectedPlan}` : 'New Digital Marketing Inquiry'}
+            fromName="Webory Digital Marketing"
           />
         </div>
       </div>

@@ -161,6 +161,8 @@ const AppDevelopment = () => {
             serviceType="app development"
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
+            subject={selectedPlan ? `New App Development Inquiry: ${selectedPlan}` : 'New App Development Inquiry'}
+            fromName="Webory AppDev"
           />
         </div>
       </div>

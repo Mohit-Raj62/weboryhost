@@ -164,6 +164,8 @@ const WebDesign = () => {
             serviceType="web design"
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
+            subject={selectedPlan ? `New Web Design Inquiry: ${selectedPlan}` : 'New Web Design Inquiry'}
+            fromName="Webory WebDesign"
           />
         </div>
       </div>

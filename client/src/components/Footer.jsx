@@ -78,7 +78,7 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: <FacebookIcon />, path: 'https://facebook.com' },
+    { icon: <FacebookIcon />, path: 'https://www.facebook.com/share/19reipJ3ga' },
     { icon: <XIcon />, path: 'https://x.com/Weboryinfo?t=-00bwPiELtq_XS_WvZZl2w&s=08' },
     { icon: <InstagramIcon />, path: 'https://www.instagram.com/weboryinfo?igsh=YjZmbjRwdHhmNHU2' },
     { icon: <ThreadsIcon />, path: 'https://www.threads.net/@weboryinfo' },
@@ -144,45 +144,6 @@ const Footer = () => {
         }
       }}
     >
-      {/* Floating Admin Button */}
-      {/* <Button
-        component={RouterLink}
-        to="/admin/login"
-        variant="contained"
-        startIcon={<SettingsIcon />}
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-          zIndex: 1000,
-          background: 'linear-gradient(45deg, #2196F3 30%, #9C27B0 90%)',
-          color: '#ffffff',
-          borderRadius: '50px',
-          px: 3,
-          py: 1,
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-          '&:hover': {
-            transform: 'scale(1.05)',
-            boxShadow: '0 6px 25px rgba(0, 0, 0, 0.3)',
-            background: 'linear-gradient(45deg, #1976D2 30%, #7B1FA2 90%)',
-          },
-          transition: 'all 0.3s ease',
-          ...(isMobile && {
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            '& .MuiButton-startIcon': {
-              margin: 0
-            },
-            '& .MuiButton-label': {
-              display: 'none'
-            }
-          })
-        }}
-      >
-        Admin
-      </Button> */}
-
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           {sections.map((section) => (
@@ -377,16 +338,82 @@ const Footer = () => {
           borderColor: 'rgba(255, 255, 255, 0.1)'
         }} />
 
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: '0.9rem',
-            textAlign: 'center'
-          }}
-        >
-          © {new Date().getFullYear()} Webory. All rights reserved.
-        </Typography>
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{
+            background: 'rgba(255,255,255,0.04)',
+            borderRadius: '16px',
+            p: 3,
+            boxShadow: '0 2px 16px 0 rgba(156,39,176,0.08)',
+            mb: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1.5,
+            border: '1px solid rgba(255,255,255,0.08)'
+          }}>
+            <Typography variant="h6" sx={{
+              color: '#fff',
+              fontWeight: 700,
+              letterSpacing: 1,
+              display: 'flex',
+              alignItems: 'center',
+              mb: 1.5
+            }}>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(45deg, #2196F3, #9C27B0)',
+                borderRadius: '50%',
+                width: 56,
+                height: 56,
+                marginRight: 16,
+                boxShadow: '0 4px 16px 0 rgba(33,150,243,0.10)',
+              }}>
+                <img src="/webs.jpg" alt="Webory Logo" style={{ width: 40, height: 40, borderRadius: '12px', boxShadow: '0 2px 8px 0 rgba(156,39,176,0.10)' }} />
+              </span>
+              About Webory
+            </Typography>
+            <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.88)', mb: 1, fontSize: '1.05rem', lineHeight: 1.7 }}>
+            Webory is a top digital agency in India offering website development, UI/UX design, SEO services, digital marketing, and IT solutions to help businesses grow online with mobile-friendly websites and result-driven strategies.
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', mt: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <EmailIcon sx={{ color: '#90caf9', fontSize: 20 }} />
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  weboryinfo@gmail.com
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PhoneIcon sx={{ color: '#a5d6a7', fontSize: 20 }} />
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  +91 94704-89367
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LocationIcon sx={{ color: '#fbc02d', fontSize: 20 }} />
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  Patna, Bihar, India
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <SettingsIcon sx={{ color: '#ce93d8', fontSize: 20 }} />
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  Mon–Sat: 9:00 AM – 7:00 PM | <span style={{ color: '#4caf50' }}>Support: 24/7</span>
+                </Typography>
+              </Box>
+            </Box>
+            <Divider sx={{ my: 2, borderColor: 'rgba(255,255,255,0.10)' }} />
+            <Typography variant="body2" sx={{
+              color: 'rgba(255,255,255,0.75)',
+              fontWeight: 500,
+              letterSpacing: 0.5,
+              textAlign: 'center',
+              fontSize: '1rem',
+            }}>
+              © 2025 <b style={{color:'#90caf9'}}>Webory</b>. All rights reserved.
+            </Typography>
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

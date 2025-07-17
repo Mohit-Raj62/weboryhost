@@ -361,7 +361,7 @@ const Maintenance = () => {
       </div>
 
       <div className="max-w-2xl mx-auto my-16">
-        <ContactForm serviceType="it maintenance" buttonText="Get Started" />
+        <ContactForm serviceType="it maintenance" buttonText="Get Started" subject="New IT Maintenance Inquiry" fromName="Webory Maintenance" />
       </div>
     </div>
   );

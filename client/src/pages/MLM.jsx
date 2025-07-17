@@ -161,6 +161,8 @@ const MLM = () => {
             serviceType="mlm software"
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
+            subject={selectedPlan ? `New MLM Software Inquiry: ${selectedPlan}` : 'New MLM Software Inquiry'}
+            fromName="Webory MLM"
           />
         </div>
       </div>
