@@ -17,7 +17,7 @@ const AdsPopup = ({ adContent }) => {
           <>
             <img src="/webory.png" alt="Ad" className="w-20 h-20 object-contain mb-3" />
             <h3 className="text-lg font-bold mb-1 text-center">Special Offer!</h3>
-            <p className="text-gray-700 text-center mb-2">Get 50% off on your first project. Limited time only!</p>
+            <p className="text-gray-700 text-center mb-2">Get 10% off on your first project. Limited time only!</p> 
             <a href="/contact" className="inline-block bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-4 py-2 rounded-full font-semibold mt-2">Contact Us</a>
           </>
         )}
