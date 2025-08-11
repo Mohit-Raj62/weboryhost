@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Navigation from '../components/Navigation';
 import PageHeader from '../components/PageHeader';
 import ServiceCard from '../components/ServiceCard';
@@ -7,6 +7,8 @@ import ContactForm from '../components/ContactForm';
 
 const SEO = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [activePricingTab, setActivePricingTab] = useState('seo');
+  const contactFormRef = useRef(null);
 
   const services = [
     {
@@ -35,55 +37,75 @@ const SEO = () => {
     }
   ];
 
-  const pricingPlans = [
-    {
-      title: "Basic",
-      price: 79,
-      features: [
-        "Keyword Research",
-        "On-page SEO",
-        "Monthly Reports",
-        "Basic Content Creation",
-        "Social Media Setup",
-        "1 Month Support"
-      ],
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      title: "Professional",
-      price: 139,
-      features: [
-        "Advanced SEO Strategy",
-        "Content Marketing",
-        "Social Media Management",
-        "PPC Campaign Setup",
-        "Monthly Analytics",
-        "3 Months Support",
-        "Competitor Analysis"
-      ],
-      isPopular: true,
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Enterprise",
-      price: 299,
-      features: [
-        "Full Digital Marketing Suite",
-        "Custom Strategy",
-        "Advanced Analytics",
-        "Priority Support",
-        "6 Months Support",
-        "Dedicated Account Manager",
-        "Custom Reports",
-        "ROI Tracking"
-      ],
-      gradient: "from-orange-500 to-red-500"
-    }
-  ];
+  const pricingPlans = {
+    seo: [
+      {
+        title: "SEO Starter",
+        price: 99,
+        features: [
+          "Keyword Research (up to 20)",
+          "On-Page SEO Optimization",
+          "Technical SEO Audit",
+          "Monthly Performance Report",
+          "Local SEO Setup",
+          "Email Support"
+        ],
+        gradient: "from-blue-500 to-cyan-500"
+      },
+      {
+        title: "SEO Professional",
+        price: 249,
+        features: [
+          "Everything in Starter, plus:",
+          "Advanced Keyword Research",
+          "Competitor Analysis",
+          "Basic Link Building",
+          "Content Strategy Guidance",
+          "Priority Support"
+        ],
+        isPopular: true,
+        gradient: "from-purple-500 to-pink-500"
+      },
+      {
+        title: "SEO Enterprise",
+        price: 499,
+        features: [
+          "Everything in Professional, plus:",
+          "Comprehensive Link Building",
+          "Advanced Technical SEO",
+          "Detailed Analytics & ROI Tracking",
+          "Dedicated SEO Specialist",
+          "Custom Reports"
+        ],
+        gradient: "from-orange-500 to-red-500"
+      }
+    ],
+    digitalMarketing: [
+      {
+        title: "Social Starter",
+        price: 129,
+        features: ["Social Media Management (2 platforms)", "Basic Content Creation", "Audience Engagement", "Monthly Analytics Report", "Community Management", "Email Support"],
+        gradient: "from-blue-500 to-cyan-500"
+      },
+      {
+        title: "Growth Marketer",
+        price: 299,
+        features: ["Everything in Starter, plus:", "PPC Campaign Management (1 platform)", "Email Marketing Campaign", "Advanced Content Marketing", "A/B Testing for Ads", "Priority Support"],
+        isPopular: true,
+        gradient: "from-purple-500 to-pink-500"
+      },
+      {
+        title: "Full Suite",
+        price: 599,
+        features: ["Everything in Growth, plus:", "Multi-platform PPC Management", "Conversion Rate Optimization (CRO)", "Advanced ROI Tracking", "Dedicated Account Manager", "Full Marketing Strategy"],
+        gradient: "from-orange-500 to-red-500"
+      }
+    ]
+  };
 
   const handlePlanSelect = (planTitle) => {
     setSelectedPlan(planTitle);
-    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+    contactFormRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // const handleFormSubmit = async (formData) => {
@@ -104,8 +126,8 @@ const SEO = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
+          {services.map((service) => (
+            <ServiceCard key={service.title} {...service} />
           ))}
         </div>
 
@@ -140,11 +162,26 @@ const SEO = () => {
         {/* Pricing Section */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing Plans</h2>
+          
+          {/* Pricing Toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-white/10 rounded-full p-1 flex space-x-1">
+              <button onClick={() => setActivePricingTab('seo')} className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activePricingTab === 'seo' ? 'bg-white/20 text-white' : 'text-white/60 hover:bg-white/15'}`}>
+                SEO Plans
+              </button>
+              <button onClick={() => setActivePricingTab('digitalMarketing')} className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activePricingTab === 'digitalMarketing' ? 'bg-white/20 text-white' : 'text-white/60 hover:bg-white/15'}`}>
+                Digital Marketing Plans
+              </button>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
+            {pricingPlans[activePricingTab].map((plan) => (
               <PricingCard
-                key={index}
+                key={plan.title}
                 {...plan}
+                price={plan.price}
+                period="month"
                 onSelect={handlePlanSelect}
                 buttonText={selectedPlan === plan.title ? 'Selected' : 'Get Started'}
               />
@@ -153,16 +190,16 @@ const SEO = () => {
         </div>
 
         {/* Contact Form Section */}
-        <div id="contact-form" className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+        <div id="contact-form" ref={contactFormRef} className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">
             {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
           </h2>
           <ContactForm
-            serviceType="digital marketing"
+            serviceType={activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'}
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
-            subject={selectedPlan ? `New Digital Marketing Inquiry: ${selectedPlan}` : 'New Digital Marketing Inquiry'}
-            fromName="Webory Digital Marketing"
+            subject={selectedPlan ? `New Inquiry: ${selectedPlan}` : `New ${activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'} Inquiry`}
+            fromName={`Webory ${activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'}`}
           />
         </div>
       </div>

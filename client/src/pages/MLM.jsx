@@ -40,12 +40,12 @@ const MLM = () => {
       title: "Starter",
       price: 1999,
       features: [
-        "Up to 100 Members",
-        "Basic MLM Features",
-        "Commission Calculator",
-        "Member Dashboard",
-        "Basic Reports",
-        "1 Month Support"
+        "Member registration & login",
+        "Basic genealogy/tree view",
+        "Basic commission calculation",
+        "Admin panel (member & payout management)",
+        "1 MLM plan (Binary / Matrix / Unilevel)",
+        "Basic reports"
       ],
       gradient: "from-blue-500 to-cyan-500"
     },
@@ -53,13 +53,13 @@ const MLM = () => {
       title: "Professional",
       price: 4999,
       features: [
-        "Up to 1000 Members",
-        "Advanced MLM Features",
-        "Multi-level Commission",
-        "E-commerce Integration",
-        "Advanced Reports",
-        "3 Months Support",
-        "API Access"
+        "Multiple MLM plans support",
+        "E-wallet system",
+        "Auto-payout calculation",
+        "Product integration (for product-based MLM)",
+        "Advanced reports & analytics",
+        "Mobile-friendly responsive UI",
+        "Multi-language support"
       ],
       isPopular: true,
       gradient: "from-purple-500 to-pink-500"
@@ -68,14 +68,14 @@ const MLM = () => {
       title: "Enterprise",
       price: 9999,
       features: [
-        "Unlimited Members",
-        "Custom MLM Features",
-        "Custom Commission Rules",
-        "Multiple Payment Gateways",
-        "Custom Reports",
-        "6 Months Support",
-        "Priority Support",
-        "White Label Option"
+        "Web + Mobile Apps (Android & iOS)",
+        "Real-time commission tracking",
+        "Automated payouts to bank/UPI",
+        "Product & inventory management",
+        "SMS/Email/WhatsApp integration",
+        "Custom dashboards & reports",
+        "Cloud hosting & security setup",
+        // "White Label Option"
       ],
       gradient: "from-orange-500 to-red-500"
     }

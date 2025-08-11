@@ -37,45 +37,50 @@ const AppDevelopment = () => {
 
   const pricingPlans = [
     {
-      title: "Basic",
-      price: 2999,
+      title: "Basic App Development",
+      price: 1999,
       features: [
-        "Single Platform (iOS/Android)",
-        "Basic Features",
-        "UI/UX Design",
-        "Basic Backend",
-        "App Store Submission",
+        "Single platform (Android ya iOS)",
+        "Static pages, basic forms, product showcase, simple login",
+        "Basic backend (Firebase, simple database)",
+        "Restaurant menu app",
+        "Portfolio app",
+        "Event booking app (simple)",
         "1 Month Support"
       ],
       gradient: "from-blue-500 to-cyan-500"
     },
     {
-      title: "Professional",
-      price: 5999,
+      title: "Medium Complexity App Development",
+      price: 3999,
       features: [
-        "Cross-Platform Development",
-        "Advanced Features",
-        "Custom UI/UX Design",
-        "Backend Development",
-        "Push Notifications",
+        "Cross-platform (Flutter, React Native)",
+        "Payment gateway integration",
+        "Push notifications",
+        "Custom UI/UX",
+        "API integration",
+        "E-commerce app",
+        "Education app",
+        "Service booking app",
         "3 Months Support",
-        "Analytics Integration"
       ],
       isPopular: true,
       gradient: "from-purple-500 to-pink-500"
     },
     {
       title: "Enterprise",
-      price: 9999,
+      price: 12999,
       features: [
-        "Cross-Platform Development",
-        "Premium Features",
-        "Custom Animations",
-        "Advanced Backend",
-        "Real-time Features",
-        "6 Months Support",
-        "Priority Support",
-        "Custom Integrations"
+
+            "Real-time features (live chat, GPS tracking)",
+            "Advanced backend (Node.js, Python, microservices)",
+            "AI/ML integration",
+            "Custom animations",
+            "Admin panel + multi-role system",
+            "Blinkit / Swiggy type delivery app",
+            "Social networking app",
+            "Fintech app",
+            "6 Months Support",
       ],
       gradient: "from-orange-500 to-red-500"
     }

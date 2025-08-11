@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Navigation from '../components/Navigation';
 import PageHeader from '../components/PageHeader';
 import ServiceCard from '../components/ServiceCard';
@@ -7,6 +7,7 @@ import ContactForm from '../components/ContactForm';
 
 const WebDevelopment = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const contactFormRef = useRef(null);
 
   const services = [
     {
@@ -37,45 +38,48 @@ const WebDevelopment = () => {
 
   const pricingPlans = [
     {
-      title: "Starter",
-      price: 1999,
+      title: "Basic Website Plan" ,
+      price: 169,
       features: [
-        "5 Pages Development",
+        "SEO",
         "Basic Database Setup",
-        "Contact Form",
+        "4-5 Pages Development",
         "Social Media Integration",
-        "Basic SEO",
+        "Contact Form integration",
+        "Mobile Responsive Design",
+        "1 free domain + hosting (optional upsell)",
         "1 Month Support"
       ],
       gradient: "from-blue-500 to-cyan-500"
     },
     {
-      title: "Business",
-      price: 4999,
+      title: "Standard Business Website Plan",
+      price: 399,
       features: [
-        "10 Pages Development",
-        "Advanced Database",
-        "User Authentication",
+        "6-10 Pages Development",
+        "Basic SEO",
+        "Basic Modern UI/UX design",
+        "1-year hosting + SSL",
+        "Admin panel (basic CMS)",
         "Payment Integration",
         "Admin Dashboard",
         "3 Months Support",
-        "API Development"
       ],
       isPopular: true,
       gradient: "from-purple-500 to-pink-500"
     },
     {
-      title: "Enterprise",
-      price: 9999,
+      title: "Premium / E-Commerce Website Plan",
+      price: 1199,
       features: [
-        "Unlimited Pages",
-        "Custom Database",
-        "Advanced Security",
-        "Multiple Integrations",
-        "Custom Features",
-        "6 Months Support",
-        "Priority Support",
-        "Scalable Architecture"
+          "Advanced UI/UX + animations",
+          "Payment gateway integration",
+          "Advanced SEO + speed optimization",
+          "Unlimited Pages/ product listing",
+          "User login / account system",
+          "Inventory & order management",
+          "Priority Support",
+          "6 Months Support"
       ],
       gradient: "from-orange-500 to-red-500"
     }
@@ -83,13 +87,14 @@ const WebDevelopment = () => {
 
   const handlePlanSelect = (planTitle) => {
     setSelectedPlan(planTitle);
-    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+    contactFormRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleFormSubmit = async (formData) => {
-    console.log('Form submitted:', { ...formData, selectedPlan });
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  };
+  // The handleFormSubmit function is defined but not used, as ContactForm handles its own submission.
+  // const handleFormSubmit = async (formData) => {
+  //   console.log('Form submitted:', { ...formData, selectedPlan });
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -104,8 +109,8 @@ const WebDevelopment = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
+          {services.map((service) => (
+            <ServiceCard key={service.title} {...service} />
           ))}
         </div>
 
@@ -141,9 +146,9 @@ const WebDevelopment = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing Plans</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
+            {pricingPlans.map((plan) => (
               <PricingCard
-                key={index}
+                key={plan.title}
                 {...plan}
                 onSelect={handlePlanSelect}
                 buttonText={selectedPlan === plan.title ? 'Selected' : 'Get Started'}
@@ -153,7 +158,7 @@ const WebDevelopment = () => {
         </div>
 
         {/* Contact Form Section */}
-        <div id="contact-form" className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+        <div id="contact-form" ref={contactFormRef} className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">
             {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
           </h2>
@@ -161,6 +166,8 @@ const WebDevelopment = () => {
             serviceType="web development"
             buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
             plan={selectedPlan}
+            fromName="Webory Web Development"
+            subject={selectedPlan ? `New Quote Request for ${selectedPlan} Plan` : 'New Inquiry from Webory Website'}
           />
         </div>
       </div>

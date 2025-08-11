@@ -92,9 +92,9 @@ const Home = () => {
       icon: '🎨',
       features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems', 'Usability Testing'],
       pricing: {
-        basic: { price: 'FREE', plan: 'Design Package', features: ['5 Screens', 'Wireframes', 'High-fidelity Mockups', '2 Revisions'] },
-        standard: { price: '$99', plan: 'Complete UX/UI', features: ['15 Screens', 'User Research', 'Interactive Prototype', 'Design System', '4 Revisions'] },
-        premium: { price: '$129', plan: 'Enterprise Design', features: ['Unlimited Screens', 'Advanced Research', 'Usability Testing', 'Brand Guidelines', 'Unlimited Revisions'] }
+        basic: { price: '$299', plan: 'Design Package', features: ['5 Screens', 'Wireframes', 'High-fidelity Mockups', '2 Revisions'] },
+        standard: { price: '$1299', plan: 'Complete UX/UI', features: ['15+ Screens', 'User Research', 'Interactive Prototype', 'Design System', '4 Revisions'] },
+        premium: { price: '$2999', plan: 'Enterprise Design', features: ['30+ Screens', 'Advanced Research', 'Usability Testing', 'Brand Guidelines', 'Unlimited Revisions'] }
       }
     },
     { 
@@ -106,9 +106,9 @@ const Home = () => {
       icon: '📱',
       features: ['Native Development', 'Cross-platform Apps', 'App Store Optimization', 'Push Notifications', 'Analytics Integration'],
       pricing: {
-        basic: { price: 'FREE', plan: 'Simple App', features: ['Single Platform', 'Basic Features', 'App Store Submission', '3 Months Support'] },
-        standard: { price: '$299', plan: 'Cross-platform App', features: ['iOS & Android', 'Advanced Features', 'Push Notifications', 'Analytics', '6 Months Support'] },
-        premium: { price: '$399', plan: 'Enterprise App', features: ['Custom Features', 'Backend Integration', 'Advanced Security', 'Scalable Architecture', '12 Months Support'] }
+        basic: { price: '$1999', plan: 'Simple App', features: ['Single Platform', 'Basic Features', 'App Store Submission', '3 Months Support'] },
+        standard: { price: '$3999', plan: 'Cross-platform App', features: ['iOS & Android', 'Advanced Features', 'Push Notifications', 'Analytics', '6 Months Support'] },
+        premium: { price: '$12999', plan: 'Enterprise App', features: ['Custom Features', 'Backend Integration', 'Advanced Security', 'Scalable Architecture', '12 Months Support'] }
       }
     },
     { 
@@ -120,9 +120,9 @@ const Home = () => {
       icon: '📈',
       features: ['SEO Optimization', 'Social Media Management', 'Content Marketing', 'PPC Campaigns', 'Analytics & Reporting'],
       pricing: {
-        basic: { price: '$0/mo', plan: 'Starter Package', features: ['Basic SEO', 'Social Media Setup', 'Monthly Reports', 'Email Support'] },
-        standard: { price: '$199/mo', plan: 'Growth Package', features: ['Advanced SEO', 'Content Creation', 'PPC Management', 'Social Media Management', 'Bi-weekly Calls'] },
-        premium: { price: '$399/mo', plan: 'Enterprise Marketing', features: ['Full-service Marketing', 'Dedicated Manager', 'Custom Strategy', 'Advanced Analytics', 'Weekly Strategy Calls'] }
+        basic: { price: '$129/mo', plan: 'Starter Package', features: ['Basic SEO', 'Social Media Setup', 'Monthly Reports', 'Email Support'] },
+        standard: { price: '$299/mo', plan: 'Growth Package', features: ['Advanced SEO', 'Content Creation', 'PPC Management', 'Social Media Management', 'Bi-weekly Calls'] },
+        premium: { price: '$599/mo', plan: 'Enterprise Marketing', features: ['Full-service Marketing', 'Dedicated Manager', 'Custom Strategy', 'Advanced Analytics', 'Weekly Strategy Calls'] }
       }
     }
   ];

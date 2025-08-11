@@ -3,7 +3,7 @@ import React from 'react';
 const PricingCard = ({ 
   title, 
   price, 
-  period = 'month', 
+  period,
   features, 
   isPopular = false, 
   buttonText = 'Get Started',
@@ -20,11 +20,11 @@ const PricingCard = ({
       <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
       <div className="text-4xl font-bold text-white mb-6">
         {typeof price === 'number' ? `$${price}` : price}
-        {typeof price === 'number' && <span className="text-lg">/{period}</span>}
+        {period && <span className="text-lg text-white/70">/{period}</span>}
       </div>
       <ul className="space-y-4 mb-8">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-center text-white/70">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-center text-white/70">
             <span className="mr-2">✓</span> {feature}
           </li>
         ))}

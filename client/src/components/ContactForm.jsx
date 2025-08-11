@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import SupportTicketForm from '../components/SupportTicketForm';
-import GetInTouchForm from '../components/GetInTouchForm';
 import { API_BASE_URL } from '../config/api';
 
 const ContactForm = ({ 

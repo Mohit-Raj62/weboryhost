@@ -1,7 +1,56 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import ContactForm from '../components/ContactForm';
 
 const Maintenance = () => {
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const contactFormRef = useRef(null);
+
+  const plans = [
+    {
+      title: 'Basic',
+      price: '₹5,000 - ₹12,000',
+      period: 'month',
+      suitableFor: 'Small Businesses',
+      features: [
+        'Website Uptime Monitoring',
+        'Basic Bug Fixes',
+        'Monthly Backup',
+        'Email Support',
+      ],
+    },
+    {
+      title: 'Standard',
+      price: '₹15,000 - ₹35,000',
+      period: 'month',
+      suitableFor: 'SMEs & E-commerce',
+      features: [
+        'Website & App Maintenance',
+        'Security Updates',
+        'Server Monitoring',
+        'Speed Optimization',
+        'Priority Support',
+      ],
+    },
+    {
+      title: 'Premium',
+      price: '₹40,000+',
+      period: 'month',
+      suitableFor: 'Corporates & High-Traffic Portals',
+      features: [
+        '24/7 Priority Support',
+        'Advanced Security Suite',
+        'Disaster Recovery Plan',
+        'Proactive Software Updates',
+        'Dedicated Resource',
+      ],
+    },
+  ];
+
+  const handlePlanSelect = (planTitle) => {
+    setSelectedPlan(planTitle);
+    contactFormRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="maintenance-page min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden">
       <style>{`
@@ -220,6 +269,24 @@ const Maintenance = () => {
           -webkit-text-fill-color: transparent;
         }
 
+        .plan-price .plan-period {
+          font-size: 1.5rem;
+          font-weight: 600;
+          background: none;
+          -webkit-background-clip: unset;
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
+          text-shadow: none;
+          vertical-align: middle;
+        }
+
+        .plan-suitable {
+          color: rgba(255, 255, 255, 0.7);
+          font-style: italic;
+          margin-bottom: 1.5rem;
+          font-size: 1rem;
+          min-height: 2.5rem; /* Ensure consistent height */
+        }
+
         .plan-features {
           list-style: none;
           padding: 0;
@@ -321,47 +388,37 @@ const Maintenance = () => {
       </div>
 
       <div className="maintenance-plans">
-        <div className="plan-card">
-          <h3>Basic Plan</h3>
-          <div className="plan-price">$299/mo</div>
-          <ul className="plan-features">
-            <li>24/7 System Monitoring</li>
-            <li>Weekly Updates</li>
-            <li>Monthly Performance Review</li>
-            <li>Email Support</li>
-          </ul>
-          <a href="/contact" className="plan-button">Get Started</a>
-        </div>
-
-        <div className="plan-card">
-          <h3>Professional Plan</h3>
-          <div className="plan-price">$599/mo</div>
-          <ul className="plan-features">
-            <li>Everything in Basic</li>
-            <li>Daily Updates</li>
-            <li>Weekly Performance Review</li>
-            <li>Priority Support</li>
-            <li>Backup Management</li>
-          </ul>
-          <a href="/contact" className="plan-button">Get Started</a>
-        </div>
-
-        <div className="plan-card">
-          <h3>Enterprise Plan</h3>
-          <div className="plan-price">Custom</div>
-          <ul className="plan-features">
-            <li>Everything in Professional</li>
-            <li>Real-time Updates</li>
-            <li>Dedicated Support Team</li>
-            <li>Custom Solutions</li>
-            <li>24/7 Phone Support</li>
-          </ul>
-          <a href="/contact" className="plan-button">Contact Us</a>
-        </div>
+        {plans.map((plan) => (
+          <div className="plan-card" key={plan.title}>
+            <h3>{plan.title}</h3>
+            <p className="plan-suitable">Suitable for: {plan.suitableFor}</p>
+            <div className="plan-price">
+              {plan.price}
+              <span className="plan-period">/{plan.period}</span>
+            </div>
+            <ul className="plan-features">
+              {plan.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+            <button onClick={() => handlePlanSelect(plan.title)} className="plan-button">
+              Get Started
+            </button>
+          </div>
+        ))}
       </div>
 
-      <div className="max-w-2xl mx-auto my-16">
-        <ContactForm serviceType="it maintenance" buttonText="Get Started" subject="New IT Maintenance Inquiry" fromName="Webory Maintenance" />
+      <div id="contact-form" ref={contactFormRef} className="max-w-2xl mx-auto my-16">
+        <h2 className="text-3xl font-bold text-white mb-8 text-center" style={{animation: 'fadeIn 1s ease-out 0.6s both'}}>
+          {selectedPlan ? `Get Started with the ${selectedPlan} Plan` : 'Contact Us for a Quote'}
+        </h2>
+        <ContactForm 
+          serviceType="it maintenance" 
+          buttonText={selectedPlan ? 'Request Quote' : 'Get Started'} 
+          subject={selectedPlan ? `New IT Maintenance Inquiry: ${selectedPlan}` : "New IT Maintenance Inquiry"} 
+          fromName="Webory Maintenance"
+          plan={selectedPlan}
+        />
       </div>
     </div>
   );
