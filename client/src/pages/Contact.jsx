@@ -299,8 +299,8 @@ const Contact = () => {
                   onClick={() => setActiveTab('support')}
                   className={`px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 ${
                     activeTab === 'support'
-                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg'
-                      : 'text-white/70 hover:text-white'
+                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-black shadow-lg'
+                      : 'text-black/70 hover:text-white'
                   }`}
                 >
                   Support Ticket
