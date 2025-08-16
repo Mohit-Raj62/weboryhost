@@ -743,13 +743,13 @@ const Navigation = () => {
             />
             {/* Desktop/Tablet logo */}
             <img
-              src="/exwayer.regular.webp"
+              // src="/exwayer.regular.webp"
+              src='/output2.png'
               alt="Webory Logo"
-              className="hidden sm:block h-8 md:h-12 lg:h-10 w-auto max-w-[160px] sm:max-w-[180px]"
+              className="hidden sm:block h-12 md:h-14 lg:h-14 w-auto max-w-[220px]"
             />
           </a>
         </div>
-
         <button 
           className={`mobile-menu-btn ${isMenuOpen ? 'active' : ''}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
