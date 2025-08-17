@@ -33,6 +33,7 @@ import {
   Search as SearchIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -58,10 +59,17 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/admin/products');
-      setProducts(response.data.products);
+      const token = localStorage.getItem('adminToken');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(`${API_BASE_URL}/api/admin/products`, config);
+      setProducts(response.data.products || []);
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProducts([]);
     }
   };
 
@@ -106,15 +114,21 @@ const Products = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('adminToken');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       if (selectedProduct) {
-        await axios.put(`/api/admin/products/${selectedProduct._id}`, formData);
+        await axios.put(`${API_BASE_URL}/api/admin/products/${selectedProduct._id}`, formData, config);
         setSnackbar({
           open: true,
           message: 'Product updated successfully',
           severity: 'success'
         });
       } else {
-        await axios.post('/api/admin/products', formData);
+        await axios.post(`${API_BASE_URL}/api/admin/products`, formData, config);
         setSnackbar({
           open: true,
           message: 'Product created successfully',
@@ -135,7 +149,13 @@ const Products = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/api/admin/products/${id}`);
+        const token = localStorage.getItem('adminToken');
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        await axios.delete(`${API_BASE_URL}/api/admin/products/${id}`, config);
         setSnackbar({
           open: true,
           message: 'Product deleted successfully',
@@ -161,10 +181,10 @@ const Products = () => {
     setPage(0);
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProducts = (products || []).filter(product =>
+    (product.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (product.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (product.category || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (

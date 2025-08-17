@@ -746,7 +746,7 @@ const Navigation = () => {
               // src="/exwayer.regular.webp"
               src='/output2.png'
               alt="Webory Logo"
-              className="hidden sm:block h-12 md:h-14 lg:h-14 w-auto max-w-[220px]"
+              className="hidden sm:block h-10 md:h-12 lg:h-12 w-auto max-w-[220px]"
             />
           </a>
         </div>
@@ -795,15 +795,14 @@ const Navigation = () => {
           </a>
           
           <a 
-            href="/about" 
+            href="/contact" 
             className="nav-link" 
-            style={{"--index": 2}}
+            style={{"--index": 5}}
             onClick={handleMenuItemClick}
           >
-            <span className="nav-link-icon">ℹ️</span>
-            About Us
+            <span className="nav-link-icon">📞</span>
+            Contact
           </a>
-          
           <div 
             className={`dropdown ${activeDropdown === 'services' ? 'active' : ''}`}
             ref={dropdownRef}
@@ -862,18 +861,14 @@ const Navigation = () => {
           </a>
           
           <a 
-            href="/contact" 
+            href="/about" 
             className="nav-link" 
-            style={{"--index": 5}}
+            style={{"--index": 2}}
             onClick={handleMenuItemClick}
           >
-            <span className="nav-link-icon">📞</span>
-            Contact
+            <span className="nav-link-icon">ℹ️</span>
+            About Us
           </a>
-
-          {/* <div className="mobile-swipe-indicator">
-            Swipe left to close ←
-          </div> */}
         </div>
       </nav>
     </>
