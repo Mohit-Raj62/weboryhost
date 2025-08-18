@@ -82,7 +82,7 @@ let html = `
     <div style='padding: 40px 32px;'>
       <div style='text-align: center; margin-bottom: 32px;'>
         <div style='width: 80px; height: 80px; background: linear-gradient(135deg, #6C63FF, #9C88FF); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;'>
-          <span style='font-size: 36px; color: white;'>✓</span>
+          <span style='font-size: 36px; color: white;'> ✓ </span>
         </div>
         <h2 style='color: #2D3748; margin: 0 0 8px 0; font-size: 24px; font-weight: 600;'>Thank You, ${name}!</h2>
         <p style='color: #718096; margin: 0; font-size: 16px;'>We're thrilled to have you join our community</p>
@@ -91,7 +91,7 @@ let html = `
       <!-- Information Card -->
       <div style='background: #F7FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 32px;'>
         <h3 style='color: #2D3748; margin: 0 0 16px 0; font-size: 18px; font-weight: 600; display: flex; align-items: center;'>
-          <span style='width: 24px; height: 24px; background: #6C63FF; border-radius: 50%; color: white; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; margin-right: 12px;'>i</span>
+          <span style='width: 24px; height: 24px; background: #6C63FF; border-radius: 50%; color: white; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; margin-right: 12px;'> i </span>
           What happens next?
         </h3>
         <div style='color: #4A5568; line-height: 1.6;'>
@@ -103,10 +103,10 @@ let html = `
       
       <!-- Action Buttons -->
       <div style='text-align: center; margin-bottom: 32px;'>
-        <a href='#' style='display: inline-block; background: linear-gradient(135deg, #6C63FF, #9C88FF); color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0; box-shadow: 0 4px 12px rgba(108,99,255,0.3);'>
+        <a href='https://webory.netlify.app' style='display: inline-block; background: linear-gradient(135deg, #6C63FF, #9C88FF); color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0; box-shadow: 0 4px 12px rgba(108,99,255,0.3);'>
           Explore Webory
         </a>
-        <a href='#' style='display: inline-block; background: transparent; color: #6C63FF; text-decoration: none; padding: 14px 28px; border: 2px solid #6C63FF; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0;'>
+        <a href='https://webory.netlify.app/contact' style='display: inline-block; background: transparent; color: #6C63FF; text-decoration: none; padding: 14px 28px; border: 2px solid #6C63FF; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0;'>
           Contact Support
         </a>
       </div>
@@ -130,11 +130,11 @@ let html = `
       <div style='text-align: center;'>
         <p style='color: #2D3748; margin: 0 0 12px 0; font-weight: 600; font-size: 16px;'>Stay Connected</p>
         <div style='margin-bottom: 16px;'>
-          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Website</a>
+          <a href='https://webory.netlify.app' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Website</a>
           <span style='color: #CBD5E0;'>•</span>
-          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>LinkedIn</a>
+          <a href='https://www.linkedin.com/in/webory-info-35a257372?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>LinkedIn</a>
           <span style='color: #CBD5E0;'>•</span>
-          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Twitter</a>
+          <a href='https://x.com/Weboryinfo?t=-00bwPiELtq_XS_WvZZl2w&s=08' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Twitter</a>
         </div>
         <div style='color: #718096; font-size: 13px; line-height: 1.4;'>
           <strong style='color: #2D3748;'>Webory</strong> - Crafting Digital Excellence<br>
