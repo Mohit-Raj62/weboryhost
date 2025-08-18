@@ -4,21 +4,20 @@ import { API_BASE_URL } from '../../config/api';
 
 // A more robust error handler utility
 const getApiErrorMessage = (err) => {
-  if (err.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.error("Error Data:", err.response.data);
-    console.error("Error Status:", err.response.status);
-    return `Error ${err.response.status}: ${err.response.data.message || 'Failed to fetch inquiries.'}`;
-  } else if (err.request) {
-    // The request was made but no response was received
-    console.error("Error Request:", err.request);
-    return "Network Error: No response received from server. Please check your connection and the server status.";
-  } else {
+    if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("API Error Response:", err.response.data);
+        return `Error ${err.response.status}: ${err.response.data.message || 'Failed to fetch inquiries.'}`;
+    }
+    if (err.request) {
+        // The request was made but no response was received
+        console.error("API No Response:", err.request);
+        return "Network Error: No response from server. Please check connection and server status.";
+    }
     // Something happened in setting up the request that triggered an Error
-    console.error("Error:", err.message);
+    console.error("API Request Setup Error:", err.message);
     return `An error occurred: ${err.message}`;
-  }
 };
 
 const WebDevInquiries = () => {
@@ -31,122 +30,43 @@ const WebDevInquiries = () => {
   const fetchInquiries = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // First, let's check if the server is accessible at all
-      console.log('🔍 Checking server accessibility...');
-      
-      try {
-        const healthCheck = await axios.get(`${API_BASE_URL}/`);
-        console.log('✅ Server is accessible:', healthCheck.status);
-      } catch (healthErr) {
-        console.log('❌ Server health check failed:', healthErr.message);
-        setError(`Cannot connect to server: ${API_BASE_URL}`);
-        setLoading(false);
-        return;
-      }
-      
       const token = localStorage.getItem('adminToken');
-      console.log('🔑 Token available:', !!token);
-      
       if (!token) {
-        // Let's try without authentication first to see if endpoint exists
-        console.log('🔍 Trying endpoints without authentication...');
-        
-        const publicEndpoints = [
-          '/api/contact',
-          '/api/contacts', 
-          '/contact',
-          '/contacts',
-          '/api/health',
-          '/health'
-        ];
-        
-        for (const endpoint of publicEndpoints) {
-          try {
-            console.log(`🔍 Trying public endpoint: ${API_BASE_URL}${endpoint}`);
-            const response = await axios.get(`${API_BASE_URL}${endpoint}`);
-            console.log(`✅ Public endpoint works: ${endpoint}`, response.data);
-          } catch (err) {
-            console.log(`❌ Public endpoint failed: ${endpoint} (${err.response?.status || 'Network Error'})`);
-          }
-        }
-        
         setError("Authentication required. Please log in first to view inquiries.");
         setLoading(false);
         return;
       }
-      
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       };
-      
-      // Try different possible endpoints with authentication
-      const possibleEndpoints = [
-        '/api/admin/inquiries',
-        '/api/inquiries',
-        '/admin/inquiries', 
-        '/inquiries',
-        '/api/contact/all',
-        '/api/contacts/all',
-        '/api/admin/contacts',
-        '/api/contacts',
-        '/api/contact',
-        '/contact/all',
-        '/contacts/all'
-      ];
-      
-      console.log('🚀 Trying authenticated endpoints...');
-      
-      let foundEndpoint = null;
-      let response = null;
-      
-      for (const endpoint of possibleEndpoints) {
-        try {
-          console.log(`🔍 Trying authenticated: ${API_BASE_URL}${endpoint}`);
-          response = await axios.get(`${API_BASE_URL}${endpoint}`, config);
-          console.log(`✅ Success with endpoint: ${endpoint}`, response.data);
-          foundEndpoint = endpoint;
-          break;
-        } catch (err) {
-          console.log(`❌ Failed: ${endpoint} (${err.response?.status || 'Network Error'})`);
-          if (err.response?.status === 401) {
-            console.log('🔑 Token might be invalid or expired');
-          }
-          continue;
-        }
-      }
-      
-      if (!foundEndpoint) {
-        setError(`No working inquiry endpoint found. Please check backend routes or create the inquiry fetch API.`);
-        return;
-      }
-      
+
+      // **IMPORTANT**: Replace with your actual backend endpoint
+      const response = await axios.get(`${API_BASE_URL}/api/admin/inquiries`, config);
+
       // Process the successful response
       if (response.data && response.data.success) {
         setInquiries(response.data.inquiries || response.data.data || response.data.contacts || []);
         setLastUpdated(new Date());
       } else if (response.data && Array.isArray(response.data)) {
+        // Handle cases where the API returns a simple array
         setInquiries(response.data);
         setLastUpdated(new Date());
       } else {
-        console.log('📋 Response data structure:', response.data);
+        // Handle unexpected response structure
+        console.warn('Unexpected API response structure:', response.data);
         setInquiries([]);
-        setError("Received data but couldn't parse inquiries. Check console for response structure.");
+        setError("Received data, but it was in an unexpected format.");
       }
       
     } catch (err) {
-      console.error("❌ Final Error:", {
-        message: err.message,
-        status: err.response?.status,
-        statusText: err.response?.statusText,
-        data: err.response?.data
-      });
-      
-      setError(`Failed to fetch inquiries: ${err.message}`);
+      const errorMessage = getApiErrorMessage(err);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -254,36 +174,11 @@ const WebDevInquiries = () => {
         <div className="text-center py-8">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-blue-800 mb-2">
-              📝 Backend Setup Required
+              No Inquiries Found
             </h3>
             <p className="text-blue-700 mb-4">
-              The inquiry fetch endpoint is not available on your backend server.
+              There are currently no web development inquiries to display.
             </p>
-            <div className="text-left bg-gray-100 p-4 rounded text-sm font-mono">
-              <p className="mb-2 font-semibold">Add this route to your backend:</p>
-              <pre className="whitespace-pre-wrap">{`// In your Express.js app
-app.get('/api/admin/inquiries', authenticateToken, async (req, res) => {
-  try {
-    const inquiries = await Contact.find() // या आपका model
-      .sort({ createdAt: -1 })
-      .limit(100);
-    
-    res.json({
-      success: true,
-      inquiries: inquiries
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false, 
-      message: error.message
-    });
-  }
-});`}</pre>
-            </div>
-            <div className="mt-4 text-sm text-gray-600">
-              <p>🔍 Check console for detailed endpoint testing results</p>
-              <p>🚀 Server: <strong>https://webory.onrender.com</strong></p>
-            </div>
           </div>
         </div>
       ) : (

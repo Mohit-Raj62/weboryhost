@@ -98,16 +98,22 @@ const SupportTicketDashboard = () => {
     }
   };
 
-  const addResponse = async (ticketId) => {
+  const addResponse = async (ticket) => {
     if (!responseMessage.trim()) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.post(`${API_BASE_URL}/api/support-tickets/admin/${ticketId}/response`,
-        { message: responseMessage },
+      const fullMessage = `Re: Ticket #${ticket.ticketNumber || 'N/A'} - "${ticket.subject}"
+Created on: ${formatDate(ticket.createdAt)}
+
+${responseMessage}`;
+
+      await axios.post(`${API_BASE_URL}/api/support-tickets/admin/${ticket._id}/response`,
+        { message: fullMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setResponseMessage('');
       fetchTickets();
+      setSelectedTicket(null); // Close modal after response
     } catch (err) {
       setError('Failed to add response');
     }
@@ -779,7 +785,7 @@ const SupportTicketDashboard = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button
-                  onClick={() => addResponse(selectedTicket._id)}
+                  onClick={() => addResponse(selectedTicket)}
                   disabled={!responseMessage.trim()}
                   className="mt-3 bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-base"
                 >

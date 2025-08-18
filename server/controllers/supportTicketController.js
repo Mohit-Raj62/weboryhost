@@ -138,6 +138,11 @@ const createTicket = async (req, res) => {
       to: email,
       name: userName || email,
       formType: "Support Ticket",
+      ticketDetails: {
+        subject: ticket.subject,
+        ticketNumber: ticket.ticketNumber,
+        createdAt: ticket.createdAt,
+      },
     });
 
     res.status(201).json({
