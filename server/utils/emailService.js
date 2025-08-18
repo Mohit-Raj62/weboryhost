@@ -51,7 +51,7 @@ exports.sendConfirmationEmail = async ({
   let text = `Dear ${name},\n\nThank you for submitting your details for ${formType} on Webory. We have received your information and will get back to you soon.\n\nBest regards,\nWebory Team`;
   let html = `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
     <div style='text-align:center;margin-bottom:24px;'>
-      <img src='https://webory.netlify.app/public/outputB2.png' alt='Webory Logo' style='height:48px;'>
+      <img src='./public/outputB2.png' alt='Webory Logo' style='height:48px;'>
     </div>
     <div style='background:#fff;padding:24px;border-radius:8px;'>
       <h2 style='color:#6C63FF;'>Thank you for your ${formType} submission!</h2>
