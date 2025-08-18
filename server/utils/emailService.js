@@ -65,13 +65,14 @@ exports.sendConfirmationEmail = async ({
   if (formType === "Support Ticket" && ticketDetails) {
     const currentDate = new Date();
     const createdDate = new Date(ticketDetails.createdAt || currentDate);
-    const formattedDate = createdDate.toLocaleString("hi-IN", {
+    const formattedDate = createdDate.toLocaleString("en-IN", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+       timeZone: 'Asia/Kolkata'
     });
 
     // Generate ticket number if not provided
