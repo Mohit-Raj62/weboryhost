@@ -4,10 +4,14 @@ require("dotenv").config();
 
 const brevoApiKey = process.env.BREVO_API_KEY;
 if (brevoApiKey) {
-  SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey = brevoApiKey;
+  SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
+    brevoApiKey;
 }
 
-console.log("BREVO_API_KEY loaded:", process.env.BREVO_API_KEY ? "[SET]" : "[NOT SET]");
+console.log(
+  "BREVO_API_KEY loaded:",
+  process.env.BREVO_API_KEY ? "[SET]" : "[NOT SET]"
+);
 console.log("EMAIL_FROM loaded:", process.env.EMAIL_FROM);
 
 // Fallback: Dummy sendEmail function for development
@@ -47,7 +51,7 @@ exports.sendConfirmationEmail = async ({
   let text = `Dear ${name},\n\nThank you for submitting your details for ${formType} on Webory. We have received your information and will get back to you soon.\n\nBest regards,\nWebory Team`;
   let html = `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
     <div style='text-align:center;margin-bottom:24px;'>
-      <img src='/outputB2.png' alt='Webory Logo' style='height:48px;'>
+      <img src='https://webory.netlify.app/public/outputB2.png' alt='Webory Logo' style='height:48px;'>
     </div>
     <div style='background:#fff;padding:24px;border-radius:8px;'>
       <h2 style='color:#6C63FF;'>Thank you for your ${formType} submission!</h2>
@@ -61,30 +65,32 @@ exports.sendConfirmationEmail = async ({
   if (formType === "Support Ticket" && ticketDetails) {
     const currentDate = new Date();
     const createdDate = new Date(ticketDetails.createdAt || currentDate);
-    const formattedDate = createdDate.toLocaleString('hi-IN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+    const formattedDate = createdDate.toLocaleString("hi-IN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
-    
+
     // Generate ticket number if not provided
-    const ticketNumber = ticketDetails.ticketNumber || `WEB-${currentDate.getFullYear()}-${String(Date.now()).slice(-6)}`;
-    
+    const ticketNumber =
+      ticketDetails.ticketNumber ||
+      `WEB-${currentDate.getFullYear()}-${String(Date.now()).slice(-6)}`;
+
     // Priority color mapping
     const priorityColors = {
-      'Low': '#28a745',
-      'Medium': '#ffc107', 
-      'High': '#fd7e14',
-      'Urgent': '#dc3545'
+      Low: "#28a745",
+      Medium: "#ffc107",
+      High: "#fd7e14",
+      Urgent: "#dc3545",
     };
-    
-    const priorityColor = priorityColors[ticketDetails.priority] || '#6C63FF';
+
+    const priorityColor = priorityColors[ticketDetails.priority] || "#6C63FF";
 
     subject = `✅ Support Ticket Created - #${ticketNumber} | ${ticketDetails.subject}`;
-    
+
     text = `Dear ${name},
 
 Your support ticket has been successfully created on Webory!
@@ -95,12 +101,12 @@ Your support ticket has been successfully created on Webory!
 
 Ticket Number: #${ticketNumber}
 Subject: ${ticketDetails.subject}
-Priority: ${ticketDetails.priority || 'Medium'}
-Category: ${ticketDetails.category || 'General'}
+Priority: ${ticketDetails.priority || "Medium"}
+Category: ${ticketDetails.category || "General"}
 Created: ${formattedDate}
 
 Description:
-${ticketDetails.description || 'No description provided'}
+${ticketDetails.description || "No description provided"}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📞 WHAT'S NEXT?
@@ -112,8 +118,8 @@ ${ticketDetails.description || 'No description provided'}
 • Response time varies based on priority level
 
 For urgent matters, you can also reach us at:
-📧 support@webory.com
-📱 +91-XXXX-XXXXX
+📧 weboryinfo@gmail.com
+📱 +91-94704-89367
 
 Thank you for choosing Webory!
 
@@ -156,20 +162,28 @@ Webory Support Team
             <table style='width: 100%; border-collapse: collapse;'>
               <tr>
                 <td style='padding: 8px 12px 8px 0; font-weight: 600; color: #4a5568; width: 120px; vertical-align: top;'>Subject:</td>
-                <td style='padding: 8px 0; color: #2d3748;'>${ticketDetails.subject}</td>
+                <td style='padding: 8px 0; color: #2d3748;'>${
+                  ticketDetails.subject
+                }</td>
               </tr>
               <tr>
                 <td style='padding: 8px 12px 8px 0; font-weight: 600; color: #4a5568; vertical-align: top;'>Priority:</td>
                 <td style='padding: 8px 0;'>
-                  <span style='background: ${priorityColor}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;'>${ticketDetails.priority || 'Medium'}</span>
+                  <span style='background: ${priorityColor}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;'>${
+      ticketDetails.priority || "Medium"
+    }</span>
                 </td>
               </tr>
-              ${ticketDetails.category ? `
+              ${
+                ticketDetails.category
+                  ? `
               <tr>
                 <td style='padding: 8px 12px 8px 0; font-weight: 600; color: #4a5568; vertical-align: top;'>Category:</td>
                 <td style='padding: 8px 0; color: #2d3748;'>${ticketDetails.category}</td>
               </tr>
-              ` : ''}
+              `
+                  : ""
+              }
               <tr>
                 <td style='padding: 8px 12px 8px 0; font-weight: 600; color: #4a5568; vertical-align: top;'>Created:</td>
                 <td style='padding: 8px 0; color: #2d3748;'>📅 ${formattedDate}</td>
@@ -177,14 +191,18 @@ Webory Support Team
             </table>
           </div>
           
-          ${ticketDetails.description ? `
+          ${
+            ticketDetails.description
+              ? `
           <div style='margin-top: 20px;'>
             <h4 style='color: #4a5568; margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;'>Your Message:</h4>
             <div style='background: #edf2f7; padding: 15px; border-radius: 6px; border-left: 3px solid #6C63FF; font-style: italic; color: #2d3748;'>
               "${ticketDetails.description}"
             </div>
           </div>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
         
         <!-- What's Next Section -->
@@ -202,8 +220,8 @@ Webory Support Team
         <div style='background: #f7fafc; margin: 0 30px; padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed #cbd5e0;'>
           <p style='margin: 0 0 10px 0; color: #4a5568; font-weight: 600;'>Need immediate assistance?</p>
           <p style='margin: 0; color: #6C63FF;'>
-            📧 <a href='mailto:support@webory.com' style='color: #6C63FF; text-decoration: none;'>support@webory.com</a> | 
-            📱 +91-XXXX-XXXXX
+            📧 <a href='mailto:weboryinfo@gmail.com' style='color: #6C63FF; text-decoration: none;'>weboryinfo@gmail.com</a> | 
+            📱 +91-94704-89367
           </p>
         </div>
         
@@ -230,7 +248,7 @@ Webory Support Team
     brevoApiKeyExists: !!brevoApiKey,
     sender: process.env.EMAIL_FROM,
   });
-  
+
   if (brevoApiKey) {
     const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     const sendSmtpEmail = {
@@ -243,7 +261,10 @@ Webory Support Team
       htmlContent: html,
     };
     try {
-      console.log("[Brevo] Attempting to send email via Brevo API:", sendSmtpEmail);
+      console.log(
+        "[Brevo] Attempting to send email via Brevo API:",
+        sendSmtpEmail
+      );
       await apiInstance.sendTransacEmail(sendSmtpEmail);
       console.log("[Brevo] Email sent via Brevo API");
       return { success: true };
@@ -271,7 +292,7 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
     brevoApiKeyExists: !!brevoApiKey,
     sender: process.env.EMAIL_FROM,
   });
-  
+
   if (!brevoApiKey) {
     console.warn("[Brevo] BREVO_API_KEY not set. Skipping real email send.");
     return exports.sendEmail({
@@ -294,7 +315,7 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
       </div>`,
     });
   }
-  
+
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
   const sendSmtpEmail = {
     to: [{ email: to, name }],
@@ -318,9 +339,12 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
       <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024 | CEO: Mohit Sinha</div>
     </div>`,
   };
-  
+
   try {
-    console.log("[Brevo] Attempting to send verification email via Brevo API:", sendSmtpEmail);
+    console.log(
+      "[Brevo] Attempting to send verification email via Brevo API:",
+      sendSmtpEmail
+    );
     await apiInstance.sendTransacEmail(sendSmtpEmail);
     console.log("[Brevo] Verification email sent via Brevo API");
     return { success: true };
@@ -341,24 +365,32 @@ exports.sendVerificationEmail = async ({ to, link, name = "User" }) => {
  * @param {string} opts.status - New status (In Progress, Resolved, Closed)
  * @param {string} opts.message - Update message from support team
  */
-exports.sendTicketUpdateEmail = async ({ to, name = "User", ticketDetails, status, message }) => {
+exports.sendTicketUpdateEmail = async ({
+  to,
+  name = "User",
+  ticketDetails,
+  status,
+  message,
+}) => {
   const statusColors = {
-    'In Progress': '#ffc107',
-    'Resolved': '#28a745', 
-    'Closed': '#6c757d',
-    'Pending': '#fd7e14'
+    "In Progress": "#ffc107",
+    Resolved: "#28a745",
+    Closed: "#6c757d",
+    Pending: "#fd7e14",
   };
-  
-  const statusColor = statusColors[status] || '#6C63FF';
+
+  const statusColor = statusColors[status] || "#6C63FF";
   const statusEmoji = {
-    'In Progress': '🔄',
-    'Resolved': '✅',
-    'Closed': '📁',
-    'Pending': '⏳'
+    "In Progress": "🔄",
+    Resolved: "✅",
+    Closed: "📁",
+    Pending: "⏳",
   };
-  
-  const subject = `${statusEmoji[status] || '📝'} Ticket Update - #${ticketDetails.ticketNumber} | ${status}`;
-  
+
+  const subject = `${statusEmoji[status] || "📝"} Ticket Update - #${
+    ticketDetails.ticketNumber
+  } | ${status}`;
+
   const html = `<div style='font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: auto; background: #f8fafc; padding: 20px;'>
     
     <!-- Header -->
@@ -366,7 +398,9 @@ exports.sendTicketUpdateEmail = async ({ to, name = "User", ticketDetails, statu
       <div style='margin-bottom: 15px;'>
         <img src='/outputB2.png' alt='Webory Logo' style='height: 40px; filter: brightness(0) invert(1);'>
       </div>
-      <h1 style='margin: 0; font-size: 26px; font-weight: 600;'>${statusEmoji[status] || '📝'} Ticket Update</h1>
+      <h1 style='margin: 0; font-size: 26px; font-weight: 600;'>${
+        statusEmoji[status] || "📝"
+      } Ticket Update</h1>
       <p style='margin: 8px 0 0 0; opacity: 0.9;'>Status: ${status}</p>
     </div>
     
@@ -376,28 +410,38 @@ exports.sendTicketUpdateEmail = async ({ to, name = "User", ticketDetails, statu
       
       <!-- Ticket Info -->
       <div style='background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid ${statusColor};'>
-        <h3 style='margin: 0 0 15px 0; color: #2d3748;'>Ticket #${ticketDetails.ticketNumber}</h3>
-        <p style='margin: 0 0 8px 0; color: #4a5568;'><strong>Subject:</strong> ${ticketDetails.subject}</p>
+        <h3 style='margin: 0 0 15px 0; color: #2d3748;'>Ticket #${
+          ticketDetails.ticketNumber
+        }</h3>
+        <p style='margin: 0 0 8px 0; color: #4a5568;'><strong>Subject:</strong> ${
+          ticketDetails.subject
+        }</p>
         <p style='margin: 0; color: #4a5568;'><strong>Status:</strong> 
           <span style='background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;'>${status}</span>
         </p>
       </div>
       
       <!-- Update Message -->
-      ${message ? `
+      ${
+        message
+          ? `
       <div style='background: #e6fffa; padding: 20px; border-radius: 8px; border-left: 4px solid #38b2ac; margin-bottom: 25px;'>
         <h4 style='margin: 0 0 10px 0; color: #2d3748;'>💬 Update from our team:</h4>
         <p style='margin: 0; color: #2d3748; font-style: italic;'>"${message}"</p>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
       
-      <p style='margin: 0 0 20px 0; color: #4a5568;'>For any questions regarding this ticket, please reference ticket number <strong>#${ticketDetails.ticketNumber}</strong> in your communication.</p>
+      <p style='margin: 0 0 20px 0; color: #4a5568;'>For any questions regarding this ticket, please reference ticket number <strong>#${
+        ticketDetails.ticketNumber
+      }</strong> in your communication.</p>
       
       <!-- Contact -->
       <div style='text-align: center; padding: 20px; background: #f1f5f9; border-radius: 8px; margin-top: 25px;'>
         <p style='margin: 0 0 8px 0; color: #4a5568; font-weight: 600;'>Need further assistance?</p>
         <p style='margin: 0; color: #6C63FF;'>
-          📧 <a href='mailto:support@webory.com' style='color: #6C63FF; text-decoration: none;'>support@webory.com</a>
+          📧 <a href='mailto:weboryinfo@gmail.com' style='color: #6C63FF; text-decoration: none;'>weboryinfo@gmail.com</a>
         </p>
       </div>
     </div>
@@ -433,11 +477,11 @@ exports.sendTicketUpdateEmail = async ({ to, name = "User", ticketDetails, statu
     }
   } else {
     console.warn("[Brevo] BREVO_API_KEY not set, using fallback sendEmail.");
-    await exports.sendEmail({ 
-      to, 
-      subject, 
-      text: `Ticket #${ticketDetails.ticketNumber} status updated to: ${status}. ${message}`, 
-      html 
+    await exports.sendEmail({
+      to,
+      subject,
+      text: `Ticket #${ticketDetails.ticketNumber} status updated to: ${status}. ${message}`,
+      html,
     });
   }
 };
