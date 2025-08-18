@@ -46,21 +46,158 @@ exports.sendConfirmationEmail = async ({
   formType = "Form",
   ticketDetails,
 }) => {
-  // Default email template for all forms (Registration, Contact, etc.)
-  let subject = `Thank you for your ${formType} submission!`;
-  let text = `Dear ${name},\n\nThank you for submitting your details for ${formType} on Webory. We have received your information and will get back to you soon.\n\nBest regards,\nWebory Team`;
-  let html = `<div style='font-family:sans-serif;background:#f9f9f9;padding:24px;border-radius:12px;max-width:600px;margin:auto;'>
-    <div style='text-align:center;margin-bottom:24px;'>
-      <img src='./public/outputB2.png' alt='Webory Logo' style='height:48px;'>
-    </div>
-    <div style='background:#fff;padding:24px;border-radius:8px;'>
-      <h2 style='color:#6C63FF;'>Thank you for your ${formType} submission!</h2>
-      <p style='color:#333;'>Dear ${name},</p>
-      <p style='color:#333;'>Thank you for submitting your details for <b>${formType}</b> on Webory. We have received your information and will get back to you soon.</p>
-    </div>
-    <div style='text-align:center;color:#888;margin-top:24px;font-size:13px;'>Webory Team &copy; 2024 | CEO: Mohit Sinha</div>
-  </div>`;
+ // Enhanced email template for all forms (Registration, Contact, etc.)
+let subject = `✨ Thank you for connecting with Webory - ${formType} received!`;
 
+let text = `Dear ${name},
+
+🎉 Welcome to Webory!
+
+Thank you for your ${formType} submission. We're excited to have you as part of our community!
+
+Your details have been safely received and our team will review them carefully. We'll get back to you within 24-48 hours with the next steps.
+
+In the meantime, feel free to explore our website and discover what makes Webory special.
+
+Best regards,
+The Webory Team
+CEO: Mohit Sinha
+
+---
+Need immediate assistance? Reply to this email or visit our support center.`;
+
+let html = `
+<div style='font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; margin: 0;'>
+  <div style='max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);'>
+    
+    <!-- Header Section -->
+    <div style='background: linear-gradient(135deg, #6C63FF 0%, #9C88FF 100%); padding: 32px 24px; text-align: center; position: relative;'>
+      <div style='position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20v20h20z'/%3E%3C/g%3E%3C/svg%3E"); opacity: 0.3;'></div>
+      <img src='./public/outputB2.png' alt='Webory Logo' style='height: 56px; filter: brightness(0) invert(1); margin-bottom: 16px; position: relative; z-index: 1;'>
+      <h1 style='color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; position: relative; z-index: 1;'>Welcome to Webory! 🎉</h1>
+      <p style='color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 16px; position: relative; z-index: 1;'>Your ${formType} has been received</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div style='padding: 40px 32px;'>
+      <div style='text-align: center; margin-bottom: 32px;'>
+        <div style='width: 80px; height: 80px; background: linear-gradient(135deg, #6C63FF, #9C88FF); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;'>
+          <span style='font-size: 36px; color: white;'>✓</span>
+        </div>
+        <h2 style='color: #2D3748; margin: 0 0 8px 0; font-size: 24px; font-weight: 600;'>Thank You, ${name}!</h2>
+        <p style='color: #718096; margin: 0; font-size: 16px;'>We're thrilled to have you join our community</p>
+      </div>
+      
+      <!-- Information Card -->
+      <div style='background: #F7FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 32px;'>
+        <h3 style='color: #2D3748; margin: 0 0 16px 0; font-size: 18px; font-weight: 600; display: flex; align-items: center;'>
+          <span style='width: 24px; height: 24px; background: #6C63FF; border-radius: 50%; color: white; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; margin-right: 12px;'>i</span>
+          What happens next?
+        </h3>
+        <div style='color: #4A5568; line-height: 1.6;'>
+          <p style='margin: 0 0 12px 0;'>📋 <strong>Review Process:</strong> Our team will carefully review your ${formType} submission</p>
+          <p style='margin: 0 0 12px 0;'>⏰ <strong>Response Time:</strong> You'll hear back from us within 24-48 hours</p>
+          <p style='margin: 0;'>🚀 <strong>Next Steps:</strong> We'll guide you through the process and answer any questions</p>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div style='text-align: center; margin-bottom: 32px;'>
+        <a href='#' style='display: inline-block; background: linear-gradient(135deg, #6C63FF, #9C88FF); color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0; box-shadow: 0 4px 12px rgba(108,99,255,0.3);'>
+          Explore Webory
+        </a>
+        <a href='#' style='display: inline-block; background: transparent; color: #6C63FF; text-decoration: none; padding: 14px 28px; border: 2px solid #6C63FF; border-radius: 8px; font-weight: 600; margin: 0 8px 8px 0;'>
+          Contact Support
+        </a>
+      </div>
+      
+      <!-- Quote/Inspiration -->
+      <div style='background: linear-gradient(135deg, #6C63FF10, #9C88FF10); border-left: 4px solid #6C63FF; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px;'>
+        <p style='color: #4A5568; font-style: italic; margin: 0; font-size: 16px; line-height: 1.5;'>
+          "Innovation distinguishes between a leader and a follower. At Webory, we're building the future of web solutions together."
+        </p>
+      </div>
+      
+      <!-- Personal Touch -->
+      <div style='color: #4A5568; line-height: 1.6;'>
+        <p style='margin: 0 0 16px 0;'>We appreciate you choosing Webory for your web development needs. Our commitment is to deliver exceptional solutions that exceed your expectations.</p>
+        <p style='margin: 0;'>If you have any immediate questions or concerns, don't hesitate to reach out to us.</p>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div style='background: #F7FAFC; padding: 24px 32px; border-top: 1px solid #E2E8F0;'>
+      <div style='text-align: center;'>
+        <p style='color: #2D3748; margin: 0 0 12px 0; font-weight: 600; font-size: 16px;'>Stay Connected</p>
+        <div style='margin-bottom: 16px;'>
+          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Website</a>
+          <span style='color: #CBD5E0;'>•</span>
+          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>LinkedIn</a>
+          <span style='color: #CBD5E0;'>•</span>
+          <a href='#' style='display: inline-block; margin: 0 8px; color: #6C63FF; text-decoration: none; font-size: 14px;'>Twitter</a>
+        </div>
+        <div style='color: #718096; font-size: 13px; line-height: 1.4;'>
+          <strong style='color: #2D3748;'>Webory</strong> - Crafting Digital Excellence<br>
+          CEO: Mohit Sinha | © 2025 All rights reserved<br>
+          <span style='font-size: 12px;'>This email was sent because you submitted a ${formType} on our website.</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Mobile Responsiveness -->
+  <style>
+    @media only screen and (max-width: 600px) {
+      .email-container {
+        margin: 10px !important;
+      }
+      .header-content h1 {
+        font-size: 24px !important;
+      }
+      .content-padding {
+        padding: 24px 20px !important;
+      }
+      .action-buttons a {
+        display: block !important;
+        margin: 8px 0 !important;
+      }
+    }
+  </style>
+</div>`;
+
+// Alternative shorter version for quick communications
+let simpleHTML = `
+<div style='font-family: "Segoe UI", sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;'>
+  <div style='background: linear-gradient(135deg, #6C63FF, #9C88FF); padding: 32px 24px; text-align: center; color: white;'>
+    <img src='./public/outputB2.png' alt='Webory Logo' style='height: 48px; filter: brightness(0) invert(1); margin-bottom: 16px;'>
+    <h1 style='margin: 0; font-size: 24px; font-weight: 700;'>Thank You! 🎉</h1>
+  </div>
+  
+  <div style='padding: 32px 24px;'>
+    <h2 style='color: #2D3748; margin: 0 0 16px 0;'>Hello ${name},</h2>
+    <p style='color: #4A5568; line-height: 1.6; margin: 0 0 16px 0;'>
+      Thank you for your <strong>${formType}</strong> submission! We've received your information and our team will review it carefully.
+    </p>
+    <p style='color: #4A5568; line-height: 1.6; margin: 0 0 24px 0;'>
+      We'll get back to you within 24-48 hours. In the meantime, feel free to explore our services.
+    </p>
+    
+    <div style='text-align: center; margin: 32px 0;'>
+      <a href='#' style='background: #6C63FF; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; display: inline-block;'>
+        Visit Webory
+      </a>
+    </div>
+  </div>
+  
+  <div style='background: #F7FAFC; padding: 20px 24px; text-align: center; color: #718096; font-size: 14px;'>
+    <strong>Webory</strong> | CEO: Mohit Sinha<br>
+    © 2025 - Crafting Digital Excellence
+  </div>
+</div>`;
+
+// Usage example:
+// Use 'html' for detailed emails, 'simpleHTML' for quick confirmations
   // Enhanced Support Ticket Email Template (ONLY for Support Tickets)
   if (formType === "Support Ticket" && ticketDetails) {
     const currentDate = new Date();
