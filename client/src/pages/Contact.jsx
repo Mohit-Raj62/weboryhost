@@ -321,7 +321,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Email</h3>
-                        <p className="text-white/70">weboryinfo@gamil.com</p>
+                        <p className="text-white/70">weboryinfo@gmail.com</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">
@@ -330,7 +330,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Phone</h3>
-                        <p className="text-white/70">+91 94704-89367</p>
+                        <p className="text-white/70">+91 94734-71153</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4">

@@ -257,7 +257,7 @@ ${ticketDetails.description || "No description provided"}
 
 For urgent matters, you can also reach us at:
 📧 weboryinfo@gmail.com
-📱 +91-94704-89367
+📱 +91-94734-71153
 
 Thank you for choosing Webory!
 
@@ -359,7 +359,7 @@ Webory Support Team
           <p style='margin: 0 0 10px 0; color: #4a5568; font-weight: 600;'>Need immediate assistance?</p>
           <p style='margin: 0; color: #6C63FF;'>
             📧 <a href='mailto:weboryinfo@gmail.com' style='color: #6C63FF; text-decoration: none;'>weboryinfo@gmail.com</a> | 
-            📱 +91-94704-89367
+            📱 +91-94734-71153
           </p>
         </div>
         

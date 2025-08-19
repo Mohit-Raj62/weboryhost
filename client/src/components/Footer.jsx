@@ -475,14 +475,14 @@ const Footer = () => {
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', mt: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <EmailIcon sx={{ color: '#90caf9', fontSize: 20 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="mailto:weboryinfo@gmail.com">
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="mailto:weboryinfo@gmail.com" rel="noopener noreferrer">
                   weboryinfo@gmail.com
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <PhoneIcon sx={{ color: '#a5d6a7', fontSize: 20 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="tel:+919470489367">
-                  +91 94704-89367
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline dotted', textUnderlineOffset: 3 }} component="a" href="tel:+919473471153">
+                  +91 94734-71153
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
@@ -494,7 +494,7 @@ const Footer = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} className="webory-contact-row">
                 <SettingsIcon sx={{ color: '#ce93d8', fontSize: 20 }} />
                 <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-                  Mon–Sat: 9:00 AM – 7:00 PM | <span style={{ color: '#4caf50' }}>Support: 24/7</span>
+                  Mon–Sat: 9:30 AM – 8:00 PM | <span style={{ color: '#4caf50' }}>Support: 24/7</span>
                 </Typography>
               </Box>
             </Box>

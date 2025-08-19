@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ContactForm from '../components/ContactForm';
 import SupportTicketForm from '../components/SupportTicketForm';
-import LiveChat from '../components/LiveChat';
 
 const Support = () => {
-  const [showLiveChat, setShowLiveChat] = useState(false);
-
-  const handleLiveChatClick = () => setShowLiveChat(true);
-  const handleCloseLiveChat = () => setShowLiveChat(false);
+  const handleLiveChatClick = () => {
+    window.open('https://wa.me/919473471153', '_blank');
+  };
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:weboryinfo@gmail.com'; // Replace with your support email
+    window.location.href = 'mailto:supporrtwebory@gmail.com'; // Replace with your support email
   };
 
   const handlePhoneClick = () => {
-    window.location.href = 'tel:+91 94704-89367'; // Replace with your support phone number
+    window.location.href = 'tel:+91 94734-71153'; // Replace with your support phone number
   };
 
   return (
@@ -387,7 +385,7 @@ const Support = () => {
         <div className="support-card">
           <h3>Live Chat Support</h3>
           <p>Connect with our support team instantly through our live chat system. Available 24/7 for immediate assistance.</p>
-          <button className="submit-button" onClick={handleLiveChatClick}>Start Chat</button>
+          <button className="submit-button" onClick={handleLiveChatClick}>Chat Live</button>
         </div>
 
         <div className="support-card">
@@ -412,45 +410,8 @@ const Support = () => {
         <h3>Support Hours</h3>
         <p>Live Chat: 24/7</p>
         <p>Email Support: 24/7 (Response within 24 hours)</p>
-        <p>Phone Support: Monday - Friday, 9:00 AM - 6:00 PM EST</p>
+        <p>Phone Support: Monday - Friday, 9:30 AM - 8:00 PM EST</p>
       </div>
-
-      {/* Live Chat Modal */}
-      {showLiveChat && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.5)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={handleCloseLiveChat}
-              style={{
-                position: 'absolute',
-                top: -40,
-                right: 0,
-                background: 'transparent',
-                color: 'white',
-                fontSize: 32,
-                border: 'none',
-                cursor: 'pointer',
-                zIndex: 1001,
-              }}
-              aria-label="Close Live Chat"
-            >
-              &times;
-            </button>
-            <LiveChat />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

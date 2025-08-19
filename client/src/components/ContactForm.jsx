@@ -242,7 +242,7 @@ const ContactForm = ({
 
           {showAdditionalFields && (
             <div className="grid md:grid-cols-2 gap-6">
-              <div>
+              {/* <div>
                 <label className="block text-white/80 mb-2">Budget Range</label>
                 <select
                   name="budget"
@@ -252,14 +252,14 @@ const ContactForm = ({
                   required
                 >
                   <option value="">Select budget range</option>
-                  <option value="1k-5k">$1,000 - $5,000</option>
-                  <option value="5k-10k">$5,000 - $10,000</option>
+                  <option value="1k-5k">$ 0 - $100</option>
+                  <option value="5k-10k">$ - $10,000</option>
                   <option value="10k-25k">$10,000 - $25,000</option>
                   <option value="25k+">$25,000+</option>
                 </select>
                 {errors.budget && <p className="text-red-400 text-sm mt-1">{errors.budget}</p>}
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label className="block text-white/80 mb-2">Timeline</label>
                 <select
                   name="timeline"
@@ -273,7 +273,7 @@ const ContactForm = ({
                   <option value="6-12months">6-12 months</option>
                   <option value="12+months">12+ months</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           )}
 

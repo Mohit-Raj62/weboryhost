@@ -37,47 +37,63 @@ const WebDesign = () => {
 
   const pricingPlans = [
     {
-      title: "Basic",
-      price: 999,
+      title: "Basic Professional Website",
+      price: 199,
       features: [
-        "5 Pages Design",
-        "Mobile Responsive",
-        "Basic SEO Setup",
-        "Contact Form",
-        "Social Media Integration",
-        "1 Month Support"
+        "✅Pages:Home, About Us, Services, Portfolio, Contact",
+        "✅5 Pages Design",
+        "✅Mobile responsive",
+        "✅SEO-friendly design",
+        "✅Contact Form / WhatsApp integration",
+        "✅Social Media links",
+        "✅24/7 Priority Support",
+
+        "✅1 Month Support"
       ],
       gradient: "from-blue-500 to-cyan-500"
     },
     {
-      title: "Professional",
-      price: 2499,
+      title: "Dynamic Business Website",
+      price: 349,
       features: [
-        "10 Pages Design",
-        "Mobile Responsive",
-        "Advanced SEO Setup",
-        "E-commerce Integration",
-        "Custom Animations",
-        "3 Months Support",
-        "Content Management System"
+        "✅ Pages: Home, About, Services (with sub-pages), Portfolio/Case Studies, Blog,   Contact",
+        "✅ 10 Pages Design",
+        "✅ CMS (WordPress/Next.js with CMS) → aap easily content update kar sako",
+        "✅ Service inquiry forms / Lead capture forms",
+        "✅ Blog section (SEO ke liye must)",
+        "✅ Testimonials & Client logos",
+        "✅ Basic On-page SEO setup",
+        "✅ 3 Months Support",
       ],
       isPopular: true,
       gradient: "from-purple-500 to-pink-500"
     },
     {
-      title: "Enterprise",
-      price: 4999,
+      title: "Premium Website + Client Portal",
+      price: 999,
       features: [
-        "Unlimited Pages",
-        "Mobile Responsive",
-        "Premium SEO Setup",
-        "Advanced E-commerce",
-        "Custom Development",
-        "6 Months Support",
-        "Priority Support",
-        "Custom Features"
+       "✅ Pages: Home, About, Services, Portfolio, Blog, Contact, Pricing/Plans",
+        "✅ CMS + Blog",
+        "✅ Client Portal (login area) – jaha aap client ko proposals, reports, invoices dikha sako",
+        "✅ Advanced animations / UI/UX design",
+        "✅ Chatbot / WhatsApp automation",
+        "✅ SEO + Analytics integration",
+        "✅6 Months Support",
       ],
       gradient: "from-orange-500 to-red-500"
+    },
+    {
+      title: "Enterprise (Agency + Marketplace/Automation)",
+      price: 2999,
+      features: [
+     "  ✅ All premium features",
+        "✅ Online Booking System (services schedule karne ke liye)",
+        "✅ Payment Gateway (services ke liye advance payment option)",
+        "✅ Multi-language support (agar global clients chahiye)",
+       " ✅ Custom dashboards + API integrations",
+        "✅ 12 Months Support",
+      ],
+      gradient: "from-orange-700 to-red-500"
     }
   ];
 
