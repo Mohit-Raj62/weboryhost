@@ -413,29 +413,59 @@ const Contact = () => {
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-white/80 mb-2">Phone</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        placeholder="+1 (555) 123-4567"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-white/80 mb-2">Subject</label>
-                      <input
-                        type="text"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        placeholder="What's this about?"
-                      />
-                    </div>
+                  <div>
+  <label className="block text-white/80 mb-2">Phone</label>
+  <input
+    type="tel"
+    name="phone"
+    value={formData.phone}
+    onChange={(e) => {
+      // Only allow digits and limit to 10 characters
+      const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+      handleChange({
+        ...e,
+        target: {
+          ...e.target,
+          name: 'phone',
+          value: value
+        }
+      });
+    }}
+    required
+    maxLength="10"
+    minLength="10"
+    pattern="[0-9]{10}"
+    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+    placeholder="98XXX-85XXX"
+  />
+</div>
+<div>
+  <label className="block text-white/80 mb-2">Subject</label>
+  <input
+    type="text"
+    name="subject"
+    value={formData.subject}
+    onChange={handleChange}
+    list="subject-options"
+    required
+    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+    placeholder="What's this about?"
+  />
+  
+  <datalist id="subject-options">
+    <option value="General Inquiry" />
+    <option value="Technical Support" />
+    {/* <option value="Business Partnership" /> */}
+    <option value="Project Proposal" />
+    <option value="Feedback" />
+    <option value="Bug Report" />
+    <option value="Feature Request" />
+    <option value="Pricing Information" />
+    <option value="Account Issues" />
+    <option value="Collaboration" />
+  </datalist>
+</div>
+
                   </div>
 
                   {activeTab === 'support' && (
