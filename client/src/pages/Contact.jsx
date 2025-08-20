@@ -83,12 +83,18 @@ const Contact = () => {
 
     if (activeTab === 'contact') {
       // Handle contact form submission (Web3Forms)
-    const web3FormsData = {
-      ...formData,
+      const { message: userMessage, ...restFormData } = formData;
+      const web3FormsData = {
+        ...restFormData,
         access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
-      from_name: "Webory Contact Form",
-        subject: `New Contact from ${formData.name}`,
-        form_type: 'Contact Us'
+        from_name: "Webory", // For user's email. Admin will see "New Submission from Webory"
+        subject: `We've received your message, ${formData.name}!`, // For user's email
+        form_type: 'Contact Us',
+        "Admin Subject": `New Contact from ${formData.name} - ${formData.subject}`,
+        "User's Message": userMessage,
+        // --- Auto-response to user ---
+        replyto: formData.email,
+        message: `Hi ${formData.name},<br><br>Thank you for reaching out to us. We have received your message and will get back to you as soon as possible.<br><br><strong>Here's a copy of your message:</strong><br><strong>Subject:</strong> ${formData.subject}<br><strong>Message:</strong><br>${userMessage}<br><br>Best regards,<br>The Webory Team`
       };
 
     try {
@@ -137,19 +143,25 @@ const Contact = () => {
       setTicketNumber(newTicketNumber);
 
       // Prepare data for both Web3Forms and Database
+      const { message: userMessage, ...restFormData } = formData;
       const web3FormsData = {
-        ...formData,
+        ...restFormData,
         access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
-        from_name: "Webory Support Ticket",
-        subject: `New Support Ticket #${newTicketNumber} from ${formData.name}`,
+        from_name: "Webory Support", // For user's email. Admin will see "New Submission from Webory Support"
+        subject: `Support Ticket #${newTicketNumber} Created - We're on it!`, // For user's email
         form_type: 'Support Ticket',
         ticket_number: newTicketNumber,
         issue_type: formData.category,
-        priority: formData.priority
+        priority: formData.priority,
+        "Admin Subject": `New Support Ticket #${newTicketNumber} from ${formData.name} - ${formData.subject}`,
+        "User's Message": userMessage,
+        // --- Auto-response to user ---
+        replyto: formData.email,
+        message: `Hi ${formData.name},<br><br>Thank you for contacting our support team. Your ticket has been created successfully.<br><br><strong>Ticket Number:</strong> ${newTicketNumber}<br><strong>Priority:</strong> ${formData.priority}<br><strong>Category:</strong> ${formData.category}<br><strong>Subject:</strong> ${formData.subject}<br><br>We will get back to you shortly.<br><br>Best regards,<br>Webory Support Team`
       };
 
       const ticketData = {
-        subject: `${formData.category} - ${formData.subject}`,
+        subject: `${formData.category} - ${formData.subject}`, // This is correct for DB
         email: formData.email,
         message: formData.message,
         priority: formData.priority,
