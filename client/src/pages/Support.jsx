@@ -4,11 +4,11 @@ import SupportTicketForm from '../components/SupportTicketForm';
 
 const Support = () => {
   const handleLiveChatClick = () => {
-    window.open('https://wa.me/919473471153', '_blank');
+    window.open('https://wa.me/919473471153?text=Hi Webory, I am [Your Name] from [Business Name]. I am looking for [Website/SEO/App]. Please connect with me.', '_blank');
   };
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:supporrtwebory@gmail.com'; // Replace with your support email
+    window.location.href = 'mailto:supporrtwebory@gmail.com';
   };
 
   const handlePhoneClick = () => {

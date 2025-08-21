@@ -9,13 +9,30 @@ const ContactForm = ({
   subject,
   fromName
 }) => {
+  
+  // Plan price mapping
+  const planPrices = {
+    'Basic Plan': '$99',
+    'Standard Plan': '$299',
+    'Premium Plan': '$599',
+    'Enterprise Plan': '$1299',
+    'Starter': '$149',
+    'Professional': '$499',
+    'Business': '$999',
+    'Custom': 'Contact for pricing',
+    // Add more plan mappings as needed
+  };
+  
+  // Get price based on selected plan
+  const getPlanPrice = (planName) => {
+    return planPrices[planName] || 'Contact for pricing';
+  };
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     company: '',
     message: '',
-    budget: '', 
     timeline: ''
   });
 
@@ -32,10 +49,82 @@ const ContactForm = ({
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
     else if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = 'Phone number must be exactly 10 digits';
-    if (!formData.budget) newErrors.budget = 'Budget is required';
     if (!formData.message) newErrors.message = 'Message is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const sendUserConfirmationEmail = async (userData) => {
+    try {
+      // Create confirmation email for user
+      const userEmailForm = new FormData();
+      userEmailForm.append("access_key", "7203cedb-c88e-49fd-9559-c83b4426bfcc");
+      userEmailForm.append("from_name", "Webory");
+      userEmailForm.append("from_email", "noreply@webory.com");
+      userEmailForm.append("to_email", userData.email);
+      userEmailForm.append("subject", "Inquiry Confirmation - We've Received Your Request");
+      
+      // Create detailed email content
+      const emailContent = `
+Dear ${userData.name},
+
+Thank you for your inquiry! We have successfully received your request and our team will review it shortly.
+
+📋 INQUIRY DETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 Contact Information:
+   • Name: ${userData.name}
+   • Email: ${userData.email}
+   • Phone: ${userData.phone}
+   ${userData.company ? `• Company: ${userData.company}` : ''}
+
+📦 Service Details:
+   • Service Type: ${serviceType || 'General Inquiry'}
+   ${plan ? `• Selected Plan: ${plan}` : ''}
+   ${plan ? `• Plan Price: ${getPlanPrice(plan)}` : ''}
+   ${userData.timeline ? `• Timeline: ${userData.timeline}` : ''}
+
+💬 Your Message:
+   "${userData.message}"
+
+${userData.ticketNumber ? `🎫 Support Ticket Number: ${userData.ticketNumber}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 WHAT'S NEXT?
+
+✅ Our expert team will review your requirements
+✅ We'll prepare a detailed proposal/solution
+✅ You can expect to hear from us within 24 hours
+✅ We'll contact you via email or phone to discuss next steps
+
+📞 Need immediate assistance? 
+   • Email: supporrtwebory@gmail.com
+   • Phone: +91 94734-71153
+   • Website: https://webory.netlify.app
+
+Thank you for choosing us! We're excited to work with you.
+
+Best regards,
+The Support Team
+Webory
+
+---
+This is an automated confirmation email. Please do not reply to this message.
+      `;
+      
+      userEmailForm.append("message", emailContent);
+      
+      // Send confirmation email to user
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: userEmailForm
+      });
+      
+    } catch (error) {
+      console.log("Failed to send confirmation email to user:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -55,23 +144,23 @@ const ContactForm = ({
     let web3Success = false;
     let dbSuccess = false;
     try {
-      // Create FormData from controlled state
+      // Create FormData from controlled state for admin email
       const form = new FormData();
       form.append("name", formData.name);
       form.append("email", formData.email);
       form.append("phone", formData.phone);
       form.append("company", formData.company);
       form.append("message", formData.message);
-      form.append("budget", formData.budget);
       form.append("timeline", formData.timeline);
       form.append("access_key", "7203cedb-c88e-49fd-9559-c83b4426bfcc");
       if (serviceType) form.append("serviceType", serviceType);
       if (plan) form.append("plan", plan);
+      if (plan) form.append("planPrice", getPlanPrice(plan));
       if (generatedTicketNumber) form.append("ticketNumber", generatedTicketNumber);
-      if (subject) form.append("subject", subject);
+      if (subject) form.append("subject", subject || `New ${serviceType} Inquiry from ${formData.name}`);
       if (fromName) form.append("from_name", fromName);
 
-      // Send to Web3Forms
+      // Send admin notification email
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: form
@@ -79,6 +168,12 @@ const ContactForm = ({
       const data = await response.json();
       if (data.success) {
         web3Success = true;
+        
+        // Send confirmation email to user
+        await sendUserConfirmationEmail({
+          ...formData,
+          ticketNumber: generatedTicketNumber
+        });
       }
       // Send to backend
       const dbPayload = {
@@ -112,9 +207,9 @@ const ContactForm = ({
       if (web3Success || dbSuccess) {
         setSuccess(true);
         if (generatedTicketNumber) {
-          setResult(`Support Ticket Submitted Successfully!\nYour Ticket Number: ${generatedTicketNumber}`);
+          setResult(`✅ Inquiry Submitted Successfully!\n📧 Confirmation email sent to ${formData.email}\n🎫 Your Ticket Number: ${generatedTicketNumber}`);
         } else {
-          setResult("Form Submitted Successfully");
+          setResult(`✅ Form Submitted Successfully!\n📧 Confirmation email sent to ${formData.email}`);
         }
         setFormData({
           name: '',
@@ -122,7 +217,6 @@ const ContactForm = ({
           phone: '',
           company: '',
           message: '',
-          budget: '',
           timeline: ''
         });
       } else {
@@ -176,10 +270,14 @@ const ContactForm = ({
             <>
               <p className="text-white/70">Your support ticket has been created.</p>
               <p className="text-white/90 font-bold mt-2">Ticket Number: {ticketNumber}</p>
-              <p className="text-white/60 mt-2">Please save this number for future reference.</p>
+              <p className="text-white/60 mt-2">📧 Confirmation email sent to your inbox!</p>
+              <p className="text-white/60">Please save this number for future reference.</p>
             </>
           ) : (
-            <p className="text-white/70">We'll get back to you shortly.</p>
+            <>
+              <p className="text-white/70">We'll get back to you shortly.</p>
+              <p className="text-white/60 mt-2">📧 Confirmation email sent to your inbox!</p>
+            </>
           )}
         </div>
       ) : (
@@ -242,23 +340,18 @@ const ContactForm = ({
 
           {showAdditionalFields && (
             <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-white/80 mb-2">Budget Range</label>
-                <select
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                  required
-                >
-                  <option value="">Select budget range</option>
-                  <option value="1k-5k">$0 - $100</option>
-                  <option value="5k-10k">$199 - $999</option>
-                  <option value="10k-25k">$999 - $1999</option>
-                  <option value="25k+">$2999 +</option>
-                </select>
-                {errors.budget && <p className="text-red-400 text-sm mt-1">{errors.budget}</p>}
-              </div> 
+              {/* Plan Price Display - Shows price based on selected plan */}
+              {plan && (
+                <div>
+                  <label className="block text-white/80 mb-2">Plan Price</label>
+                  <input
+                    type="text"
+                    value={getPlanPrice(plan)}
+                    readOnly
+                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
+                  />
+                </div>
+              )}
              <div>
                 <label className="block text-white/80 mb-2">Timeline</label>
                 <select
@@ -372,4 +465,4 @@ const ContactForm = ({
   );
 };
 
-export default ContactForm; 
+export default ContactForm;
