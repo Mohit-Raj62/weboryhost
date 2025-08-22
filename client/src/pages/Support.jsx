@@ -2,19 +2,22 @@ import React from 'react';
 import ContactForm from '../components/ContactForm';
 import SupportTicketForm from '../components/SupportTicketForm';
 
+const handleLiveChatClick = () => {
+  // Replaced non-breaking spaces with regular spaces and used encodeURIComponent for safety.
+  const text = 'Hi Webory, I am [Your Name] from [Business Name]. I am looking for [Website/SEO/App]. Please connect with me.';
+  window.open(`https://wa.me/919473471153?text=${encodeURIComponent(text)}`, '_blank');
+};
+
+const handleEmailClick = () => {
+  // Corrected typo in email address from 'supporrtwebory' to 'weboryinfo'.
+  window.location.href = 'mailto:weboryinfo@gmail.com';
+};
+
+const handlePhoneClick = () => {
+  window.location.href = 'tel:+919473471153';
+};
+
 const Support = () => {
-  const handleLiveChatClick = () => {
-    window.open('https://wa.me/919473471153?text=Hi Webory, I am [Your Name] from [Business Name]. I am looking for [Website/SEO/App]. Please connect with me.', '_blank');
-  };
-
-  const handleEmailClick = () => {
-    window.location.href = 'mailto:supporrtwebory@gmail.com';
-  };
-
-  const handlePhoneClick = () => {
-    window.location.href = 'tel:+91 94734-71153'; // Replace with your support phone number
-  };
-
   return (
     <div className="support-page min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden">
       <style>{`
@@ -385,19 +388,19 @@ const Support = () => {
         <div className="support-card">
           <h3>Live Chat Support</h3>
           <p>Connect with our support team instantly through our live chat system. Available 24/7 for immediate assistance.</p>
-          <button className="submit-button" onClick={handleLiveChatClick}>Chat Live</button>
+          <button type="button" className="submit-button" onClick={handleLiveChatClick}>Chat Live</button>
         </div>
 
         <div className="support-card">
           <h3>Email Support</h3>
           <p>Send us an email and our team will respond within 24 hours with detailed solutions to your queries.</p>
-          <button className="submit-button" onClick={handleEmailClick}>Send Email</button>
+          <button type="button" className="submit-button" onClick={handleEmailClick}>Send Email</button>
         </div>
 
         <div className="support-card">
           <h3>Phone Support</h3>
           <p>Speak directly with our technical experts. Available during business hours for personalized assistance.</p>
-          <button className="submit-button" onClick={handlePhoneClick}>Call Now</button>
+          <button type="button" className="submit-button" onClick={handlePhoneClick}>Call Now</button>
         </div>
       </div>
 
