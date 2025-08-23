@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import LiveChat from './components/LiveChat';
+import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
 import About from './pages/About';
 import Consulting from './pages/Consulting';
@@ -63,6 +64,7 @@ const App = () => {
       <BrowserRouter>
         <div className="min-h-screen bg-gray-100">
       <Navigation />
+      <WhatsAppButton />
       <main className="flex-grow">
         <Routes>
           {/* Public Routes */}
