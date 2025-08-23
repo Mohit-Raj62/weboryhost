@@ -27,6 +27,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import GetStarted from './pages/GetStarted';
 import TestPage from './pages/TestPage';
+import WhatsApp from './pages/WhatsApp';
 
 // Admin Components
 import AdminLogin from './pages/admin/AdminLogin';
@@ -87,6 +88,7 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/get-started" element={<GetStarted />} />
               <Route path="/test-page" element={<TestPage />} />
+              <Route path="/whatsapp" element={<WhatsApp />} />
 
               {/* Admin Authentication Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
