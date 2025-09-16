@@ -3,10 +3,15 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Fab, Tooltip } from '@mui/material';
 
 const WhatsAppButton = () => {
-  const handleLiveChatClick = () => {
-    // Replaced non-breaking spaces with regular spaces and used encodeURIComponent for safety.
-    const text = 'Hi Webory, I am [Your Name] from [Business Name]. I am looking for [Website/SEO/App]. Please connect with me.';
-    window.open(`https://wa.me/919473471153?text=${encodeURIComponent(text)}`, '_blank');
+  const handleLiveChatClick = (e) => {
+    e.preventDefault();
+    try {
+      const text = 'Hi Webory, I am [Your Name] from [Business Name]. I am looking for [Website/SEO/App]. Please connect with me.';
+      const whatsappUrl = `https://wa.me/919473471153?text=${encodeURIComponent(text)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error('Error opening WhatsApp:', error);
+    }
   };
 
   return (
@@ -22,8 +27,6 @@ const WhatsAppButton = () => {
           zIndex: 1000,
         }}
         onClick={handleLiveChatClick}
-        target="_blank"
-        rel="noopener noreferrer"
       >
         <WhatsAppIcon />
       </Fab>
