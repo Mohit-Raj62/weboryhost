@@ -51,7 +51,7 @@ const About = () => {
       image: "👩‍🎨",
       bio: "People-focused HR expert, growth-driven social media strategist, and visionary creative lead crafting impactful brand experiences.",
       skills: ["Creative Design", "HR Management", "Social Media"],
-      social: { email: "salonisingh17781@gmail.com", phone: "+91-9142812872" }
+      social: { email: "salonisingh17781@gmail.com", phone: "+91-94734 71153" }
     },
     {
       name: "Piyush Aryan",
