@@ -46,6 +46,14 @@ const About = () => {
       social: { email: "utkarshvats3434@gmail.com", phone: "+91-94316 15128" , Instagram: "https://www.instagram.com/utkarshvats_/"}
     },
     {
+      name: "Ridhima Singh",
+      role: "Social Media Strategist & UI/UX Designer",
+      image: "👩‍🎨 ",
+      bio: "A dynamic digital creator passionate about blending design and strategy. Ridhima specializes in crafting visually stunning interfaces and impactful social media experiences that connect brands with their audience authentically",
+        skills: ["Social Media Management", "UI/UX Design", "Brand Strategy"],
+      social: { email: "supportwebory@gmail.com", phone: "+91-94734 71153" }
+    },
+    {
       name: "Saloni Singh",
       role: "HR, SMM & Creative Director",
       image: "👩‍🎨",
