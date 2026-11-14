@@ -1,28 +1,9 @@
 [build]
   publish = "dist"
   command = "npm run build"
-  functions = "netlify/functions"
-
-[build.environment]
-  NODE_VERSION = "18"
-  VITE_API_URL = "https://webory.onrender.com"
-  VITE_NODE_ENV = "production"
-  NODE_ENV = "production"
-
-[[redirects]]
-  from = "/api/*"
-  to = "https://webory.onrender.com/api/:splat"
-  status = 200
-  force = true
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, Authorization" 
+  force = false
