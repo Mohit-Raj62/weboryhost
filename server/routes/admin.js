@@ -44,13 +44,17 @@ router.put("/users/:id", adminAuth, adminController.updateUser);
 // Post management
 router.put("/posts/:id/status", adminAuth, adminController.updatePostStatus);
 router.delete("/posts/:id", adminAuth, adminController.deletePost);
+router.post("/posts", adminAuth, adminController.createPost);
+router.put("/posts/:id", adminAuth, adminController.updatePost);
 
 // Comment management
 router.put(
   "/comments/:id/status",
   adminAuth,
+  adminAuth,
   adminController.updateCommentStatus
 );
+router.put("/comments/:id", adminAuth, adminController.updateComment);
 router.delete("/comments/:id", adminAuth, adminController.deleteComment);
 
 // Product management

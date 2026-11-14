@@ -41,11 +41,18 @@ const requiredEnvVars = ["MONGODB_URI"];
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  console.error(
-    "Missing required environment variables:",
-    missingEnvVars.join(", ")
-  );
-  process.exit(1);
+  if (process.env.NODE_ENV !== "production" && !process.env.MONGODB_URI) {
+    console.log(
+      "⚠️  MONGODB_URI not found, using default local URI for development."
+    );
+    process.env.MONGODB_URI = "mongodb://localhost:27017/webory";
+  } else {
+    console.error(
+      "Missing required environment variables:",
+      missingEnvVars.join(", ")
+    );
+    process.exit(1);
+  }
 }
 
 const allowedOrigins = [
@@ -435,18 +442,15 @@ const startServer = async () => {
       process.exit(1);
     }
 
-    // Start server only on Render or production
-    if (process.env.NODE_ENV === "production" || process.env.RENDER) {
+    // Start server (allow local development)
+    if (true) {
+      // Always start server
       server.listen(PORT, () => {
         console.log(`🚀 Server is running on port ${PORT}`);
         console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
         console.log(`Health check: http://localhost:${PORT}/api/health`);
         console.log(`Server started at: ${new Date().toISOString()}`);
       });
-    } else {
-      console.log(
-        "Server is not running locally. It will only run on Render (production).\nSet NODE_ENV=production to run locally if needed."
-      );
     }
   } catch (error) {
     console.error("Error starting server:", error);

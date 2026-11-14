@@ -17,7 +17,12 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
 
-  // Use Render server for both development and production
+  // Use Render server for production, localhost for development
+  if (import.meta.env.DEV) {
+    console.log("Using Localhost backend URL");
+    return "http://localhost:5002";
+  }
+
   console.log("Using Render backend URL");
   return "https://webory.onrender.com";
 };

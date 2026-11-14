@@ -434,7 +434,7 @@ ${responseMessage}`;
             <div className="flex flex-col gap-3 md:flex-row md:gap-4 sticky bottom-0 bg-gradient-to-br from-white via-blue-50 to-indigo-50 pt-4 pb-2">
               <button
                 onClick={() => { setPagination(prev => ({ ...prev, page: 1 })); setShowFilters(false); }}
-                className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-4 md:py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-base"
+                className="flex-1 flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-xl font-semibold shadow-md shadow-blue-600/25 transition-all text-sm"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

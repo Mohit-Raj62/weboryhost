@@ -255,9 +255,9 @@ const AdminDashboard = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
@@ -782,7 +782,7 @@ const AdminDashboard = () => {
       <>
         <div className="overflow-x-auto hidden md:block">
           <table className="min-w-full divide-y divide-gray-200 rounded-xl overflow-hidden shadow-md">
-            <thead className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white sticky top-0 z-10">
+            <thead className="bg-[#1e293b] text-white sticky top-0 z-10">
               <tr>
                 <th className="px-4 py-3 text-left font-semibold">Name</th>
                 <th className="px-4 py-3 text-left font-semibold">Email</th>

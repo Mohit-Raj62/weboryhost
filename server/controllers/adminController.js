@@ -1,5 +1,6 @@
 const Admin = require("../models/Admin");
 const User = require("../models/User");
+const Role = require("../models/Role");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const bcrypt = require("bcryptjs");
@@ -8,46 +9,7 @@ const emailService = require("../utils/emailService");
 // Role management functions
 const getRoles = async (req, res) => {
   try {
-    // Return predefined roles with their permissions
-    const roles = {
-      admin: {
-        name: "Administrator",
-        description: "Full access to all features and settings",
-        permissions: [
-          "manage_users",
-          "manage_roles",
-          "manage_posts",
-          "manage_comments",
-          "manage_settings",
-        ],
-      },
-      moderator: {
-        name: "Moderator",
-        description: "Can manage content and moderate users",
-        permissions: ["manage_posts", "manage_comments", "moderate_users"],
-      },
-      author: {
-        name: "Author",
-        description: "Can create and manage their own content",
-        permissions: [
-          "create_posts",
-          "edit_own_posts",
-          "delete_own_posts",
-          "manage_own_comments",
-        ],
-      },
-      user: {
-        name: "User",
-        description: "Basic user access",
-        permissions: [
-          "view_posts",
-          "create_comments",
-          "edit_own_comments",
-          "delete_own_comments",
-        ],
-      },
-    };
-
+    const roles = await Role.find({});
     res.json(roles);
   } catch (error) {
     console.error("Error fetching roles:", error);
@@ -57,20 +19,22 @@ const getRoles = async (req, res) => {
 
 const updateRole = async (req, res) => {
   try {
-    const { role } = req.params;
-    const { permissions } = req.body;
+    const { role: roleId } = req.params; // roleId
+    const { name, description, permissions } = req.body;
 
-    // Validate role
-    const validRoles = ["admin", "moderator", "author", "user"];
-    if (!validRoles.includes(role)) {
-      return res.status(400).json({ error: "Invalid role" });
+    const updatedRole = await Role.findByIdAndUpdate(
+      roleId,
+      { name, description, permissions },
+      { new: true }
+    );
+
+    if (!updatedRole) {
+      return res.status(404).json({ error: "Role not found" });
     }
 
-    // For now, just return success (in a real app, you'd update a database)
     res.json({
-      message: `Role ${role} updated successfully`,
-      role,
-      permissions,
+      message: "Role updated successfully",
+      role: updatedRole,
     });
   } catch (error) {
     console.error("Error updating role:", error);
@@ -82,16 +46,26 @@ const createRole = async (req, res) => {
   try {
     const { name, description, permissions } = req.body;
 
-    if (!name || !permissions) {
-      return res
-        .status(400)
-        .json({ error: "Name and permissions are required" });
+    if (!name) {
+      return res.status(400).json({ error: "Role name is required" });
     }
 
-    // For now, just return success (in a real app, you'd save to database)
+    const existingRole = await Role.findOne({ name });
+    if (existingRole) {
+      return res.status(400).json({ error: "Role already exists" });
+    }
+
+    const newRole = new Role({
+      name,
+      description,
+      permissions,
+    });
+
+    await newRole.save();
+
     res.status(201).json({
       message: "Role created successfully",
-      role: { name, description, permissions },
+      role: newRole,
     });
   } catch (error) {
     console.error("Error creating role:", error);
@@ -101,16 +75,14 @@ const createRole = async (req, res) => {
 
 const deleteRole = async (req, res) => {
   try {
-    const { role } = req.params;
+    const { role: roleId } = req.params;
+    const deletedRole = await Role.findByIdAndDelete(roleId);
 
-    // Validate role
-    const validRoles = ["admin", "moderator", "author", "user"];
-    if (!validRoles.includes(role)) {
-      return res.status(400).json({ error: "Invalid role" });
+    if (!deletedRole) {
+      return res.status(404).json({ error: "Role not found" });
     }
 
-    // For now, just return success (in a real app, you'd delete from database)
-    res.json({ message: `Role ${role} deleted successfully` });
+    res.json({ message: "Role deleted successfully" });
   } catch (error) {
     console.error("Error deleting role:", error);
     res.status(500).json({ error: "Failed to delete role" });
@@ -133,11 +105,77 @@ const getUsers = async (req, res) => {
 };
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("author", "name email");
+    const posts = await Post.find({})
+      .populate("author", "name email")
+      .sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);
     res.status(500).json({ error: "Failed to fetch posts" });
+  }
+};
+
+const createPost = async (req, res) => {
+  try {
+    const { title, content, status, tags, category } = req.body;
+
+    // Default author to current admin user if not provided (assuming admin context)
+    const author = req.admin._id;
+
+    if (!title || !content) {
+      return res.status(400).json({ error: "Title and content are required" });
+    }
+
+    const newPost = new Post({
+      title,
+      content,
+      status: status || "draft",
+      tags: tags
+        ? Array.isArray(tags)
+          ? tags
+          : tags.split(",").map((t) => t.trim())
+        : [],
+      category,
+      author,
+    });
+
+    await newPost.save();
+    res
+      .status(201)
+      .json({ message: "Post created successfully", post: newPost });
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ error: "Failed to create post" });
+  }
+};
+
+const updatePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, status, tags, category } = req.body;
+
+    const updateData = { title, content, status };
+    if (tags) {
+      updateData.tags = Array.isArray(tags)
+        ? tags
+        : tags.split(",").map((t) => t.trim());
+    }
+    if (category) {
+      updateData.category = category;
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.json({ message: "Post updated", post: updatedPost });
+  } catch (error) {
+    console.error("Error updating post:", error);
+    res.status(500).json({ error: "Failed to update post" });
   }
 };
 const getComments = async (req, res) => {
@@ -241,6 +279,29 @@ const updateCommentStatus = async (req, res) => {
     res.status(500).json({ error: "Failed to update comment status" });
   }
 };
+
+const updateComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    const comment = await Comment.findByIdAndUpdate(
+      id,
+      { content },
+      { new: true }
+    ).populate("author", "name email");
+
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    res.json({ message: "Comment updated", comment });
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    res.status(500).json({ error: "Failed to update comment" });
+  }
+};
+
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
@@ -358,8 +419,11 @@ module.exports = {
   updatePostStatus,
   deletePost,
   updateCommentStatus,
+  updateComment,
   deleteComment,
   getUserById,
   createUser,
+  createPost,
+  updatePost,
   updateUser,
 };

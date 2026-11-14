@@ -12,13 +12,13 @@ const ContactForm = ({
   
   // Plan price mapping
   const planPrices = {
-    'Basic Plan': '$99',
-    'Standard Plan': '$299',
-    'Premium Plan': '$599',
-    'Enterprise Plan': '$1299',
-    'Starter': '$149',
-    'Professional': '$499',
-    'Business': '$999',
+    'Basic Plan': '₹99',
+    'Standard Plan': '₹299',
+    'Premium Plan': '₹599',
+    'Enterprise Plan': '₹1299',
+    'Starter': '₹149',
+    'Professional': '₹499',
+    'Business': '₹999',
     'Custom': 'Contact for pricing',
     // Add more plan mappings as needed
   };
@@ -408,7 +408,7 @@ This is an automated confirmation email. Please do not reply to this message.
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl text-base font-semibold transition-all duration-200 shadow-lg shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="flex items-center justify-center">

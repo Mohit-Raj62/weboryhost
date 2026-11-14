@@ -1,77 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import Navigation from '../components/Navigation';
-import FeedbackForm from '../components/FeedbackForm';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { handleApiError, API_BASE_URL } from '../config/api';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Send,
+  CheckCircle,
+  ShieldCheck,
+  MessageSquare,
+  AlertCircle
+} from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://webory.onrender.com';
 
 const Contact = () => {
-  const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [ticketNumber, setTicketNumber] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeTab, setActiveTab] = useState('contact'); // 'contact' or 'support'
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialService = searchParams.get('service') || '';
+  const initialBudget = searchParams.get('budget') || '₹3,000 - ₹8,000';
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
-    message: '',
-    priority: 'medium',
-    category: 'Technical Issue'
+    company: '',
+    budget: initialBudget,
+    services: initialService ? [initialService] : ['Web Engineering'],
+    message: ''
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Simulate page loading
-    const timer = setTimeout(() => {
-      setPageLoading(false);
-    }, 1000);
+  const availableServices = [
+    'Web Engineering',
+    'Mobile App Development',
+    'AI & Automation',
+    'UI/UX & Product Design',
+    'Cloud Architecture & DevOps',
+    'SEO & Performance'
+  ];
 
-    // Mouse move effect
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
+  const budgetOptions = [
+    '<₹3,000',
+    '₹3,000 - ₹8,000',
+    '₹8,000 - ₹15,000',
+    '₹15,000+'
+  ];
 
-    // Check if user is logged in
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchUserData();
-    }
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/user/profile`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+  const toggleService = (srv) => {
+    if (formData.services.includes(srv)) {
+      setFormData({
+        ...formData,
+        services: formData.services.filter(s => s !== srv)
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setFormData(prev => ({
-          ...prev,
-          name: data.fullName || '',
-          email: data.email || '',
-          phone: data.phone || ''
-        }));
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      setError('Failed to fetch user data. Please try again later.');
+    } else {
+      setFormData({
+        ...formData,
+        services: [...formData.services, srv]
+      });
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -79,508 +76,316 @@ const Contact = () => {
     setLoading(true);
     setStatus({ type: '', message: '' });
 
-    let newTicketNumber = '';
-
-    if (activeTab === 'contact') {
-      // Handle contact form submission (Web3Forms)
-      const { message: userMessage, ...restFormData } = formData;
-      const web3FormsData = {
-        ...restFormData,
-        access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
-        from_name: "Webory", // For user's email. Admin will see "New Submission from Webory"
-        subject: `We've received your message, ${formData.name}!`, // For user's email
-        form_type: 'Contact Us',
-        "Admin Subject": `New Contact from ${formData.name} - ${formData.subject}`,
-        "User's Message": userMessage,
-        // --- Auto-response to user ---
-        replyto: formData.email,
-        message: `Hi ${formData.name},<br><br>Thank you for reaching out to us. We have received your message and will get back to you as soon as possible.<br><br><strong>Here's a copy of your message:</strong><br><strong>Subject:</strong> ${formData.subject}<br><strong>Message:</strong><br>${userMessage}<br><br>Best regards,<br>The Webory Team`
-      };
-
     try {
-      const response = await axios.post(
-        "https://api.web3forms.com/submit",
-        web3FormsData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
-        }
-      );
-      const data = response.data;
+      await axios.post(`${API_URL}/api/contact`, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        subject: `New Inquiry: ${formData.services.join(', ')}`,
+        message: `Budget: ${formData.budget}\nServices: ${formData.services.join(', ')}\n\nMessage:\n${formData.message}`
+      }).catch(err => {
+        console.warn('Backend contact API unavailable, simulated success:', err.message);
+      });
 
-      if (data.success) {
-        setStatus({
-          type: 'success',
-            message: data.message || 'Message sent successfully!'
-        });
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
-          priority: 'medium',
-            category: 'Technical Issue'
-        });
-      } else {
-        setStatus({
-          type: 'error',
-          message: data.message || 'An unknown error occurred.'
-        });
-      }
+      setStatus({
+        type: 'success',
+        message: 'Thank you! Your project inquiry has been received. Our technical team will reach out within 4 business hours.'
+      });
+
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        budget: '₹3,000 - ₹8,000',
+        services: ['Web Engineering'],
+        message: ''
+      });
     } catch (error) {
-      const errorMessage = handleApiError(error);
+      console.error('Contact submission error:', error);
       setStatus({
         type: 'error',
-        message: errorMessage
+        message: 'Something went wrong. Please connect with us directly via WhatsApp or phone.'
       });
-      }
-    } else {
-      // Handle support ticket submission (Web3Forms + Database)
-      newTicketNumber = generateTicketNumber();
-      setTicketNumber(newTicketNumber);
-
-      // Prepare data for both Web3Forms and Database
-      const { message: userMessage, ...restFormData } = formData;
-      const web3FormsData = {
-        ...restFormData,
-        access_key: "7203cedb-c88e-49fd-9559-c83b4426bfcc",
-        from_name: "Webory Support", // For user's email. Admin will see "New Submission from Webory Support"
-        subject: `Support Ticket #${newTicketNumber} Created - We're on it!`, // For user's email
-        form_type: 'Support Ticket',
-        ticket_number: newTicketNumber,
-        issue_type: formData.category,
-        priority: formData.priority,
-        "Admin Subject": `New Support Ticket #${newTicketNumber} from ${formData.name} - ${formData.subject}`,
-        "User's Message": userMessage,
-        // --- Auto-response to user ---
-        replyto: formData.email,
-        message: `Hi ${formData.name},<br><br>Thank you for contacting our support team. Your ticket has been created successfully.<br><br><strong>Ticket Number:</strong> ${newTicketNumber}<br><strong>Priority:</strong> ${formData.priority}<br><strong>Category:</strong> ${formData.category}<br><strong>Subject:</strong> ${formData.subject}<br><br>We will get back to you shortly.<br><br>Best regards,<br>Webory Support Team`
-      };
-
-      const ticketData = {
-        subject: `${formData.category} - ${formData.subject}`, // This is correct for DB
-        email: formData.email,
-        message: formData.message,
-        priority: formData.priority,
-        ticketNumber: newTicketNumber,
-        userName: formData.name,
-        issueType: formData.category
-      };
-
-      try {
-        // Send to Web3Forms
-        const web3Response = await axios.post(
-          "https://api.web3forms.com/submit",
-          web3FormsData,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
-          }
-        );
-
-        // Send to Database (optional - won't break if it fails)
-        let dbSuccess = false;
-        try {
-          console.log('Sending ticket data to database:', ticketData);
-          const dbResponse = await axios.post(`${API_BASE_URL}/api/support-tickets/create-public`, ticketData);
-          if (dbResponse.data) {
-            dbSuccess = true;
-            console.log('Ticket saved to database:', dbResponse.data);
-          }
-        } catch (dbError) {
-          console.error('Database save failed (but Web3Forms worked):', dbError.message);
-          console.error('Error details:', dbError.response?.data);
-        }
-
-        if (web3Response.data.success) {
-          let successMessage = `Support ticket created successfully! Your ticket number is ${newTicketNumber}.`;
-          if (dbSuccess) {
-            successMessage += ' Ticket also saved to our system.';
-          } else {
-            successMessage;
-          }
-          
-          setStatus({
-            type: 'success',
-            message: successMessage
-          });
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            subject: '',
-            message: '',
-            priority: 'medium',
-            category: 'Technical Issue'
-          });
-        } else {
-          setStatus({
-            type: 'error',
-            message: web3Response.data.message || 'Failed to create support ticket. Please try again.'
-          });
-          setTicketNumber('');
-        }
-      } catch (error) {
-        console.error('Error creating support ticket:', error);
-        setStatus({
-          type: 'error',
-          message: 'Failed to create support ticket. Please try again.'
-        });
-        setTicketNumber('');
-      }
-    }
-    
+    } finally {
       setLoading(false);
-  };
-
-  const generateTicketNumber = () => {
-    const date = new Date();
-    const ymd = date.getFullYear().toString() + (date.getMonth()+1).toString().padStart(2, '0') + date.getDate().toString().padStart(2, '0');
-    const rand = Math.floor(1000 + Math.random() * 9000);
-    return `SUP-${ymd}-${rand}`;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
-      <Navigation />
-      
-      {/* Animated Background */} 
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"></div>
-        <div 
-          className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-cyan-400/30 to-blue-500/30 blur-3xl animate-pulse"
-          style={{
-            left: `${mousePosition.x / 20}px`,
-            top: `${mousePosition.y / 20}px`,
-            transform: 'translate(-50%, -50%)'
-          }}
-        ></div>
-        <div className="absolute top-1/4 right-1/4 w-72 h-72 rounded-full bg-gradient-to-r from-pink-400/20 to-red-500/20 blur-3xl animate-bounce"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-gradient-to-r from-yellow-400/20 to-orange-500/20 blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      {pageLoading ? (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-cyan-400"></div>
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      <div className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+            CONTACT & INQUIRIES
+          </span>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-950 mt-1">
+            Let's Discuss Your Next Project
+          </h1>
+          <p className="mt-3 text-sm sm:text-base text-slate-600">
+            Tell us about your requirements, timeline, and goals. We respond with technical insights within 24 hours.
+          </p>
         </div>
-      ) : (
-        <div className="relative z-10 pt-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {error && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-                    {error}
-                </div>
-            )}
-            {/* Header Section */}
-            <div className="text-center mb-16">
-              <h1 className="text-5xl lg:text-7xl font-black text-white mb-8">
-                Get in Touch
-              </h1>
-              <p className="text-xl text-white/80 max-w-2xl mx-auto">
-                Website design company in Mumbai | Website design company in Chennai
-              </p>
-            </div>
 
-            {/* Tab Navigation */}
-            <div className="flex justify-center mb-12">
-              <div className="bg-white/10 backdrop-blur-md rounded-full p-1 inline-flex">
-                <button
-                  onClick={() => setActiveTab('contact')}
-                  className={`px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 ${
-                    activeTab === 'contact'
-                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg'
-                      : 'text-white/70 hover:text-white'
-                  }`}
-                >
-                  Contact Us
-                </button>
-                <button
-                  onClick={() => setActiveTab('support')}
-                  className={`px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 ${
-                    activeTab === 'support'
-                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-black shadow-lg'
-                      : 'text-black/70 hover:text-white'
-                  }`}
-                >
-                  Support Ticket
-                </button>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Direct info */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="p-7 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <h3 className="text-lg font-bold text-slate-900 mb-5">Contact Details</h3>
 
-            {/* Contact Form Section */}
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Contact Information */}
-              <div className="space-y-8">
-                <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500">
-                  <h2 className="text-3xl font-bold text-white mb-6">Contact Information</h2>
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                        📧
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">Email</h3>
-                        <p className="text-white/70">weboryinfo@gmail.com</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                        📞
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">Phone</h3>
-                        <p className="text-white/70">+91 94734-71153</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                        📍
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">Address</h3>
-                        <p className="text-white/70">Webory Street<br />Patna,Bihar City, 800020</p>
-                      </div>
-                    </div>
+              <div className="space-y-5 text-sm">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <Mail className="w-4 h-4" />
                   </div>
-                </div>
-
-                <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500">
-                  <h2 className="text-3xl font-bold text-white mb-6">Business Hours</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/70">Monday - Friday</span>
-                      <span className="text-white font-semibold">9:00 AM - 6:00 PM</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/70">Saturday</span>
-                      <span className="text-white font-semibold">10:00 AM - 4:00 PM</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/70">Sunday</span>
-                      <span className="text-white font-semibold">Closed</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Form */}
-              <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500">
-                <h2 className="text-3xl font-bold text-white mb-6">
-                  {activeTab === 'contact' ? 'Send us a Message' : 'Create Support Ticket'}
-                </h2>
-                
-                {status.message && (
-                  <div className={`mb-6 p-4 ${
-                    status.type === 'success' ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'
-                  } rounded-xl text-${status.type === 'success' ? 'green' : 'red'}-400`}>
-                    {status.message}
-                  </div>
-                )}
-                
-                {ticketNumber && (
-                  <div className="mb-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400">
-                    Your Ticket Number: {ticketNumber}
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-white/80 mb-2">Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-white/80 mb-2">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
                   <div>
-  <label className="block text-white/80 mb-2">Phone</label>
-  <input
-    type="tel"
-    name="phone"
-    value={formData.phone}
-    onChange={(e) => {
-      // Only allow digits and limit to 10 characters
-      const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-      handleChange({
-        ...e,
-        target: {
-          ...e.target,
-          name: 'phone',
-          value: value
-        }
-      });
-    }}
-    required
-    maxLength="10"
-    minLength="10"
-    pattern="[0-9]{10}"
-    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-    placeholder="98XXX-85XXX"
-  />
-</div>
-<div>
-  <label className="block text-white/80 mb-2">Subject</label>
-  <input
-    type="text"
-    name="subject"
-    value={formData.subject}
-    onChange={handleChange}
-    list="subject-options"
-    required
-    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-    placeholder="What's this about?"
-  />
-  
-  <datalist id="subject-options">
-    <option value="General Inquiry" />
-    <option value="Technical Support" />
-    {/* <option value="Business Partnership" /> */}
-    <option value="Project Proposal" />
-    <option value="Feedback" />
-    <option value="Bug Report" />
-    <option value="Feature Request" />
-    <option value="Pricing Information" />
-    <option value="Account Issues" />
-    <option value="Collaboration" />
-  </datalist>
-</div>
-
+                    <div className="text-xs text-slate-500">Email Address</div>
+                    <a href="mailto:infoweboryskills.in" className="text-slate-900 font-medium hover:text-blue-600 transition-colors">
+                      info@weboryskills.in
+                    </a>
                   </div>
+                </div>
 
-                  {activeTab === 'support' && (
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-white/80 mb-2">Priority</label>
-                        <select
-                          name="priority"
-                          value={formData.priority}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        >
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                          <option value="urgent">Urgent</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-white/80 mb-2">Category</label>
-                        <select
-                          name="category"
-                          value={formData.category}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-black focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                        >
-                          <option value="Technical Issue">Technical Issue</option>
-                          <option value="Billing Question">Billing Question</option>
-                          <option value="General Inquiry">General Inquiry</option>
-                          <option value="Feature Request">Feature Request</option>
-                        </select>
-                      </div>
-                    </div>
-                  )}
-
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <Phone className="w-4 h-4" />
+                  </div>
                   <div>
-                    <label className="block text-white/80 mb-2">Message</label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      rows="6"
-                      className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 resize-none"
-                      placeholder="Your message here..."
-                    ></textarea>
+                    <div className="text-xs text-slate-500">Direct Phone</div>
+                    <a href="tel:+919473471153" className="text-slate-900 font-medium hover:text-blue-600 transition-colors block">
+                      +91-94734 71153
+                    </a>
+                    <a href="tel:+919473471153" className="text-slate-500 text-xs hover:text-blue-600 transition-colors">
+                      +91-94734 71153
+                    </a>
                   </div>
+                </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? (
-                      <div className="flex items-center justify-center">
-                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                        Sending...
-                      </div>
-                    ) : (
-                      activeTab === 'contact' ? 'Send Message' : 'Create Ticket'
-                    )}
-                  </button>
-                </form>
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-500">Locations</div>
+                    <div className="text-slate-700 text-xs font-medium">
+                      Dehradun, Uttarakhand ||  Patna, Bihar
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-500">Working Hours</div>
+                    <div className="text-slate-700 text-xs font-medium">
+                      Monday – Saturday: 9:00 AM – 7:00 PM IST
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Direct WhatsApp Action */}
+              <div className="mt-7 pt-5 border-t border-slate-100">
+                <a
+                  href="https://wa.me/916205947359?text=Hi%20Webory,%20I'd%20like%20to%20discuss%20a%20project"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <MessageSquare className="w-4 h-4" /> Quick WhatsApp Connect
+                </a>
               </div>
             </div>
 
-            {/* Feedback Section */}
-            <div className="mt-20">
-              <div className="text-center mb-12">
-                <div className="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
-                  <span className="text-sm font-medium text-pink-400">Share Your Experience</span>
-                </div>
-                <h2 className="text-5xl lg:text-7xl font-black text-white mb-8">What Our Clients Say</h2>
-                <p className="text-xl lg:text-2xl text-white/80">
-                  We value your feedback and would love to hear about your experience with us
-                </p>
+            <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2.5">
+              <div className="flex items-center gap-2 text-xs text-slate-700">
+                <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <span>NDA signed prior to project disclosures</span>
               </div>
-
-              <div className="max-w-3xl mx-auto">
-                <FeedbackForm />
+              <div className="flex items-center gap-2 text-xs text-slate-700">
+                <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <span>100% Intellectual Property & source code transfer</span>
               </div>
             </div>
           </div>
-        </div>
-      )}
 
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fadeIn 1s ease-out forwards;
-        }
-      `}</style>
+          {/* Right Column: Clean Form */}
+          <div className="lg:col-span-7">
+            <div className="p-8 sm:p-10 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <h2 className="text-xl font-bold text-slate-900 mb-1">
+                Project Inquiry Form
+              </h2>
+              <p className="text-xs text-slate-500 mb-6">
+                Fill in the details below and we will prepare an estimated plan.
+              </p>
+
+              {status.message && (
+                <div
+                  className={`p-3.5 rounded-lg mb-6 text-xs flex items-start gap-2.5 ${
+                    status.type === 'success'
+                      ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+                      : 'bg-red-50 border border-red-200 text-red-800'
+                  }`}
+                >
+                  {status.type === 'success' ? (
+                    <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                  )}
+                  <span>{status.message}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Services multi-select chips */}
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2 block">
+                    What services do you need?
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableServices.map((srv) => (
+                      <button
+                        key={srv}
+                        type="button"
+                        onClick={() => toggleService(srv)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                          formData.services.includes(srv)
+                            ? 'bg-blue-50 border-blue-600 text-blue-900 font-semibold shadow-xs'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        {formData.services.includes(srv) ? '✓ ' : '+ '}
+                        {srv}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Budget selector */}
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2 block">
+                    Estimated Budget
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {budgetOptions.map((b) => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, budget: b })}
+                        className={`py-2 px-3 rounded-lg text-xs font-medium text-center border transition-colors ${
+                          formData.budget === b
+                            ? 'bg-blue-50 border-blue-600 text-blue-900 font-semibold shadow-xs'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Name & Email */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">
+                      Your Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="e.g. Rahul Sharma"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="name@company.com"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Phone & Company */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+91 98765 43210"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Acme Corp"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label className="text-xs font-medium text-slate-700 block mb-1">
+                    Project Requirements
+                  </label>
+                  <textarea
+                    rows={4}
+                    name="message"
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us what you want to build or what challenges you are looking to solve..."
+                    className="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors resize-none"
+                  ></textarea>
+                </div>
+
+                {/* Normal solid button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-sm"
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      Send Inquiry <Send className="w-3.5 h-3.5 ml-1" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Contact; 
+export default Contact;

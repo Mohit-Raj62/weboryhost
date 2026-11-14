@@ -1,173 +1,102 @@
-import React, { useState } from 'react';
-import Navigation from '../components/Navigation';
-import PageHeader from '../components/PageHeader';
-import ServiceCard from '../components/ServiceCard';
-import PricingCard from '../components/PricingCard';
-import ContactForm from '../components/ContactForm';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Layers,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  Sparkles
+} from 'lucide-react';
 
 const MLM = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-
-  const services = [
+  const capabilities = [
     {
-      title: "MLM Software",
-      description: "Complete MLM software solution with advanced features.",
-      icon: "💼",
-      gradient: "from-blue-500 to-cyan-500"
+      title: "Binary & Matrix Commission Engines",
+      desc: "Mathematical precision engines calculating deep hierarchical payouts, downline volumes, and binary leg balances in real time.",
+      icon: DollarSign,
+      tags: ["Binary", "Matrix", "Unilevel", "Automated Payouts"]
     },
     {
-      title: "Network Marketing",
-      description: "Tools for managing your network marketing business.",
-      icon: "🌐",
-      gradient: "from-purple-500 to-pink-500"
+      title: "Network & Tree Visualizer",
+      desc: "Interactive canvas visualization mapping downlines, distributor genealogies, and leg volumes with instant zoom and search.",
+      icon: Layers,
+      tags: ["Genealogy Tree", "Downline Map", "Real-Time Sync"]
     },
     {
-      title: "Commission Management",
-      description: "Automated commission calculation and payout system.",
-      icon: "💰",
-      gradient: "from-orange-500 to-red-500"
+      title: "Automated Wallet & Payment Gateways",
+      desc: "Multi-currency digital e-wallets supporting automated bank transfers, UPI payouts, and crypto settlement options.",
+      icon: TrendingUp,
+      tags: ["E-Wallet", "Instant Payouts", "Multi-Currency"]
     },
     {
-      title: "Business Analytics",
-      description: "Comprehensive reporting and analytics dashboard.",
-      icon: "📊",
-      gradient: "from-green-500 to-emerald-500"
+      title: "Compliance & Anti-Fraud Telemetry",
+      desc: "Automated fraud detection, KYC verification, and regulatory compliance safeguards preventing compensation exploitation.",
+      icon: ShieldCheck,
+      tags: ["KYC Gateways", "Fraud Anomaly Detection", "Audit Trails"]
     }
   ];
-
-  const pricingPlans = [
-    {
-      title: "Starter",
-      price: 1999,
-      features: [
-        "Member registration & login",
-        "Basic genealogy/tree view",
-        "Basic commission calculation",
-        "Admin panel (member & payout management)",
-        "1 MLM plan (Binary / Matrix / Unilevel)",
-        "Basic reports"
-      ],
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      title: "Professional",
-      price: 4999,
-      features: [
-        "Multiple MLM plans support",
-        "E-wallet system",
-        "Auto-payout calculation",
-        "Product integration (for product-based MLM)",
-        "Advanced reports & analytics",
-        "Mobile-friendly responsive UI",
-        "Multi-language support"
-      ],
-      isPopular: true,
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Enterprise",
-      price: 9999,
-      features: [
-        "Web + Mobile Apps (Android & iOS)",
-        "Real-time commission tracking",
-        "Automated payouts to bank/UPI",
-        "Product & inventory management",
-        "SMS/Email/WhatsApp integration",
-        "Custom dashboards & reports",
-        "Cloud hosting & security setup",
-        // "White Label Option"
-      ],
-      gradient: "from-orange-500 to-red-500"
-    }
-  ];
-
-  const handlePlanSelect = (planTitle) => {
-    setSelectedPlan(planTitle);
-    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleFormSubmit = async (formData) => {
-    console.log('Form submitted:', { ...formData, selectedPlan });
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
-      <Navigation />
-      
-      <PageHeader 
-        title="MLM Software Solutions"
-        description="Powerful MLM software to manage and grow your network marketing business"
-        gradient="from-indigo-900 via-purple-900 to-pink-900"
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
-          ))}
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-semibold mb-6">
+          <Layers className="w-3.5 h-3.5 text-blue-600" /> NETWORK MARKETING & COMMISSION SOFTWARE
         </div>
 
-        {/* Features Section */}
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Why Choose Our MLM Software?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xl">
-                ⚡
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-950 max-w-4xl mx-auto leading-tight">
+          High-Concurrency Network Engines That{' '}
+          <span className="text-blue-600">
+            Never Miss a Calculation.
+          </span>
+        </h1>
+
+        <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          Custom compensation plan architectures, interactive genealogy trees, and automated payout pipelines built for hundreds of thousands of concurrent distributors.
+        </p>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Link
+            to="/contact?service=Network+Marketing+Software"
+            className="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm transition-all flex items-center gap-2"
+          >
+            Request Demo Sandbox <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Capabilities */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {capabilities.map((cap, idx) => {
+            const CIcon = cap.icon;
+            return (
+              <div
+                key={idx}
+                className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 mb-6">
+                  <CIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-950">{cap.title}</h3>
+                <p className="mt-3 text-sm text-slate-600 leading-relaxed">{cap.desc}</p>
+                <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+                  {cap.tags.map(t => (
+                    <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-slate-600">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Scalable Solution</h3>
-              <p className="text-white/70">Grow your network seamlessly</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl">
-                🔒
-              </div>
-              <h3 className="text-xl font-semibold text-white">Secure Platform</h3>
-              <p className="text-white/70">Enterprise-grade security</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white text-xl">
-                📈
-              </div>
-              <h3 className="text-xl font-semibold text-white">Business Growth</h3>
-              <p className="text-white/70">Tools for success</p>
-            </div>
-          </div>
+            );
+          })}
         </div>
-
-        {/* Pricing Section */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing Plans</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <PricingCard
-                key={index}
-                {...plan}
-                onSelect={handlePlanSelect}
-                buttonText={selectedPlan === plan.title ? 'Selected' : 'Get Started'}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Contact Form Section */}
-        <div id="contact-form" className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
-          </h2>
-          <ContactForm
-            serviceType="mlm software"
-            buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
-            plan={selectedPlan}
-            subject={selectedPlan ? `New MLM Software Inquiry: ${selectedPlan}` : 'New MLM Software Inquiry'}
-            fromName="Webory MLM"
-          />
-        </div>
-      </div>
+      </section>
     </div>
   );
 };
 
-export default MLM; 
+export default MLM;
+

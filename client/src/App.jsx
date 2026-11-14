@@ -25,6 +25,7 @@ import CookiePolicy from './pages/CookiePolicy';
 import Blog from './pages/Blog';
 import Career from './pages/Careers';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Register from './pages/Register';
 import GetStarted from './pages/GetStarted';
 import TestPage from './pages/TestPage';
@@ -40,21 +41,41 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminPosts from './pages/admin/AdminPosts';
 import AdminComments from './pages/admin/AdminComments';
 import AdminRoles from './pages/admin/AdminRoles';
-import Products from './pages/admin/Products';
 import Careers from './pages/admin/Careers';
 import Settings from './pages/admin/Settings';
 import Profile from './pages/admin/Profile';
+
+import { useLocation } from 'react-router-dom';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+  return null;
+};
 
 const App = () => {
   const theme = createTheme({
     palette: {
       mode: 'light',
+      background: {
+        default: '#f8fafc',
+        paper: '#ffffff',
+      },
       primary: {
-        main: '#2196F3',
+        main: '#2563eb',
       },
       secondary: {
-        main: '#21CBF3',
+        main: '#0f172a',
       },
+      text: {
+        primary: '#0f172a',
+        secondary: '#475569',
+      },
+    },
+    typography: {
+      fontFamily: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'].join(','),
     },
   });
 
@@ -62,10 +83,11 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-100">
-      <Navigation />
-      <WhatsAppButton />
-      <main className="flex-grow">
+        <ScrollToTop />
+        <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white">
+          <Navigation />
+          <WhatsAppButton />
+          <main className="flex-grow pt-24">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -87,6 +109,7 @@ const App = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/career" element={<Career />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/register" element={<Register />} />
               <Route path="/get-started" element={<GetStarted />} />
               <Route path="/test-page" element={<TestPage />} />
@@ -111,7 +134,6 @@ const App = () => {
                 <Route path="roles" element={<AdminRoles />} />
                 <Route path="posts" element={<AdminPosts />} />
                 <Route path="comments" element={<AdminComments />} />
-                <Route path="products" element={<Products />} />
                 <Route path="careers" element={<Careers />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="profile" element={<Profile />} />

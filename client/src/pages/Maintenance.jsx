@@ -1,427 +1,131 @@
-import React, { useState, useRef } from 'react';
-import ContactForm from '../components/ContactForm';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Wrench,
+  CheckCircle2
+} from 'lucide-react';
 
 const Maintenance = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const contactFormRef = useRef(null);
-
   const plans = [
     {
-      title: 'Basic',
-      price: '₹5,000 - ₹12,000',
+      title: 'Essential SLA',
+      price: '₹299',
       period: 'month',
-      suitableFor: 'Small Businesses',
+      suitableFor: 'Startups & Growing Businesses',
       features: [
-        'Website Uptime Monitoring',
-        'Basic Bug Fixes',
-        'Monthly Backup',
-        'Email Support',
+        '24/7 Automated Uptime Telemetry',
+        'Weekly Security & Dependency Patches',
+        'Cloud Database Automated Snapshots',
+        'SSL Certificate & Domain Monitoring',
+        'Guaranteed 12-Hour Support SLA',
+        'Monthly Speed & Health Audit'
       ],
+      popular: false
     },
     {
-      title: 'Standard',
-      price: '₹15,000 - ₹35,000',
+      title: 'High-Velocity Growth',
+      price: '₹799',
       period: 'month',
-      suitableFor: 'SMEs & E-commerce',
+      suitableFor: 'High-Traffic Portals & E-Commerce',
       features: [
-        'Website & App Maintenance',
-        'Security Updates',
-        'Server Monitoring',
-        'Speed Optimization',
-        'Priority Support',
+        'Dedicated Technical Account Lead',
+        '20 Hours Allocated Engineering Iterations / Mo',
+        'Continuous Vulnerability & Penetration Scanning',
+        'Core Web Vitals & Redis Caching Tuning',
+        'Guaranteed 2-Hour Response SLA',
+        'Emergency Rollback & Hotfix Protocol'
       ],
+      popular: true
     },
     {
-      title: 'Premium',
-      price: '₹40,000+',
+      title: 'Mission-Critical Enterprise',
+      price: '₹1,899',
       period: 'month',
-      suitableFor: 'Corporates & High-Traffic Portals',
+      suitableFor: 'Enterprise SaaS & Mission-Critical Systems',
       features: [
-        '24/7 Priority Support',
-        'Advanced Security Suite',
-        'Disaster Recovery Plan',
-        'Proactive Software Updates',
-        'Dedicated Resource',
+        '24/7/365 On-Call Principal Engineers',
+        '50 Hours Custom Feature Engineering / Mo',
+        'Multi-Region Disaster Recovery Guarantee',
+        'SOC-2 / Compliance Continuous Auditing',
+        '15-Minute Critical Incident Escalation SLA',
+        'Dedicated Slack / Discord Communication'
       ],
-    },
+      popular: false
+    }
   ];
 
-  const handlePlanSelect = (planTitle) => {
-    setSelectedPlan(planTitle);
-    contactFormRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <div className="maintenance-page min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-950 relative overflow-x-hidden">
-      <style>{`
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-          100% { transform: translateY(0px); }
-        }
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          MAINTENANCE & SLA SUPPORT
+        </span>
 
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-950 max-w-3xl mx-auto mt-2 leading-tight">
+          Reliable Software <span className="text-blue-600">Maintenance & Uptime.</span>
+        </h1>
 
-        @keyframes shine {
-          from { background-position: 200% center; }
-          to { background-position: -200% center; }
-        }
+        <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          Zero downtime. Regular security updates. Continuous performance tuning. We maintain your infrastructure so you can focus entirely on growing your business.
+        </p>
+      </section>
 
-        .maintenance-page {
-          padding: 4rem 2rem;
-          max-width: 2200px;
-          margin: 0 auto;
-          color: white;
-          position: relative;
-        }
+      {/* Plans */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {plans.map((plan, idx) => (
+            <div
+              key={idx}
+              className={`rounded-2xl p-7 flex flex-col justify-between transition-all ${
+                plan.popular
+                  ? 'bg-white border-2 border-blue-600 shadow-lg relative'
+                  : 'bg-white border border-slate-200 hover:shadow-md'
+              }`}
+            >
+              <div>
+                {plan.popular && (
+                  <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white mb-3">
+                    Recommended
+                  </span>
+                )}
+                <h3 className="text-xl font-bold text-slate-950">{plan.title}</h3>
+                <p className="text-xs text-slate-500 mt-1">{plan.suitableFor}</p>
 
-        .maintenance-page::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
-          pointer-events: none;
-        }
+                <div className="my-5">
+                  <span className="text-3xl font-extrabold text-slate-950">
+                    {plan.price}
+                  </span>
+                  <span className="text-xs text-slate-500"> / {plan.period}</span>
+                </div>
 
-        .hero-section {
-          text-align: center;
-          padding: 6rem 0;
-          position: relative;
-          animation: fadeIn 1s ease-out;
-        }
+                <div className="space-y-2.5 pt-4 border-t border-slate-100">
+                  {plan.features.map((f, fIdx) => (
+                    <div key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-        .hero-section::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 150%;
-          height: 150%;
-          background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .hero-section h1 {
-          font-size: 4rem;
-          font-weight: 800;
-          margin-bottom: 1.5rem;
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          letter-spacing: -0.02em;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .hero-section p {
-          font-size: 1.4rem;
-          color: rgba(255, 255, 255, 0.95);
-          max-width: 700px;
-          margin: 0 auto;
-          line-height: 1.6;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .maintenance-features {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 2.5rem;
-          margin: 4rem auto;
-          max-width: 1600px;
-          padding: 0 1rem;
-        }
-
-        .feature-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          border-radius: 24px;
-          padding: 2.5rem;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          position: relative;
-          overflow: hidden;
-          animation: fadeIn 1s ease-out 0.2s both;
-        }
-
-        .feature-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent
-          );
-          transition: 0.5s;
-        }
-
-        .feature-card:hover::before {
-          left: 100%;
-        }
-
-        .feature-card:hover {
-          transform: translateY(-10px) scale(1.02);
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card h3 {
-          font-size: 1.8rem;
-          margin-bottom: 1.5rem;
-          color: #fff;
-          font-weight: 700;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .feature-card p {
-          color: rgba(255, 255, 255, 0.9);
-          line-height: 1.7;
-          font-size: 1.1rem;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .maintenance-plans {
-          margin: 6rem auto;
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 2.5rem;
-          max-width: 1600px;
-          padding: 0 1rem;
-        }
-
-        .plan-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          border-radius: 24px;
-          padding: 3rem;
-          text-align: center;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-          animation: fadeIn 1s ease-out 0.4s both;
-        }
-
-        .plan-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent
-          );
-          transition: 0.5s;
-        }
-
-        .plan-card:hover::before {
-          left: 100%;
-        }
-
-        .plan-card:hover {
-          transform: translateY(-10px) scale(1.02);
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-
-        .plan-card h3 {
-          font-size: 2rem;
-          margin-bottom: 1.5rem;
-          color: #fff;
-          font-weight: 700;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .plan-price {
-          font-size: 3rem;
-          color: #fff;
-          margin: 1.5rem 0;
-          font-weight: 800;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .plan-price .plan-period {
-          font-size: 1.5rem;
-          font-weight: 600;
-          background: none;
-          -webkit-background-clip: unset;
-          -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
-          text-shadow: none;
-          vertical-align: middle;
-        }
-
-        .plan-suitable {
-          color: rgba(255, 255, 255, 0.7);
-          font-style: italic;
-          margin-bottom: 1.5rem;
-          font-size: 1rem;
-          min-height: 2.5rem; /* Ensure consistent height */
-        }
-
-        .plan-features {
-          list-style: none;
-          padding: 0;
-          margin: 2.5rem 0;
-        }
-
-        .plan-features li {
-          color: rgba(255, 255, 255, 0.9);
-          margin: 1rem 0;
-          font-size: 1.1rem;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .plan-button {
-          display: inline-block;
-          padding: 1.2rem 3rem;
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          color: white;
-          text-decoration: none;
-          border-radius: 16px;
-          font-weight: 600;
-          font-size: 1.2rem;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 
-            0 4px 24px -8px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .plan-button:hover {
-          transform: translateY(-5px) scale(1.02);
-          box-shadow: 
-            0 8px 32px -8px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        }
-
-        .plan-button:active {
-          transform: translateY(-2px) scale(0.98);
-          transition: all 0.1s ease;
-        }
-
-        @media (max-width: 768px) {
-          .maintenance-page {
-            padding: 2rem 1rem;
-          }
-          
-          .hero-section {
-            padding: 4rem 0;
-          }
-          
-          .hero-section h1 {
-            font-size: 2.8rem;
-          }
-          
-          .hero-section p {
-            font-size: 1.2rem;
-          }
-          
-          .maintenance-features,
-          .maintenance-plans {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-          
-          .feature-card,
-          .plan-card {
-            padding: 2rem;
-          }
-        }
-      `}</style>
-
-      <div className="hero-section">
-        <h1>IT Maintenance Services</h1>
-        <p>Keep your systems running smoothly with our comprehensive maintenance solutions</p>
-      </div>
-
-      <div className="maintenance-features">
-        <div className="feature-card">
-          <h3>24/7 Monitoring</h3>
-          <p>Round-the-clock system monitoring to detect and prevent issues before they impact your business.</p>
-        </div>
-
-        <div className="feature-card">
-          <h3>Regular Updates</h3>
-          <p>Automated system updates and patches to ensure optimal performance and security.</p>
-        </div>
-
-        <div className="feature-card">
-          <h3>Performance Optimization</h3>
-          <p>Continuous system optimization to maintain peak performance and efficiency.</p>
-        </div>
-
-        <div className="feature-card">
-          <h3>Backup Solutions</h3>
-          <p>Regular automated backups to protect your valuable data and ensure business continuity.</p>
-        </div>
-      </div>
-
-      <div className="maintenance-plans">
-        {plans.map((plan) => (
-          <div className="plan-card" key={plan.title}>
-            <h3>{plan.title}</h3>
-            <p className="plan-suitable">Suitable for: {plan.suitableFor}</p>
-            <div className="plan-price">
-              {plan.price}
-              <span className="plan-period">/{plan.period}</span>
+              <div className="mt-8 pt-5 border-t border-slate-100">
+                <Link
+                  to={`/contact?service=Maintenance&plan=${encodeURIComponent(plan.title)}`}
+                  className={`w-full py-2.5 rounded-xl font-semibold text-xs text-center block transition-colors ${
+                    plan.popular
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200'
+                  }`}
+                >
+                  Activate SLA Coverage
+                </Link>
+              </div>
             </div>
-            <ul className="plan-features">
-              {plan.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-            <button onClick={() => handlePlanSelect(plan.title)} className="plan-button">
-              Get Started
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <div id="contact-form" ref={contactFormRef} className="max-w-2xl mx-auto my-16">
-        <h2 className="text-3xl font-bold text-white mb-8 text-center" style={{animation: 'fadeIn 1s ease-out 0.6s both'}}>
-          {selectedPlan ? `Get Started with the ${selectedPlan} Plan` : 'Contact Us for a Quote'}
-        </h2>
-        <ContactForm 
-          serviceType="it maintenance" 
-          buttonText={selectedPlan ? 'Request Quote' : 'Get Started'} 
-          subject={selectedPlan ? `New IT Maintenance Inquiry: ${selectedPlan}` : "New IT Maintenance Inquiry"} 
-          fromName="Webory Maintenance"
-          plan={selectedPlan}
-        />
-      </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Maintenance; 
+export default Maintenance;

@@ -124,17 +124,168 @@ const AdminPosts = () => {
     );
   }
 
+  // ... existing imports
+
+  // Add state for modal
+  const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentPostId, setCurrentPostId] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    status: 'draft',
+    category: '',
+    tags: ''
+  });
+  const [msg, setMsg] = useState('');
+
+  // ... existing fetchPosts ...
+
+  const handleEditClick = (post) => {
+    setIsEditing(true);
+    setCurrentPostId(post._id || post.id);
+    setFormData({
+      title: post.title,
+      content: post.content,
+      status: post.status,
+      category: post.category || '',
+      tags: post.tags ? post.tags.join(', ') : ''
+    });
+    setShowModal(true);
+  };
+
+  const handleCreatePost = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('adminToken');
+      const url = isEditing 
+        ? `${API_BASE_URL}/api/admin/posts/${currentPostId}`
+        : `${API_BASE_URL}/api/admin/posts`;
+      
+      const method = isEditing ? 'put' : 'post';
+      
+      await axios[method](url, formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setMsg(isEditing ? 'Post updated successfully' : 'Post created successfully');
+      setShowModal(false);
+      setIsEditing(false);
+      setFormData({ title: '', content: '', status: 'draft', category: '', tags: '' });
+      fetchPosts();
+      setTimeout(() => setMsg(''), 3000);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to save post');
+    }
+  };
+
+  // ... existing handleStatusChange and handleDeletePost ...
+  
+  // Render part update
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Post Management</h2>
+        <div>
+        <button
+            onClick={() => {
+                setIsEditing(false);
+                setFormData({ title: '', content: '', status: 'draft', category: '', tags: '' });
+                setShowModal(true);
+            }}
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2"
+          >
+            Add New Post
+          </button>
         <button
           onClick={fetchPosts}
           className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
         >
           Refresh
         </button>
+        </div>
       </div>
+
+      {msg && <div className="bg-green-100 text-green-700 p-2 mb-2 rounded">{msg}</div>}
+
+       {/* Modal for Add/Edit Post */}
+       {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h3 className="text-xl font-bold mb-4">{isEditing ? 'Edit Post' : 'Add New Post'}</h3>
+            <form onSubmit={handleCreatePost}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <input
+                  type="text"
+                  className="w-full border rounded p-2"
+                  value={formData.title}
+                  onChange={e => setFormData({...formData, title: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Content</label>
+                <textarea
+                  className="w-full border rounded p-2 h-32"
+                  value={formData.content}
+                  onChange={e => setFormData({...formData, content: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Status</label>
+                   <select
+                        className="w-full border rounded p-2"
+                        value={formData.status}
+                        onChange={e => setFormData({...formData, status: e.target.value})}
+                    >
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                 <div>
+                    <label className="block text-sm font-medium mb-1">Category</label>
+                    <input
+                      type="text"
+                      className="w-full border rounded p-2"
+                      value={formData.category}
+                      onChange={e => setFormData({...formData, category: e.target.value})}
+                    />
+                </div>
+              </div>
+              <div className="mb-4">
+                 <label className="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                  <input
+                      type="text"
+                      className="w-full border rounded p-2"
+                      value={formData.tags}
+                      onChange={e => setFormData({...formData, tags: e.target.value})}
+                      placeholder="React, JavaScript, WebDev"
+                    />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+                >
+                  {isEditing ? 'Update' : 'Create'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -182,6 +333,12 @@ const AdminPosts = () => {
                     {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Unknown'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button
+                      onClick={() => handleEditClick(post)}
+                      className="text-blue-600 hover:text-blue-900 mr-4"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleStatusChange(post._id || post.id, post.status === 'published' ? 'draft' : 'published')}
                       className="text-indigo-600 hover:text-indigo-900 mr-4"

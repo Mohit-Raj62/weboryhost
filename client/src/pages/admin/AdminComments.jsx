@@ -124,6 +124,42 @@ const AdminComments = () => {
     );
   }
 
+  // ... existing imports
+  
+  // Add state
+  const [showModal, setShowModal] = useState(false);
+  const [currentCommentId, setCurrentCommentId] = useState(null);
+  const [editContent, setEditContent] = useState('');
+  const [msg, setMsg] = useState('');
+
+  // ... existing fetch ...
+
+  const handleEditClick = (comment) => {
+    setCurrentCommentId(comment._id || comment.id);
+    setEditContent(comment.content);
+    setShowModal(true);
+  };
+
+  const handleUpdateComment = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.put(`${API_BASE_URL}/api/admin/comments/${currentCommentId}`, {
+        content: editContent
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setMsg('Comment updated successfully');
+      setShowModal(false);
+      fetchComments();
+      setTimeout(() => setMsg(''), 3000);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update comment');
+    }
+  };
+
+  // ... render ...
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
@@ -135,6 +171,42 @@ const AdminComments = () => {
           Refresh
         </button>
       </div>
+
+       {msg && <div className="bg-green-100 text-green-700 p-2 mb-2 rounded">{msg}</div>}
+
+       {/* Edit Modal */}
+       {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-lg">
+            <h3 className="text-xl font-bold mb-4">Edit Comment</h3>
+            <form onSubmit={handleUpdateComment}>
+              <div className="mb-4">
+                <textarea
+                  className="w-full border rounded p-2 h-32"
+                  value={editContent}
+                  onChange={e => setEditContent(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -184,6 +256,12 @@ const AdminComments = () => {
                     {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : 'Unknown'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button
+                      onClick={() => handleEditClick(comment)}
+                      className="text-blue-600 hover:text-blue-900 mr-4"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleStatusChange(comment._id || comment.id, comment.status === 'approved' ? 'pending' : 'approved')}
                       className="text-indigo-600 hover:text-indigo-900 mr-4"

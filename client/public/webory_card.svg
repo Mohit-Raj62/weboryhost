@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 650" width="1050" height="650">
+  <defs>
+    <!-- Background Gradient: Deep Obsidian to Cosmic Black -->
+    <radialGradient id="cardBg" cx="30%" cy="30%" r="85%">
+      <stop offset="0%" stop-color="#242933" />
+      <stop offset="40%" stop-color="#11141c" />
+      <stop offset="100%" stop-color="#06070a" />
+    </radialGradient>
+
+    <!-- Metallic Surface Grain / Stipple -->
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.12 0" />
+      <feComposite in2="SourceGraphic" in="glare" operator="in" />
+    </filter>
+
+    <!-- Linear Metallic Sheen -->
+    <linearGradient id="metallicSheen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.03" />
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.8" />
+    </linearGradient>
+
+    <!-- Subtle Premium Glow for Typography -->
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Border Gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.25)" />
+      <stop offset="50%" stop-color="rgba(255,255,255,0.06)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.18)" />
+    </linearGradient>
+
+    <!-- Stipple Pattern -->
+    <pattern id="stipple" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.75" fill="#e2e8f0" opacity="0.15" />
+      <circle cx="5" cy="5" r="0.75" fill="#e2e8f0" opacity="0.15" />
+    </pattern>
+  </defs>
+
+  <!-- Card Body with Rounded Bevel -->
+  <rect width="1050" height="650" rx="32" fill="url(#cardBg)" />
+
+  <!-- Textured Sandblasted Stipple Overlay -->
+  <rect width="1050" height="650" rx="32" fill="url(#stipple)" />
+
+  <!-- Diagonal Studio Light Reflection -->
+  <rect width="1050" height="650" rx="32" fill="url(#metallicSheen)" />
+
+  <!-- Outer Precision Border -->
+  <rect x="2" y="2" width="1046" height="646" rx="30" fill="none" stroke="url(#borderGrad)" stroke-width="2.5" />
+
+  <!-- Inner Hairline Border -->
+  <rect x="14" y="14" width="1022" height="622" rx="22" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" />
+
+  <!-- Center Typography Hierarchy matching TechServeNexus (Photo 4) -->
+  <g id="CenterContent" transform="translate(525, 325)">
+    <!-- Main Headline: Webory Technologies -->
+    <text
+      x="0"
+      y="-45"
+      text-anchor="middle"
+      font-family="'Playfair Display', Georgia, Cambria, 'Times New Roman', serif"
+      font-size="64"
+      font-weight="700"
+      fill="#ffffff"
+      letter-spacing="2.5"
+      filter="url(#subtleGlow)"
+    >Webory Technologies</text>
+
+    <!-- Company Subtitle: Webory Tech Pvt. Ltd. -->
+    <text
+      x="0"
+      y="24"
+      text-anchor="middle"
+      font-family="'Cinzel', 'Playfair Display', 'Times New Roman', serif"
+      font-size="24"
+      font-weight="500"
+      fill="#f1f5f9"
+      letter-spacing="5"
+      opacity="0.95"
+    >Webory Tech Pvt. Ltd.</text>
+
+    <!-- Tagline: Innovate. Build. Scale. -->
+    <text
+      x="0"
+      y="82"
+      text-anchor="middle"
+      font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif"
+      font-size="16"
+      font-weight="500"
+      fill="#cbd5e1"
+      letter-spacing="8"
+      opacity="0.8"
+    >Innovate. Build. Scale.</text>
+  </g>
+</svg>

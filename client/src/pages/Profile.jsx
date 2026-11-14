@@ -154,7 +154,9 @@ const Profile = () => {
           padding: 2rem;
           max-width: 1200px;
           margin: 0 auto;
-          color: white;
+          color: #0f172a;
+          background: #f8fafc;
+          min-height: 100vh;
         }
 
         .profile-header {
@@ -164,16 +166,16 @@ const Profile = () => {
 
         .profile-header h1 {
           font-size: 2.5rem;
+          font-weight: 800;
           margin-bottom: 1rem;
-          background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #0f172a;
         }
 
         .user-info-card {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border-radius: 15px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+          border-radius: 16px;
           padding: 2rem;
           margin-bottom: 2rem;
           text-align: center;
@@ -183,48 +185,54 @@ const Profile = () => {
           width: 100px;
           height: 100px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #2563eb;
           display: flex;
           align-items: center;
           justify-content: center;
           margin: 0 auto 1rem;
           font-size: 2.5rem;
           color: white;
+          font-weight: bold;
         }
 
         .user-name {
           font-size: 1.8rem;
+          font-weight: 700;
           margin-bottom: 0.5rem;
-          color: white;
+          color: #0f172a;
         }
 
         .user-email {
           font-size: 1.1rem;
-          color: rgba(255, 255, 255, 0.8);
+          color: #64748b;
           margin-bottom: 1rem;
         }
 
         .user-role {
           display: inline-block;
           padding: 0.5rem 1rem;
-          background: rgba(255, 255, 255, 0.1);
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
           border-radius: 20px;
           font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.9);
+          font-weight: 600;
+          color: #1d4ed8;
         }
 
         .profile-container {
           display: grid;
           grid-template-columns: 250px 1fr;
           gap: 2rem;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border-radius: 15px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+          border-radius: 16px;
           padding: 2rem;
         }
 
         .profile-sidebar {
-          background: rgba(255, 255, 255, 0.05);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: 12px;
           padding: 1.5rem;
         }
@@ -245,21 +253,26 @@ const Profile = () => {
           text-align: left;
           background: transparent;
           border: none;
-          color: white;
+          color: #475569;
           cursor: pointer;
           border-radius: 8px;
-          transition: all 0.3s ease;
+          font-weight: 500;
+          transition: all 0.2s ease;
         }
 
         .profile-nav button:hover,
         .profile-nav button.active {
-          background: rgba(255, 255, 255, 0.1);
+          background: #e2e8f0;
+          color: #0f172a;
+          font-weight: 600;
         }
 
         .profile-content {
-          background: rgba(255, 255, 255, 0.05);
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           border-radius: 12px;
           padding: 2rem;
+          color: #0f172a;
         }
 
         .profile-section {
@@ -277,17 +290,19 @@ const Profile = () => {
         .form-group label {
           display: block;
           margin-bottom: 0.5rem;
-          color: #fff;
+          color: #1e293b;
+          font-weight: 600;
+          font-size: 0.9rem;
         }
 
         .form-group input,
         .form-group textarea {
           width: 100%;
           padding: 0.8rem;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          border: 1px solid #cbd5e1;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
+          background: #ffffff;
+          color: #0f172a;
           font-size: 1rem;
         }
 
@@ -298,42 +313,44 @@ const Profile = () => {
 
         .save-button {
           display: inline-block;
-          padding: 1rem 2rem;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: 0.8rem 1.8rem;
+          background: #2563eb;
           color: white;
           border: none;
           border-radius: 8px;
-          font-weight: bold;
+          font-weight: 600;
           cursor: pointer;
-          transition: transform 0.3s ease;
+          transition: background 0.2s ease;
         }
 
         .save-button:hover {
-          transform: translateY(-2px);
+          background: #1d4ed8;
         }
 
         .error-message {
-          color: #ff4444;
+          color: #dc2626;
           margin-top: 0.5rem;
           font-size: 0.9rem;
-          padding: 0.5rem;
-          background: rgba(255, 68, 68, 0.1);
-          border-radius: 4px;
+          padding: 0.75rem;
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          border-radius: 8px;
         }
 
         .success-message {
-          color: #00C851;
+          color: #16a34a;
           margin-top: 0.5rem;
           font-size: 0.9rem;
-          padding: 0.5rem;
-          background: rgba(0, 200, 81, 0.1);
-          border-radius: 4px;
+          padding: 0.75rem;
+          background: #f0fdf4;
+          border: 1px solid #bbf7d0;
+          border-radius: 8px;
         }
 
         .loading {
           text-align: center;
           padding: 2rem;
-          color: white;
+          color: #64748b;
           font-size: 1.2rem;
         }
 

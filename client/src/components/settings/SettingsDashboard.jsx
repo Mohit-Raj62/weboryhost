@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL } from '../../config/api';
 
 // const themes = ["light", "dark"];
 // const layouts = ["list", "grid"];
@@ -8,12 +9,12 @@ export default function SettingsDashboard() {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({
     general: {
-      companyName: 'Webory Agency',
-      email: 'contact@webory.com',
-      phone: '+1 (555) 123-4567',
-      address: '123 Business St, City, State 12345',
-      timezone: 'America/New_York',
-      currency: 'USD',
+      companyName: '',
+      email: '',
+      phone: '',
+      address: '',
+      timezone: 'Asia/Kolkata',
+      currency: 'INR',
       language: 'en'
     },
     notifications: {
@@ -33,8 +34,8 @@ export default function SettingsDashboard() {
     },
     integrations: {
       slack: {
-        enabled: true,
-        webhook: 'https://hooks.slack.com/services/...',
+        enabled: false,
+        webhook: '',
         channel: '#general'
       },
       googleCalendar: {
@@ -42,9 +43,9 @@ export default function SettingsDashboard() {
         calendarId: ''
       },
       stripe: {
-        enabled: true,
-        publishableKey: 'pk_test_...',
-        secretKey: 'sk_test_...'
+        enabled: false,
+        publishableKey: '',
+        secretKey: ''
       },
       mailchimp: {
         enabled: false,
@@ -60,12 +61,72 @@ export default function SettingsDashboard() {
     }
   });
 
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      // Fix: Check environment or use relative path if proxy is set up, but assuming /api context
+      // Using axios if available or fetch
+      const response = await fetch(`${API_BASE_URL}/api/admin/settings`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch settings');
+      
+      const data = await response.json();
+      // Merge with default structure to ensure all fields exist
+      setSettings(prev => ({
+        ...prev,
+        ...data,
+        // Ensure nested objects are merged correctly if backend returns partial data
+        general: { ...prev.general, ...(data.general || {}) },
+        notifications: { ...prev.notifications, ...(data.notifications || {}) },
+        security: { ...prev.security, ...(data.security || {}) },
+        integrations: { ...prev.integrations, ...(data.integrations || {}) },
+        appearance: { ...prev.appearance, ...(data.appearance || {}) }
+      }));
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      setMessage({ type: 'error', text: 'Failed to load settings' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveSettings = async () => {
+    setSaving(true);
+    setMessage({ type: '', text: '' });
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${API_BASE_URL}/api/admin/settings`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(settings)
+      });
+      
+      if (!response.ok) throw new Error('Failed to save settings');
+      
+      setMessage({ type: 'success', text: 'Settings saved successfully' });
+      // Clear success message after 3 seconds
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      setMessage({ type: 'error', text: 'Failed to save settings' });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleSettingChange = (category, key, value) => {
     setSettings(prev => ({
@@ -114,10 +175,20 @@ export default function SettingsDashboard() {
           <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
           <p className="text-gray-600">Manage your account and system preferences</p>
         </div>
-        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-          Save Changes
+        <button 
+          onClick={saveSettings}
+          disabled={saving}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
+      
+      {message.text && (
+        <div className={`p-4 rounded-lg ${message.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+          {message.text}
+        </div>
+      )}
 
       {/* Settings Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
@@ -204,6 +275,7 @@ export default function SettingsDashboard() {
                     onChange={(e) => handleSettingChange('general', 'currency', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
+                    <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
                     <option value="EUR">EUR (€)</option>
                     <option value="GBP">GBP (£)</option>

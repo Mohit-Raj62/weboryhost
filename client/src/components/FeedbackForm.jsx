@@ -105,7 +105,7 @@ const FeedbackForm = () => {
               <blockquote className="text-xl text-white/80 mb-4 italic">
                 "{submittedFeedback.feedback}"
               </blockquote>
-              <cite className="text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text font-bold text-lg">
+              <cite className="text-blue-400 font-bold text-lg">
                 {submittedFeedback.name}
               </cite>
               <p className="text-white/60 text-sm mt-2">
@@ -183,7 +183,7 @@ const FeedbackForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl text-base font-semibold transition-all duration-200 shadow-lg shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="flex items-center justify-center">

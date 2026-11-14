@@ -1,195 +1,277 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Code2,
+  Smartphone,
+  Palette,
+  Bot,
+  Search,
+  Cloud,
+  CheckCircle2,
+  ArrowRight
+} from 'lucide-react';
 
 const Services = () => {
-  const services = [
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const servicesData = [
     {
-      title: 'Web Development',
-      description: 'Custom website development tailored to your business needs. From simple landing pages to complex web applications.',
-      icon: '🌐',
-      link: '/consulting'
+      id: 'web',
+      category: 'web',
+      title: 'Full-Stack Web Engineering',
+      tagline: 'High-speed, scalable web platforms',
+      icon: Code2,
+      detailRoute: '/web-development',
+      description: 'We build enterprise-grade web applications with Next.js, React, Node.js, and TypeScript, engineered for lightning-fast latency, high concurrent traffic, and effortless scalability.',
+      features: [
+        'Next.js 15 Server Components & Fast Edge Caching',
+        'Headless API Architecture (REST, GraphQL, tRPC)',
+        'Multi-Tenant & Relational Database Structures',
+        'Sub-Second Page Load Optimization & 100 Core Web Vitals',
+        'Role-Based Access Control (RBAC) & Secure Gateways'
+      ],
+      techStack: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Tailwind', 'PostgreSQL', 'Redis'],
+      deliverables: '3-6 weeks delivery • 100% Code Ownership'
     },
     {
+      id: 'mobile',
+      category: 'mobile',
       title: 'Mobile App Development',
-      description: 'Native and cross-platform mobile applications for iOS and Android devices.',
-      icon: '📱',
-      link: '/consulting'
+      tagline: 'iOS & Android native and cross-platform apps',
+      icon: Smartphone,
+      detailRoute: '/app-development',
+      description: 'Crafting responsive mobile applications with Flutter and React Native. Built with offline-first synchronization, push notification engines, and fluid micro-animations.',
+      features: [
+        'Single Codebase for High-Performance iOS & Android',
+        'Offline-First Data Storage with SQLite Caching',
+        'Hardware Integration (Biometrics, Camera, Geolocation)',
+        'App Store & Play Store Submission Support',
+        'Real-Time WebSocket & Push Notification Pipelines'
+      ],
+      techStack: ['Flutter', 'React Native', 'Dart', 'Swift', 'Kotlin', 'Firebase'],
+      deliverables: '4-8 weeks delivery • Store deployment'
     },
     {
-      title: 'UI/UX Design',
-      description: 'User-centered design solutions that enhance user experience and drive engagement.',
-      icon: '🎨',
-      link: '/consulting'
+      id: 'design',
+      category: 'design',
+      title: 'UI/UX & Product Design',
+      tagline: 'Clean, user-centric interface design',
+      icon: Palette,
+      detailRoute: '/web-design',
+      description: 'We design intuitive, conversion-focused user interfaces and design systems in Figma that reduce user drop-off and compound brand trust.',
+      features: [
+        'Interactive High-Fidelity Figma Click-Through Prototypes',
+        'Atomic Design Systems with Documented UI Token Libraries',
+        'User Journey Mapping, Wireframes & Information Architecture',
+        'Conversion Rate Optimization (CRO) & Usability Audits',
+        'Developer Handover Specs with Pixel-Perfect Asset Exports'
+      ],
+      techStack: ['Figma', 'FigJam', 'Design Systems', 'Prototyping', 'Tokens'],
+      deliverables: '2-4 weeks delivery • Figma source files'
     },
     {
-      title: 'Cloud Solutions',
-      description: 'Scalable cloud infrastructure and migration services for your business.',
-      icon: '☁️',
-      link: '/consulting'
+      id: 'ai',
+      category: 'ai',
+      title: 'AI & Automation Solutions',
+      tagline: 'Smart workflows and custom AI models',
+      icon: Bot,
+      detailRoute: '/services',
+      description: 'Automate repetitive back-office operations and elevate client experiences using private LLM agents, RAG document search engines, and intelligent webhooks.',
+      features: [
+        'Retrieval-Augmented Generation (RAG) over Company Data',
+        'Autonomous Multi-Agent Task Routing & Orchestration',
+        'Custom Fine-Tuning & Prompt Architecture Pipelines',
+        'Document Extraction (PDFs, Invoices, Contracts, Receipts)',
+        'Enterprise Security, Zero-Leakage & GDPR Compliance'
+      ],
+      techStack: ['Python', 'FastAPI', 'OpenAI', 'LangChain', 'ChromaDB', 'Docker'],
+      deliverables: '3-5 weeks delivery • API endpoints & docs'
     },
     {
-      title: 'Maintenance & Support',
-      description: 'Regular maintenance and 24/7 technical support for your digital assets.',
-      icon: '🔧',
-      link: '/maintenance'
+      id: 'seo',
+      category: 'web',
+      title: 'SEO & Performance Engineering',
+      tagline: 'Technical speed & search visibility',
+      icon: Search,
+      detailRoute: '/seo',
+      description: 'Rank higher on Google searches with technical speed optimization, schema markup, semantic HTML, and lightning-fast Core Web Vitals.',
+      features: [
+        'Core Web Vitals Audit (LCP, FID, CLS, INP Optimization)',
+        'Structured Schema.org JSON-LD Rich Snippet Integration',
+        'Dynamic XML Sitemaps, Canonicalization & Robots Directives',
+        'Keyword Strategy, On-Page Architecture & Semantic Silos',
+        'Server-Side Rendering (SSR) & Dynamic Open Graph Metadata'
+      ],
+      techStack: ['Lighthouse', 'Google Search Console', 'Schema.org', 'Next.js SSR'],
+      deliverables: 'Ongoing monthly sprints • Monthly reports'
     },
     {
-      title: 'Technical Support',
-      description: 'Expert technical support and troubleshooting for all your IT needs.',
-      icon: '💻',
-      link: '/support'
-    },
-    {
-      title: 'Startup web solutions India',
-      description: 'App developers in Hyderabad, Website design company in Chennai',
-      icon: '🚀',
-      link: '/startup'
-    },
-    {
-      title: 'Startup web solutions Ahmedabad',
-      description: 'App developers in Hyderabad, Website design company in Chennai',
-      icon: '🚀',
-      link: '/startup'
+      id: 'cloud',
+      category: 'cloud',
+      title: 'Cloud Infrastructure & DevOps',
+      tagline: 'AWS architectures and CI/CD pipelines',
+      icon: Cloud,
+      detailRoute: '/consulting',
+      description: 'Deploy resilient cloud infrastructure with automated autoscaling, database read-replicas, and continuous deployment pipelines.',
+      features: [
+        'AWS Cloud Infrastructure Design (ECS, RDS, S3, CloudFront)',
+        'Automated CI/CD Pipelines via GitHub Actions & Docker',
+        'Zero-Downtime Blue/Green Deployments',
+        'Disaster Recovery & Distributed Backups',
+        'Cloud Cost Optimization (saving 30-50% on AWS bills)'
+      ],
+      techStack: ['AWS', 'Docker', 'Kubernetes', 'GitHub Actions', 'Terraform'],
+      deliverables: 'Infrastructure as Code • CI/CD automation'
     }
   ];
 
+  const filteredServices = activeCategory === 'all'
+    ? servicesData
+    : servicesData.filter(s => s.category === activeCategory);
+
   return (
-    <div className="services-page  min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
-      <style>{`
-        .services-page {
-          padding: 2rem;
-          max-width: 2200px;
-          margin: 0 auto;
-          color: white;
-        
-        }
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      {/* Header */}
+      <section className="pt-16 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          TECHNICAL SERVICES
+        </span>
 
-        .services-header {
-          text-align: center;
-          padding: 2rem 0;
-        }
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-950 max-w-3xl mx-auto mt-2 leading-tight">
+          Comprehensive Engineering For <span className="text-blue-600">Modern Businesses.</span>
+        </h1>
 
-        .services-header h1 {
-          font-size: 2.5rem;
-          margin-bottom: 1rem;
-          background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+        <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          From full-stack web platforms and cross-platform mobile apps to automation workflows, we engineer digital products built for reliability and scale.
+        </p>
 
-        .services-header p {
-          font-size: 1.1rem;
-          color: rgba(255, 255, 255, 0.8);
-          max-width: 600px;
-          margin: 0 auto;
-        }
+        {/* Category Tabs */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          {[
+            { id: 'all', label: 'All Services' },
+            { id: 'web', label: 'Web Engineering' },
+            { id: 'mobile', label: 'Mobile Apps' },
+            { id: 'ai', label: 'AI & Automations' },
+            { id: 'design', label: 'UI/UX Design' },
+            { id: 'cloud', label: 'Cloud & DevOps' }
+          ].map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors border ${
+                activeCategory === cat.id
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                  : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </section>
 
-        .services-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-          margin-top: 3rem;
-        }
+      {/* Services Cards */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 pb-20">
+        {filteredServices.map((service) => {
+          const Icon = service.icon;
+          return (
+            <div
+              key={service.id}
+              className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-10 transition-colors shadow-sm"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="lg:col-span-7">
+                  <div className="flex items-center gap-3.5 mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-blue-600 uppercase tracking-wider font-semibold">
+                        {service.tagline}
+                      </span>
+                      <h2 className="text-2xl font-bold text-slate-900 mt-0.5">
+                        {service.title}
+                      </h2>
+                    </div>
+                  </div>
 
-        .service-card {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border-radius: 15px;
-          padding: 2rem;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          cursor: pointer;
-          text-decoration: none;
-          color: white;
-        }
+                  <p className="text-sm text-slate-600 leading-relaxed mt-4">
+                    {service.description}
+                  </p>
 
-        .service-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
+                  <div className="mt-5 space-y-2">
+                    {service.features.map((feat, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-        .service-icon {
-          font-size: 3rem;
-          margin-bottom: 1rem;
-        }
+                <div className="lg:col-span-5 bg-slate-50 rounded-xl p-5 border border-slate-200 flex flex-col justify-between h-full">
+                  <div>
+                    <div className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2.5">
+                      Core Technologies
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mb-5">
+                      {service.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="text-xs font-mono px-2.5 py-1 rounded-md bg-white text-slate-700 border border-slate-200"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
 
-        .service-title {
-          font-size: 1.5rem;
-          margin-bottom: 1rem;
-          color: white;
-        }
+                    <div className="p-3 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 mb-5">
+                      <strong>Delivery Scope:</strong> {service.deliverables}
+                    </div>
+                  </div>
 
-        .service-description {
-          color: rgba(255, 255, 255, 0.8);
-          line-height: 1.6;
-        }
+                  <div className="flex flex-col sm:flex-row gap-2.5 mt-2">
+                    <Link
+                      to={`/contact?service=${encodeURIComponent(service.title)}`}
+                      className="flex-1 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs text-center transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                    >
+                      Inquire About Service <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                    <Link
+                      to={service.detailRoute}
+                      className="py-2.5 px-4 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-medium text-center transition-colors shadow-sm"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </section>
 
-        .cta-section {
-          text-align: center;
-          margin-top: 4rem;
-          padding: 3rem;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border-radius: 15px;
-        }
-
-        .cta-section h2 {
-          font-size: 2rem;
-          margin-bottom: 1rem;
-          color: white;
-        }
-
-        .cta-section p {
-          color: rgba(255, 255, 255, 0.8);
-          margin-bottom: 2rem;
-          max-width: 600px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        .cta-button {
-          display: inline-block;
-          padding: 1rem 2rem;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          text-decoration: none;
-          border-radius: 8px;
-          font-weight: bold;
-          transition: transform 0.3s ease;
-        }
-
-        .cta-button:hover {
-          transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-          .services-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-
-      <div className="services-header">
-        <h1>Our Services</h1>
-        <p>Discover our comprehensive range of digital solutions designed to help your business thrive in the digital age.</p>
-      </div>
-
-      <div className="services-grid">
-        {services.map((service, index) => (
-          <Link to={service.link} key={index} className="service-card">
-            <div className="service-icon">{service.icon}</div>
-            <h2 className="service-title">{service.title}</h2>
-            <p className="service-description">{service.description}</p>
-          </Link>
-        ))}
-      </div>
-
-      <div className="cta-section">
-        <h2>Ready to Get Started?</h2>
-        <p>Contact us today to discuss how we can help transform your business with our expert services.</p>
-        <Link to="/contact" className="cta-button">Contact Us</Link>
-      </div>
+      {/* Banner */}
+      <section className="py-16 px-4 text-center border-t border-slate-200">
+        <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900">
+            Need a custom technical roadmap?
+          </h2>
+          <p className="mt-2 text-slate-600 text-sm">
+            Our software leads are available for an initial discovery session with zero sales pressure.
+          </p>
+          <div className="mt-5 flex justify-center">
+            <Link
+              to="/contact"
+              className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm"
+            >
+              Book Discovery Call
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Services; 
+export default Services;

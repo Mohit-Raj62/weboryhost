@@ -368,9 +368,9 @@ const Clients = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
     }).format(amount);
   };
 
@@ -773,7 +773,7 @@ const Clients = () => {
                   value={formData.contractValue}
                   onChange={handleInputChange}
                   InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    startAdornment: <InputAdornment position="start">₹</InputAdornment>,
                   }}
                 />
               </Grid>

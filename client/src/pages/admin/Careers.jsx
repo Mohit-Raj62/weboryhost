@@ -101,10 +101,16 @@ const Careers = () => {
     fetchApplicationStats();
   }, []);
 
+  // Remove jobListings import usage if present, but here just replacing logic
+  
   const fetchCareers = async () => {
     try {
-      // Use the shared jobListings data instead of API call
-      setCareers(jobListings);
+      setLoading(true);
+      const token = localStorage.getItem('adminToken');
+      const response = await axios.get(`${API_BASE_URL}/api/admin/careers`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCareers(response.data);
       setError("");
     } catch (error) {
       setError("Failed to fetch careers");
@@ -114,128 +120,26 @@ const Careers = () => {
     }
   };
 
-  const fetchApplications = async () => {
-    try {
-      setApplicationsLoading(true);
-      const token = localStorage.getItem('adminToken');
-      
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
+  // ... fetchApplications ...
 
-      const response = await axios.get(`${API_BASE_URL}/api/applications`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+  // ... fetchApplicationStats ...
 
-      if (response.data.success) {
-        setApplications(response.data.data);
-      } else {
-        throw new Error(response.data.message || 'Failed to fetch applications');
-      }
-    } catch (error) {
-      console.error("Error fetching applications:", error);
-      setSnackbar({
-        open: true,
-        message: error.response?.data?.message || "Failed to fetch applications",
-        severity: "error",
-      });
-    } finally {
-      setApplicationsLoading(false);
-    }
-  };
-
-  const fetchApplicationStats = async () => {
-    try {
-      const token = localStorage.getItem('adminToken');
-      
-      if (!token) {
-        return;
-      }
-
-      const response = await axios.get(`${API_BASE_URL}/api/applications/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.data.success) {
-        setApplicationStats(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching application stats:", error);
-    }
-  };
-
-  const handleOpen = (career = null) => {
-    if (career) {
-      setSelectedCareer(career);
-      setFormData({
-        title: career.title,
-        department: career.department,
-        location: career.location,
-        type: career.type,
-        description: career.description,
-        requirements: career.requirements ? career.requirements.join('\n') : "",
-        responsibilities: career.responsibilities || "",
-        salary: career.salary || "",
-        status: career.status || "open",
-      });
-    } else {
-      setSelectedCareer(null);
-      setFormData({
-        title: "",
-        department: "",
-        location: "",
-        type: "",
-        description: "",
-        requirements: "",
-        responsibilities: "",
-        salary: "",
-        status: "open",
-      });
-    }
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedCareer(null);
-    setFormData({
-      title: "",
-      department: "",
-      location: "",
-      type: "",
-      description: "",
-      requirements: "",
-      responsibilities: "",
-      salary: "",
-      status: "open",
-    });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // ... handleOpen / handleClose / handleInputChange ...
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('adminToken');
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      const payload = {
+          ...formData,
+           requirements: formData.requirements.split('\n').filter(req => req.trim())
+      };
+
       if (selectedCareer) {
         // Update existing career
-        const updatedCareers = careers.map(career => 
-          career.id === selectedCareer.id 
-            ? { ...career, ...formData, requirements: formData.requirements.split('\n').filter(req => req.trim()) }
-            : career
-        );
-        setCareers(updatedCareers);
+        await axios.put(`${API_BASE_URL}/api/admin/careers/${selectedCareer._id || selectedCareer.id}`, payload, { headers });
         setSnackbar({
           open: true,
           message: "Career updated successfully",
@@ -243,20 +147,17 @@ const Careers = () => {
         });
       } else {
         // Add new career
-        const newCareer = {
-          id: `career_${Date.now()}`, // Generate unique ID
-          ...formData,
-          requirements: formData.requirements.split('\n').filter(req => req.trim())
-        };
-        setCareers([...careers, newCareer]);
+        await axios.post(`${API_BASE_URL}/api/admin/careers`, payload, { headers });
         setSnackbar({
           open: true,
           message: "Career created successfully",
           severity: "success",
         });
       }
+      fetchCareers(); // Refresh list from server
       handleClose();
     } catch (error) {
+      console.error("Error saving career:", error);
       setSnackbar({
         open: true,
         message: error.response?.data?.message || "Operation failed",
@@ -268,8 +169,14 @@ const Careers = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this career posting?")) {
       try {
-        const updatedCareers = careers.filter(career => career.id !== id);
-        setCareers(updatedCareers);
+        const token = localStorage.getItem('adminToken');
+        await axios.delete(`${API_BASE_URL}/api/admin/careers/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        // Refresh list
+        fetchCareers();
+        
         setSnackbar({
           open: true,
           message: "Career deleted successfully",

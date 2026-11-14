@@ -1,89 +1,41 @@
 import React from 'react';
-import Navigation from '../components/Navigation';
+import { Shield } from 'lucide-react';
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
-      <Navigation />
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-5xl lg:text-7xl font-black text-white mb-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-4">
+            <Shield className="w-3.5 h-3.5 text-blue-600" /> MASTER SERVICE TERMS
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-950">
             Terms of Service
           </h1>
-          <p className="text-xl text-white/80">
-            Last updated: {new Date().toLocaleDateString()}
+          <p className="text-xs text-slate-500 mt-2">
+            Last updated: {new Date().toLocaleDateString()} • Webory Technologies
           </p>
         </div>
 
-        <div className="space-y-12">
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">1. Acceptance of Terms</h2>
-            <div className="space-y-4 text-white/80">
-              <p>By accessing and using Webory's services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our services.</p>
+        <div className="space-y-8">
+          <section className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-950 mb-4">1. Scope of Engagement</h2>
+            <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p>Webory delivers bespoke software engineering, mobile application development, UI/UX architecture, and cloud consultancy governed by mutually approved Statements of Work (SOW) and agile milestones.</p>
             </div>
           </section>
 
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">2. Use License</h2>
-            <div className="space-y-4 text-white/80">
-              <p>Permission is granted to temporarily access our services for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
-              <ul className="list-disc list-inside space-y-2">
-                <li>Modify or copy the materials</li>
-                <li>Use the materials for any commercial purpose</li>
-                <li>Attempt to decompile or reverse engineer any software</li>
-                <li>Remove any copyright or other proprietary notations</li>
-                <li>Transfer the materials to another person</li>
-              </ul>
+          <section className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-950 mb-4">2. Intellectual Property Ownership</h2>
+            <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p>Upon final milestone clearance, all bespoke source code, design systems, application assets, and cloud deployment scripts become the exclusive intellectual property of the commissioning client with zero vendor lock-in.</p>
             </div>
           </section>
 
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">3. Service Modifications</h2>
-            <div className="space-y-4 text-white/80">
-              <p>Webory reserves the right to modify or discontinue, temporarily or permanently, any part of our services with or without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the services.</p>
-            </div>
-          </section>
-
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">4. User Responsibilities</h2>
-            <div className="space-y-4 text-white/80">
-              <p>As a user of our services, you agree to:</p>
-              <ul className="list-disc list-inside space-y-2">
-                <li>Provide accurate and complete information</li>
-                <li>Maintain the security of your account</li>
-                <li>Comply with all applicable laws and regulations</li>
-                <li>Not engage in any unauthorized use of the services</li>
-                <li>Not interfere with the proper working of the services</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">5. Payment Terms</h2>
-            <div className="space-y-4 text-white/80">
-              <p>Payment terms and conditions:</p>
-              <ul className="list-disc list-inside space-y-2">
-                <li>All fees are non-refundable unless otherwise stated</li>
-                <li>We reserve the right to change our fees at any time</li>
-                <li>Payment is due upon receipt of invoice</li>
-                <li>Late payments may result in service suspension</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">6. Limitation of Liability</h2>
-            <div className="space-y-4 text-white/80">
-              <p>In no event shall Webory be liable for any damages arising out of the use or inability to use our services, even if we have been notified of the possibility of such damages.</p>
-            </div>
-          </section>
-
-          <section className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">7. Contact Information</h2>
-            <div className="space-y-4 text-white/80">
-              <p>If you have any questions about these Terms of Service, please contact us at:</p>
-              <p className="text-cyan-400">weboryinfo@gmail.com</p>
+          <section className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-950 mb-4">3. Warranty & SLA Guarantees</h2>
+            <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p>All production deliveries include a minimum 45-day post-launch warranty covering software defects, regression anomalies, and performance benchmarks outlined in the original technical blueprint.</p>
             </div>
           </section>
         </div>
@@ -92,4 +44,4 @@ const TermsOfService = () => {
   );
 };
 
-export default TermsOfService; 
+export default TermsOfService;

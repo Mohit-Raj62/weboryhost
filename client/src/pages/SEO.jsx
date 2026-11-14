@@ -1,210 +1,95 @@
-import React, { useState, useRef } from 'react';
-import Navigation from '../components/Navigation';
-import PageHeader from '../components/PageHeader';
-import ServiceCard from '../components/ServiceCard';
-import PricingCard from '../components/PricingCard';
-import ContactForm from '../components/ContactForm';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Search,
+  TrendingUp,
+  Globe,
+  Zap,
+  ArrowRight
+} from 'lucide-react';
 
 const SEO = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [activePricingTab, setActivePricingTab] = useState('seo');
-  const contactFormRef = useRef(null);
-
-  const services = [
+  const capabilities = [
     {
-      title: "SEO Optimization",
-      description: "Comprehensive search engine optimization to improve your rankings.",
-      icon: "🔍",
-      gradient: "from-blue-500 to-cyan-500"
+      title: "Technical SEO & Schema Optimization",
+      desc: "Structured data, canonical mapping, dynamic XML sitemaps, and Core Web Vitals optimization ensuring clean search engine indexing.",
+      icon: Search,
+      tags: ["Schema.org", "Structured Data", "Sitemaps", "Core Web Vitals"]
     },
     {
-      title: "Social Media Marketing",
-      description: "Engaging social media campaigns to grow your audience.",
-      icon: "📱",
-      gradient: "from-purple-500 to-pink-500"
+      title: "Content & Keyword Architecture",
+      desc: "Engineering scalable content architecture targeting high-intent industry keywords and customer search queries.",
+      icon: Globe,
+      tags: ["Keyword Strategy", "Content Architecture", "Indexing"]
     },
     {
-      title: "Content Marketing",
-      description: "High-quality content creation to attract and engage users.",
-      icon: "✍️",
-      gradient: "from-orange-500 to-red-500"
+      title: "Core Web Vitals & Speed Optimization",
+      desc: "Profiling assets, caching, and server components to ensure 90+ performance scores on Google PageSpeed Insights.",
+      icon: Zap,
+      tags: ["Lighthouse", "Edge Caching", "Asset Minification"]
     },
     {
-      title: "PPC Advertising",
-      description: "Targeted paid advertising campaigns for maximum ROI.",
-      icon: "💰",
-      gradient: "from-green-500 to-emerald-500"
+      title: "Conversion Rate Optimization (CRO)",
+      desc: "Optimizing landing page funnels, clear call-to-actions, and navigation flow to convert visitors into active leads.",
+      icon: TrendingUp,
+      tags: ["CRO", "Funnel Analytics", "User Testing"]
     }
   ];
 
-  const pricingPlans = {
-    seo: [
-      {
-        title: "SEO Starter",
-        price: 99,
-        features: [
-          "Keyword Research (up to 20)",
-          "On-Page SEO Optimization",
-          "Technical SEO Audit",
-          "Monthly Performance Report",
-          "Local SEO Setup",
-          "Email Support"
-        ],
-        gradient: "from-blue-500 to-cyan-500"
-      },
-      {
-        title: "SEO Professional",
-        price: 249,
-        features: [
-          "Everything in Starter, plus:",
-          "Advanced Keyword Research",
-          "Competitor Analysis",
-          "Basic Link Building",
-          "Content Strategy Guidance",
-          "Priority Support"
-        ],
-        isPopular: true,
-        gradient: "from-purple-500 to-pink-500"
-      },
-      {
-        title: "SEO Enterprise",
-        price: 499,
-        features: [
-          "Everything in Professional, plus:",
-          "Comprehensive Link Building",
-          "Advanced Technical SEO",
-          "Detailed Analytics & ROI Tracking",
-          "Dedicated SEO Specialist",
-          "Custom Reports"
-        ],
-        gradient: "from-orange-500 to-red-500"
-      }
-    ],
-    digitalMarketing: [
-      {
-        title: "Social Starter",
-        price: 129,
-        features: ["Social Media Management (2 platforms)", "Basic Content Creation", "Audience Engagement", "Monthly Analytics Report", "Community Management", "Email Support"],
-        gradient: "from-blue-500 to-cyan-500"
-      },
-      {
-        title: "Growth Marketer",
-        price: 299,
-        features: ["Everything in Starter, plus:", "PPC Campaign Management (1 platform)", "Email Marketing Campaign", "Advanced Content Marketing", "A/B Testing for Ads", "Priority Support"],
-        isPopular: true,
-        gradient: "from-purple-500 to-pink-500"
-      },
-      {
-        title: "Full Suite",
-        price: 599,
-        features: ["Everything in Growth, plus:", "Multi-platform PPC Management", "Conversion Rate Optimization (CRO)", "Advanced ROI Tracking", "Dedicated Account Manager", "Full Marketing Strategy"],
-        gradient: "from-orange-500 to-red-500"
-      }
-    ]
-  };
-
-  const handlePlanSelect = (planTitle) => {
-    setSelectedPlan(planTitle);
-    contactFormRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // const handleFormSubmit = async (formData) => {
-  //   console.log('Form submitted:', { ...formData, selectedPlan });
-  //   await new Promise(resolve => setTimeout(resolve, 1000));
-  // };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
-      <Navigation />
-      
-      <PageHeader 
-        title="SEO & Digital Marketing Services"
-        description="Boost your online presence with our comprehensive digital marketing solutions"
-        gradient="from-indigo-900 via-purple-900 to-pink-900"
-      />
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          TECHNICAL SEO & GROWTH
+        </span>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {services.map((service) => (
-            <ServiceCard key={service.title} {...service} />
-          ))}
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-950 max-w-3xl mx-auto mt-2 leading-tight">
+          Capture High-Intent Traffic That <span className="text-blue-600">Converts.</span>
+        </h1>
+
+        <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          We build search architectures designed to capture visitors ready to engage, backed by technical speed and conversion optimization.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/contact?service=SEO+%26+Growth"
+            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm flex items-center gap-2"
+          >
+            Request SEO Audit <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
+      </section>
 
-        {/* Features Section */}
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Why Choose Our Digital Marketing?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xl">
-                📈
+      {/* Capabilities */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {capabilities.map((cap, idx) => {
+            const CIcon = cap.icon;
+            return (
+              <div
+                key={idx}
+                className="p-7 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all"
+              >
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 mb-5">
+                  <CIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-950">{cap.title}</h3>
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">{cap.desc}</p>
+                <div className="mt-5 pt-3 border-t border-slate-100 flex flex-wrap gap-2">
+                  {cap.tags.map(t => (
+                    <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-slate-600">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Proven Results</h3>
-              <p className="text-white/70">Data-driven strategies</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl">
-                🎯
-              </div>
-              <h3 className="text-xl font-semibold text-white">Targeted Approach</h3>
-              <p className="text-white/70">Reach your ideal audience</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white text-xl">
-                📊
-              </div>
-              <h3 className="text-xl font-semibold text-white">Detailed Analytics</h3>
-              <p className="text-white/70">Track your success</p>
-            </div>
-          </div>
+            );
+          })}
         </div>
-
-        {/* Pricing Section */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing Plans</h2>
-          
-          {/* Pricing Toggle */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white/10 rounded-full p-1 flex space-x-1">
-              <button onClick={() => setActivePricingTab('seo')} className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activePricingTab === 'seo' ? 'bg-white/20 text-white' : 'text-white/60 hover:bg-white/15'}`}>
-                SEO Plans
-              </button>
-              <button onClick={() => setActivePricingTab('digitalMarketing')} className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activePricingTab === 'digitalMarketing' ? 'bg-white/20 text-white' : 'text-white/60 hover:bg-white/15'}`}>
-                Digital Marketing Plans
-              </button>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans[activePricingTab].map((plan) => (
-              <PricingCard
-                key={plan.title}
-                {...plan}
-                price={plan.price}
-                period="month"
-                onSelect={handlePlanSelect}
-                buttonText={selectedPlan === plan.title ? 'Selected' : 'Get Started'}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Contact Form Section */}
-        <div id="contact-form" ref={contactFormRef} className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
-          </h2>
-          <ContactForm
-            serviceType={activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'}
-            buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
-            plan={selectedPlan}
-            subject={selectedPlan ? `New Inquiry: ${selectedPlan}` : `New ${activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'} Inquiry`}
-            fromName={`Webory ${activePricingTab === 'seo' ? 'SEO' : 'Digital Marketing'}`}
-          />
-        </div>
-      </div>
+      </section>
     </div>
   );
 };
 
-export default SEO; 
+export default SEO;

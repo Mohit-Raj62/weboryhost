@@ -1,192 +1,96 @@
-import React, { useState } from 'react';
-import Navigation from '../components/Navigation';
-import PageHeader from '../components/PageHeader';
-import ServiceCard from '../components/ServiceCard';
-import PricingCard from '../components/PricingCard';
-import ContactForm from '../components/ContactForm';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Palette,
+  Layout,
+  ArrowRight,
+  Eye,
+  MousePointer,
+  Smartphone
+} from 'lucide-react';
 
 const WebDesign = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-
-  const services = [
+  const capabilities = [
     {
-      title: "Responsive Design",
-      description: "Create beautiful, mobile-friendly websites that look great on any device.",
-      icon: "📱",
-      gradient: "from-blue-500 to-cyan-500"
+      title: "Design Systems & Component Libraries",
+      desc: "Complete atomic design systems built in Figma with design tokens, strict autolayout, dark mode support, and seamless code synchronization.",
+      icon: Layout,
+      tags: ["Figma", "Atomic Design", "Variants", "Tokens"]
     },
     {
-      title: "UI/UX Design",
-      description: "User-centered design that enhances user experience and engagement.",
-      icon: "🎨",
-      gradient: "from-purple-500 to-pink-500"
+      title: "Interactive High-Fidelity Prototypes",
+      desc: "Realistic, clickable prototypes showing micro-interactions, page transitions, and animations before writing a single line of code.",
+      icon: MousePointer,
+      tags: ["Figma Prototyping", "Micro-Interactions", "User Flow"]
     },
     {
-      title: "Custom Themes",
-      description: "Unique and tailored designs that reflect your brand identity.",
-      icon: "🎯",
-      gradient: "from-orange-500 to-red-500"
+      title: "Conversion-Focused User Research",
+      desc: "User journey mapping, wireframing, and usability testing designed to maximize conversion rates and reduce friction.",
+      icon: Eye,
+      tags: ["User Journeys", "Wireframing", "CRO", "Usability"]
     },
     {
-      title: "E-commerce Design",
-      description: "Optimized shopping experiences that drive conversions.",
-      icon: "🛍️",
-      gradient: "from-green-500 to-emerald-500"
+      title: "Mobile App & Responsive UI/UX",
+      desc: "Pixel-perfect touch targets, clean navigation patterns, and adaptive layouts tailored for iOS and Android.",
+      icon: Smartphone,
+      tags: ["iOS Guidelines", "Material 3", "Mobile UX"]
     }
   ];
-
-  const pricingPlans = [
-    {
-      title: "Basic Professional Website",
-      price: 199,
-      features: [
-        "✅Pages:Home, About Us, Services, Portfolio, Contact",
-        "✅5 Pages Design",
-        "✅Mobile responsive",
-        "✅SEO-friendly design",
-        "✅Contact Form / WhatsApp integration",
-        "✅Social Media links",
-        "✅24/7 Priority Support",
-
-        "✅1 Month Support"
-      ],
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      title: "Dynamic Business Website",
-      price: 349,
-      features: [
-        "✅ Pages: Home, About, Services (with sub-pages), Portfolio/Case Studies, Blog,   Contact",
-        "✅ 10 Pages Design",
-        "✅ CMS (WordPress/Next.js with CMS) → aap easily content update kar sako",
-        "✅ Service inquiry forms / Lead capture forms",
-        "✅ Blog section (SEO ke liye must)",
-        "✅ Testimonials & Client logos",
-        "✅ Basic On-page SEO setup",
-        "✅ 3 Months Support",
-      ],
-      isPopular: true,
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Premium Website + Client Portal",
-      price: 999,
-      features: [
-       "✅ Pages: Home, About, Services, Portfolio, Blog, Contact, Pricing/Plans",
-        "✅ CMS + Blog",
-        "✅ Client Portal (login area) – jaha aap client ko proposals, reports, invoices dikha sako",
-        "✅ Advanced animations / UI/UX design",
-        "✅ Chatbot / WhatsApp automation",
-        "✅ SEO + Analytics integration",
-        "✅6 Months Support",
-      ],
-      gradient: "from-orange-500 to-red-500"
-    },
-    {
-      title: "Enterprise (Agency + Marketplace/Automation)",
-      price: 2999,
-      features: [
-     "  ✅ All premium features",
-        "✅ Online Booking System (services schedule karne ke liye)",
-        "✅ Payment Gateway (services ke liye advance payment option)",
-        "✅ Multi-language support (agar global clients chahiye)",
-       " ✅ Custom dashboards + API integrations",
-        "✅ 12 Months Support",
-      ],
-      gradient: "from-orange-700 to-red-500"
-    }
-  ];
-
-  const handlePlanSelect = (planTitle) => {
-    setSelectedPlan(planTitle);
-    // Scroll to contact form
-    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleFormSubmit = async (formData) => {
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', { ...formData, selectedPlan });
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
-      <Navigation />
-      
-      <PageHeader 
-        title="Web Design Services"
-        description="Transform your digital presence with our cutting-edge web design solutions"
-        gradient="from-indigo-900 via-purple-900 to-pink-900"
-      />
+    <div className="bg-[#f8fafc] text-slate-900 min-h-screen">
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          PRODUCT & UI/UX DESIGN
+        </span>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
-          ))}
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-950 max-w-3xl mx-auto mt-2 leading-tight">
+          Clean, User-Centric <span className="text-blue-600">Interface Design.</span>
+        </h1>
+
+        <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          We merge visual clarity with cognitive user experience. We design digital interfaces that are easy to use, aesthetically pleasing, and built to convert.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/contact?service=UI/UX+Design"
+            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm flex items-center gap-2"
+          >
+            Design Your Product <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
+      </section>
 
-        {/* Features Section */}
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Why Choose Our Web Design Services?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xl">
-                ⚡
+      {/* Capabilities */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {capabilities.map((cap, idx) => {
+            const CIcon = cap.icon;
+            return (
+              <div
+                key={idx}
+                className="p-7 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all"
+              >
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 mb-5">
+                  <CIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-950">{cap.title}</h3>
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">{cap.desc}</p>
+                <div className="mt-5 pt-3 border-t border-slate-100 flex flex-wrap gap-2">
+                  {cap.tags.map(t => (
+                    <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-slate-600">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Fast Performance</h3>
-              <p className="text-white/70">Optimized for speed and efficiency</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl">
-                🔒
-              </div>
-              <h3 className="text-xl font-semibold text-white">Secure & Reliable</h3>
-              <p className="text-white/70">Built with security best practices</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white text-xl">
-                📈
-              </div>
-              <h3 className="text-xl font-semibold text-white">SEO Friendly</h3>
-              <p className="text-white/70">Optimized for search engines</p>
-            </div>
-          </div>
+            );
+          })}
         </div>
-
-        {/* Pricing Section */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing Plans</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <PricingCard
-                key={index}
-                {...plan}
-                onSelect={handlePlanSelect}
-                buttonText={selectedPlan === plan.title ? 'Selected' : 'Get Started'}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Contact Form Section */}
-        <div id="contact-form" className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            {selectedPlan ? `Get Started with ${selectedPlan} Plan` : 'Contact Us'}
-          </h2>
-          <ContactForm
-            serviceType="web design"
-            buttonText={selectedPlan ? 'Request Quote' : 'Get Started'}
-            plan={selectedPlan}
-            subject={selectedPlan ? `New Web Design Inquiry: ${selectedPlan}` : 'New Web Design Inquiry'}
-            fromName="Webory WebDesign"
-          />
-        </div>
-      </div>
+      </section>
     </div>
   );
 };
 
-export default WebDesign; 
+export default WebDesign;
